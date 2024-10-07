@@ -2,6 +2,7 @@ Server:
   ~/dbfiles/
   ~/*
 
+run: docker compose -f docker-compose.dev.yml up --build -d
 
 ### Connecting to PostgreSQL server
 * On host go to `localhost:5420`
