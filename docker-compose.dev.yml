@@ -1,0 +1,56 @@
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+      target: dev
+    depends_on:
+      - database
+    ports:
+      - 8081:8081
+    environment:
+      SECRET_KEY: RxtBeFg7yunnBFGwa8dYa8Q7CiUiTJVn
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: student
+      POSTGRES_URL: r2dbc:postgresql://database:5432/user_database
+      DATABASE_NAME: user_database
+
+      ADMIN_UNAME: student
+      ADMIN_PASSWORD: student
+    volumes:
+      - ./Gateway/:/app
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./Frontend/:/app
+      - /app/node_modules
+
+  database:
+    container_name: database
+    image: postgres
+    restart: always
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: student
+      POSTGRES_DB: student
+    volumes:
+      - ./Database/InitDatabase:/docker-entrypoint-initdb.d
+  
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - 5420:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: student@student.student
+      PGADMIN_DEFAULT_PASSWORD: student
