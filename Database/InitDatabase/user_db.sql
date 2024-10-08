@@ -7,8 +7,17 @@ CREATE TABLE IF NOT EXISTS public.user_db (
                             GENERATED ALWAYS AS IDENTITY, 
   username                VARCHAR(255) NOT NULL, 
   password                VARCHAR(255) NOT NULL,
-  is_admin                BOOLEAN NOT NULL DEFAULT FALSE,
+  email                   VARCHAR(255) NOT NULL,
+  phone                   INTEGER NOT NULL,
+  role                    INTEGER NOT NULL DEFAULT 2,
+  
+  -- Optional
+  age                     INTEGER,
+  sex                     BOOLEAN,
 
+  -- constrain
   UNIQUE(username),
+  UNIQUE(email),
+  UNIQUE(phone),
   PRIMARY KEY(id)
 );
