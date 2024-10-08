@@ -2,6 +2,8 @@ Server:
   ~/dbfiles/
   ~/*
 
+  YAREK
+
 run: docker compose -f docker-compose.dev.yml up --build -d
 
 ### Connecting to PostgreSQL server
