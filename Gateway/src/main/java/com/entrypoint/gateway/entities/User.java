@@ -3,10 +3,10 @@ package com.entrypoint.gateway.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Table("user_db")
 public class User{
@@ -18,7 +18,7 @@ public class User{
     private String username;
 
     @Column("role")
-    private Integer role;
+    private int role;
   
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column("password")
@@ -27,7 +27,7 @@ public class User{
     public User(String password, String username, Boolean isAdmin) {
         this.password = password;
         this.username = username;
-        this.isAdmin = isAdmin;
+        this.role = role;
     }
 
     public String getPassword(){
@@ -42,15 +42,19 @@ public class User{
         return this.username;
     }
 
-    public String getRole(){
+    public int getRole(){
         return this.role;
+    }
+
+    public void hashPassword() {
+        this.password = new BCryptPasswordEncoder().encode(this.password);
     }
 
     @Override
     public String toString() {
         return "User{" +
             "id=" + this.id + ", " +
-            "role"= this.role + "\', " +
+            "role"+ this.role + "\', " +
             "username=\'" + this.username + "\', " +
             "password=\'" + this.password +
         "}";
