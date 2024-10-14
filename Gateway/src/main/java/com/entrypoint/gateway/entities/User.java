@@ -24,7 +24,7 @@ public class User{
     @Column("password")
     private String password;
 
-    public User(String password, String username, Boolean isAdmin) {
+    public User(String password, String username, Integer role) {
         this.password = password;
         this.username = username;
         this.role = role;
