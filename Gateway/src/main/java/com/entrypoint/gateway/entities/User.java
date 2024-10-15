@@ -17,17 +17,26 @@ public class User{
     @Column("username")
     private String username;
 
+    @Column("email")
+    private String email;
+
+    @Column("phone")
+    private Integer phone;
+
     @Column("role")
-    private int role;
-  
+    private Integer role;
+    
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column("password")
     private String password;
 
-    public User(String password, String username, Integer role) {
+    // , Integer phone,
+    public User(String password, String username, String email, Integer phone, Integer role) {
         this.password = password;
         this.username = username;
         this.role = role;
+        this.email = email;
+        this.phone = phone;
     }
 
     public String getPassword(){
@@ -42,7 +51,15 @@ public class User{
         return this.username;
     }
 
-    public int getRole(){
+    public String getEmail() {
+        return this.email;
+    }
+
+    public Integer getPhone() {
+        return this.phone;
+    }
+
+    public Integer getRole(){
         return this.role;
     }
 
@@ -54,9 +71,11 @@ public class User{
     public String toString() {
         return "User{" +
             "id=" + this.id + ", " +
-            "role"+ this.role + "\', " +
+            "role="+ this.role + ", " +
             "username=\'" + this.username + "\', " +
-            "password=\'" + this.password +
+            "email=\'" + this.email + "\', " +
+            "phone=" + this.phone + ", " +
+            "password=\'" + this.password + "\'" +
         "}";
   }
 }
