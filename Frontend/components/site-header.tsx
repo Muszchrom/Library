@@ -14,12 +14,7 @@ export function SiteHeader() {
     { id: 2, title: "Ipsum", path: "ipsum" },
     { id: 3, title: "Dolor", path: "dolor" },
     { id: 4, title: "Sit", path: "sit" },
-    { id: 5, title: "Amet", path: "amet" },
-    { id: 6, title: "Consectetur", path: "consectetur" },
-    { id: 7, title: "Adipiscing", path: "adipiscing" },
-    { id: 8, title: "Elit", path: "elit" },
-    { id: 9, title: "Sed", path: "sed" },
-    { id: 10, title: "Eiusmod", path: "eiusmod" }
+    { id: 5, title: "Amet", path: "amet" }
   ];
   return (
     <header className="">
@@ -61,7 +56,8 @@ export function SiteHeader() {
 
               <div className="mt-auto">
               <SheetClose asChild>
-                <Link href="/logout">{"Wyloguj się"}</Link>
+                <Link href="/login">{"Zaloguj się"}</Link>
+                {/* <Link href="/logout">{"Wyloguj się"}</Link> */}
               </SheetClose>
               </div>
             </div>
