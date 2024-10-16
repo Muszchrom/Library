@@ -13,6 +13,7 @@ public class CorsConfig implements WebFluxConfigurer {
   public void addCorsMappings(CorsRegistry corsRegistry) {
     corsRegistry.addMapping("/**")
       .allowedOrigins("http://localhost:3000")
-      .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE");
+      .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+      .allowCredentials(true);
   }
 }
