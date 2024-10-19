@@ -21,3 +21,17 @@ run: docker compose -f docker-compose.dev.yml up --build -d
   * 1 - Admin
   * 2 - Employee
   * 3 - User
+
+## Config
+* /login  
+* /logout
+  * @Post 
+  * @Get
+
+* /admin 
+* /employee
+* /user
+  * @Post
+  * @Get
+  * @Patch
+  * @Delete
