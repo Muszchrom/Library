@@ -24,6 +24,8 @@ run: docker compose -f docker-compose.dev.yml up --build -d
 
 ## Config
 * /login  
+  * @Post
+  * @Get
 * /logout
   * @Post 
   * @Get
