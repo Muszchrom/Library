@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<String>> login(@RequestBody User user, ServerHttpResponse response) {
+    public Mono<ResponseEntity<User>> login(@RequestBody User user, ServerHttpResponse response) {
     return userRepository.findByUsername(user.getUsername()).map(u -> {
       BCryptPasswordEncoder bcPsswdEncoder = new BCryptPasswordEncoder();
       if (bcPsswdEncoder.matches(user.getPassword(), u.getPassword())) {
@@ -49,7 +49,8 @@ public class AuthController {
           .build();
 
         response.addCookie(responseCookie);
-        return ResponseEntity.ok("Zalogowano");
+        //return suer obj as JSON
+        return ResponseEntity.ok(u);
       } else {
         throw new BadCredentialsException("Niepoprawna nazwa uzytkownika lub haslo");
       }
@@ -74,14 +75,14 @@ public class AuthController {
     @PostMapping("/user")
     public Mono<User> register(@RequestBody User user) {
     if (user.getPassword().length() < 7) {
-      throw new InvalidPasswordException("Password too short");
+      throw new InvalidPasswordException("Haslo za krotkie");
     }
 
         return userRepository.findByUsername(user.getUsername())
         .map(u -> {
             Boolean t = true;
             if (t) {
-            throw new UsernameExistsException("Username: " + user.getUsername() + " already exist");
+            throw new UsernameExistsException("Username: " + user.getUsername() + " juz istnieje");
             }
             return u;
         }).switchIfEmpty(Mono.defer(() -> {
@@ -94,7 +95,7 @@ public class AuthController {
     @GetMapping("/user/{id}")
     public Mono<User> getUser(@PathVariable Long id) {
         return userRepository.findById(id)
-        .switchIfEmpty(Mono.error(new UserNotFoundException("User: " + id + " not found")));
+        .switchIfEmpty(Mono.error(new UserNotFoundException("User: " + id + " nie znaleziono")));
     }
 
 

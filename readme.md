@@ -23,13 +23,12 @@ run: docker compose -f docker-compose.dev.yml up --build -d
   * 3 - User
 
 #### Config
-* /login
+* /login 
   * @Post
   * @Get
 * /logout
   * @Post
   * @Get
-
 * /admin
   * @Post
   * @Get
