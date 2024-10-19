@@ -39,7 +39,6 @@ public class User{
         this.email = email;
         this.phone = phone;
     }
-
     public String getPassword(){
         return this.password;
     }
@@ -79,4 +78,5 @@ public class User{
             "password=\'" + this.password + "\'" +
         "}";
   }
+
 }

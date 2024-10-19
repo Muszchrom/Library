@@ -35,26 +35,37 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<User>> login(@RequestBody User user, ServerHttpResponse response) {
-    return userRepository.findByUsername(user.getUsername()).map(u -> {
-      BCryptPasswordEncoder bcPsswdEncoder = new BCryptPasswordEncoder();
-      if (bcPsswdEncoder.matches(user.getPassword(), u.getPassword())) {
-        String token = JWTUtil.generateToken(u.getUsername(), u.getRole(), u.getId());
-        ResponseCookie responseCookie = ResponseCookie.from("JWT", token)
-          .httpOnly(true)
-          .secure(!appTarget.equals("DEV")) // !appTarget.equals("DEV")
-          .sameSite("Lax")
-          .maxAge(JWTUtil.getJWTExpiration())
-          .path("/")
-          .build();
+    public Mono<ResponseEntity<LoginResponse>> login(@RequestBody User user, ServerHttpResponse response) {
+        return userRepository.findByUsername(user.getUsername())
+                .map(u -> {
+                    BCryptPasswordEncoder bcPsswdEncoder = new BCryptPasswordEncoder();
+                    if (bcPsswdEncoder.matches(user.getPassword(), u.getPassword())) {
+                        String token = JWTUtil.generateToken(u.getUsername(), u.getRole(), u.getId());
+                        ResponseCookie responseCookie = ResponseCookie.from("JWT", token)
+                                .httpOnly(true)
+                                .secure(!appTarget.equals("DEV")) // !appTarget.equals("DEV")
+                                .sameSite("Lax")
+                                .maxAge(JWTUtil.getJWTExpiration())
+                                .path("/")
+                                .build();
 
-        response.addCookie(responseCookie);
-        //return suer obj as JSON
-        return ResponseEntity.ok(u);
-      } else {
-        throw new BadCredentialsException("Niepoprawna nazwa uzytkownika lub haslo");
-      }
-    }).switchIfEmpty(Mono.error(new BadCredentialsException("Niepoprawna nazwa uzytkownika lub haslo")));
+                        response.addCookie(responseCookie);
+
+                        // Create a LoginResponse object with the desired fields
+                        LoginResponse loginResponse = new LoginResponse();
+                        loginResponse.setToken(token);
+                        loginResponse.setUsername(u.getUsername());
+                        loginResponse.setEmail(u.getEmail());
+                        loginResponse.setPhone(String.valueOf(u.getPhone()));
+                        loginResponse.setRole(String.valueOf(u.getRole()));
+
+                        // Return the LoginResponse object as JSON
+                        return ResponseEntity.ok(loginResponse);
+                    } else {
+                        throw new BadCredentialsException("Niepoprawna nazwa uzytkownika lub haslo");
+                    }
+                })
+                .switchIfEmpty(Mono.error(new BadCredentialsException("Niepoprawna nazwa uzytkownika lub haslo")));
     }
 
 
