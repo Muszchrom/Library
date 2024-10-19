@@ -29,7 +29,15 @@ run: docker compose -f docker-compose.dev.yml up --build -d
   * @Get
 
 * /admin 
+  * @Post
+  * @Get
+  * @Patch
+  * @Delete
 * /employee
+  * @Post
+  * @Get
+  * @Patch
+  * @Delete
 * /user
   * @Post
   * @Get
