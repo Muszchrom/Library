@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const loginSchema = z.object({
   username: z.string().min(3, {
@@ -74,25 +75,18 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
   })
 
   async function onSubmitLogin(values: z.infer<typeof loginSchema>) {
-    console.log(values)
-    const res = await fetch("http://localhost:8081/auth/login", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(values)
+    const res = await signIn("credentials", {
+      username: values.username,
+      password: values.password,
+      redirect: false
     })
-    
-    if (res.status === 200) {
+
+    if (!res?.error) {
       router.push("/");
-    } else if (res.status === 403) {
-      toast.error("Logowanie nie powiodło się", {
-        description: "Niepoprawna nazwa użytkownika i/lub hasło"
-      })
+      toast.success("Jesteś teraz zalogowany/a!");
     } else {
       toast.error("Logowanie nie powiodło się", {
-        description: "Kod błędu: " + res.status
+        description: "Niepoprawna nazwa użytkownika i/lub hasło"
       })
     }
   }
