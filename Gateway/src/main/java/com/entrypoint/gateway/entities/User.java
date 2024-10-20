@@ -25,7 +25,8 @@ public class User{
 
     @Column("role")
     private Integer role;
-    
+    //1-admin,2-employee,3-user
+
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column("password")
     private String password;
@@ -38,7 +39,6 @@ public class User{
         this.email = email;
         this.phone = phone;
     }
-
     public String getPassword(){
         return this.password;
     }
@@ -78,4 +78,5 @@ public class User{
             "password=\'" + this.password + "\'" +
         "}";
   }
+
 }

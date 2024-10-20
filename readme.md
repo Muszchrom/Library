@@ -1,8 +1,6 @@
 Server:
-  ~/dbfiles/
-  ~/*
-
-  YAREK
+~/dbfiles/
+~/*
 
 run: docker compose -f docker-compose.dev.yml up --build -d
 
@@ -16,3 +14,33 @@ run: docker compose -f docker-compose.dev.yml up --build -d
   * Maintenance database: `student`
   * Username: `student`
   * Password: `student`
+
+
+### Gateway
+* Role:
+  * 1 - Admin
+  * 2 - Employee
+  * 3 - User
+
+#### Config
+* /login 
+  * @Post
+  * @Get
+* /logout
+  * @Post
+  * @Get
+* /admin
+  * @Post
+  * @Get
+  * @Patch
+  * @Delete
+* /employee
+  * @Post
+  * @Get
+  * @Patch
+  * @Delete
+* /user
+  * @Post
+  * @Get
+  * @Patch
+  * @Delete
