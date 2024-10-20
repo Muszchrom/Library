@@ -54,6 +54,7 @@ public class AuthController {
                         // Create a LoginResponse object with the desired fields
                         LoginResponse loginResponse = new LoginResponse();
                         loginResponse.setToken(token);
+                        loginResponse.setId(Long.toString(u.getId()));
                         loginResponse.setUsername(u.getUsername());
                         loginResponse.setEmail(u.getEmail());
                         loginResponse.setPhone(String.valueOf(u.getPhone()));

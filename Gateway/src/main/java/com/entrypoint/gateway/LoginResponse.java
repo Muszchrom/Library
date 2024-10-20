@@ -1,13 +1,20 @@
 package com.entrypoint.gateway;
 
-import com.entrypoint.gateway.entities.User;
-
 public class LoginResponse{
+    private String id;
     private String token;
     private String username;
     private String email;
     private String phone;
     private String role;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getToken() {
         return token;
