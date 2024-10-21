@@ -15,6 +15,11 @@ run: docker compose -f docker-compose.dev.yml up --build -d
   * Username: `student`
   * Password: `student`
 
+# Frontend
+create file Frontend/.env.local with these lines in it:
+`NEXTAUTH_SECRET=[secret key]`
+`NEXTAUTH_URL=http://localhost:3000/`
+And to get secret key run this command in ubuntu: `openssl rand -base64 32` 
 
 ### Gateway
 * Role:
