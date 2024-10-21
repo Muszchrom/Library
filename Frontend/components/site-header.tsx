@@ -7,9 +7,10 @@ import {
 } from "@/components/ui/sheet"
 import { BookCheckIcon } from "lucide-react";
 import Link from "next/link";
+import LogInOutThing from "./log-in-out-provider";
 
 
-export function SiteHeader() {
+export async function SiteHeader() {
   const links = [
     { id: 1, title: "Lorem", path: "lorem" },
     { id: 2, title: "Ipsum", path: "ipsum" },
@@ -17,6 +18,7 @@ export function SiteHeader() {
     { id: 4, title: "Sit", path: "sit" },
     { id: 5, title: "Amet", path: "amet" }
   ];
+
   return (
     <header className="">
       <div className="container px-4 md:px-8 mx-auto flex h-14 max-w-screen-2xl items-center justify-between ">
@@ -63,8 +65,7 @@ export function SiteHeader() {
 
               <div className="mt-auto">
               <SheetClose asChild>
-                <Link href="/login">{"Zaloguj się"}</Link>
-                {/* <Link href="/logout">{"Wyloguj się"}</Link> */}
+                <LogInOutThing />
               </SheetClose>
               </div>
             </div>
