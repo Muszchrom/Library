@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS public.user_db (
   age                     INTEGER,
   sex                     BOOLEAN,
 
-  -- constrain
+  -- constraints
   UNIQUE(username),
   UNIQUE(email),
   UNIQUE(phone),
