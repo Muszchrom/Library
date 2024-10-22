@@ -18,6 +18,9 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Separator } from "@/components/ui/separator";
+import SeparatorWithText from "@/components/separator-with-text";
+import React from "react";
 
 const loginSchema = z.object({
   username: z.string().min(3, {
@@ -43,6 +46,11 @@ const registerSchema = z.object({
     }).max(255, {
       message: "Hasło nie może mieć więcej niż 255 znaków"
     }),
+    email: z.string().email("Podaj poprawny adres email"),
+    phone: z.string().regex(
+      new RegExp(/^([0-9]{3}) ?([0-9]{3}) ?([0-9]{3})$/),
+      "Niepoprawny numer telefonu"
+    ),
     confirmPassword: z.string(),
   }).superRefine(({confirmPassword, password}, ctx) => {
     if (confirmPassword !== password) {
@@ -70,6 +78,8 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
     defaultValues: {
       username: "",
       password: "",
+      email: "",
+      phone: "",
       confirmPassword: ""
     }
   })
@@ -92,24 +102,31 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
   }
 
   async function onSubmitRegister(values: z.infer<typeof registerSchema>) {
-    const res = await fetch("http://localhost:8081/auth/login", {
+    const res = await fetch("http://localhost:8081/auth/user", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({
+        username: values.username,
+        password: values.password,
+        email: values.email,
+        phone: parseInt(values.phone.replaceAll(" ", ""))
+      })
     })
     
     if (res.status === 200) {
       onSubmitLogin(values); // login directly after register
     } else if (res.status === 400) {
+      console.log(await res.text())
       toast.error("Rejestracja nie powiodła się", {
-        description: "Niepoprawna dane rejestracji lub podana nazwa użytkownika już istnieje"
+        description: "Kod błędu: " + res.status + ". Typ błędu: " + await res.text()
+        // description: "Niepoprawna dane rejestracji lub podana nazwa użytkownika już istnieje"
       })
     } else {
       toast.error("Rejestracja nie powiodła się", {
-        description: "Kod błędu: " + res.status
+        description: "Kod błędu: " + res.status + ". Typ błędu: " + await res.text()
       })
     }
   }
@@ -117,6 +134,7 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
   return formType === "login" ? (
     <Form {...loginForm}>
       <form onSubmit={loginForm.handleSubmit(onSubmitLogin)} className="space-y-4">
+        <h1 className="text-center text-xl">Zaloguj się</h1>
         <FormField
           control={loginForm.control}
           name="username"
@@ -159,6 +177,7 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
   ) : (
     <Form {...registerForm}>
       <form onSubmit={registerForm.handleSubmit(onSubmitRegister)} className="space-y-4">
+        <h1 className="text-center text-xl">Zarejestruj się</h1>
         <FormField
           control={registerForm.control}
           name="username"
@@ -168,14 +187,13 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
               <FormControl>
                 <Input placeholder="Scaresca20" {...field} />
               </FormControl>
-              <FormDescription>
+              {/* <FormDescription>
                 Pole na wprowadzenie loginu.
-              </FormDescription>
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
-          />
-
+        />
         <FormField
           control={registerForm.control}
           name="password"
@@ -185,13 +203,13 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
               <FormControl>
                 <Input type="password" placeholder="Super silne hasło" {...field} />
               </FormControl>
-              <FormDescription>
+              {/* <FormDescription>
                 Pole na wprowadzenie hasła.
-              </FormDescription>
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
-          />
+        />
         <FormField
           control={registerForm.control}
           name="confirmPassword"
@@ -201,9 +219,44 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
               <FormControl>
                 <Input type="password" placeholder="Super silne hasło" {...field} />
               </FormControl>
-              <FormDescription>
+              {/* <FormDescription>
                 Pole na ponowne wprowadzenie hasła.
-              </FormDescription>
+              </FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <SeparatorWithText>
+          Dane kontaktowe
+        </SeparatorWithText>
+        <FormField
+          control={registerForm.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="marek.c@gmail.com" {...field} />
+              </FormControl>
+              {/* <FormDescription>
+                Pole na wprowadzenie adresu email.
+              </FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={registerForm.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Telefon</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="123456789" {...field} />
+              </FormControl>
+              {/* <FormDescription>
+                Pole na wprowadzenie numeru telefonu.
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
