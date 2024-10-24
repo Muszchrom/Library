@@ -4,6 +4,10 @@ Server:
 
 run: docker compose -f docker-compose.dev.yml up --build -d
 
+### Backend
+If after building the application, the backed container does not start, you need to remove the migrated folders
+
+
 ### Connecting to PostgreSQL server
 * On host go to `localhost:5420`
 * Right click Servers, located on the left side of browser window, then select Register, server
@@ -15,14 +19,12 @@ run: docker compose -f docker-compose.dev.yml up --build -d
   * Username: `student`
   * Password: `student`
 
+
 # Frontend
 create file Frontend/.env.local with these lines in it:
 `NEXTAUTH_SECRET=[secret key]`
 `NEXTAUTH_URL=http://localhost:3000/`
 And to get secret key run this command in ubuntu: `openssl rand -base64 32` 
-
-### Backend
-If after building the application, the backed container does not start, you need to remove the migrated folders
 
 ### Gateway
 * Role:
