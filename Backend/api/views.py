@@ -12,6 +12,15 @@ class LibraryViewSet(viewsets.ModelViewSet):
     queryset = Library.objects.all()
     serializer_class = LibrarySerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Zachowaj oryginalne queryset
+        city = self.request.query_params.get('city', None)  # Pobierz parametr city z zapytania
+        if city is not None:
+            queryset = queryset.filter(city__iexact=city)  # Filtrowanie bibliotek po mieście
+            if not queryset.exists():  # Sprawdź, czy nie znaleziono żadnych bibliotek
+                return Response({"detail": "No libraries found in this city."}, status=status.HTTP_404_NOT_FOUND)
+        return queryset
+
     def retrieve(self, request, *args, **kwargs):
         identifier = kwargs.get('pk')                                                 # nazwa lub di
         try:
