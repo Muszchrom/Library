@@ -21,6 +21,9 @@ create file Frontend/.env.local with these lines in it:
 `NEXTAUTH_URL=http://localhost:3000/`
 And to get secret key run this command in ubuntu: `openssl rand -base64 32` 
 
+### Backend
+If after building the application, the backed container does not start, you need to remove the migrated folders
+
 ### Gateway
 * Role:
   * 1 - Admin
