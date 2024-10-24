@@ -5,7 +5,7 @@ Server:
 run: docker compose -f docker-compose.dev.yml up --build -d
 
 ### Backend
-If after building the application, the backed container does not start, you need to remove the migrated folders
+If after building the application, the backed container does not start, you need to remove the 'migrations' folders
 
 
 ### Connecting to PostgreSQL server
