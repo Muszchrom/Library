@@ -1,8 +1,15 @@
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework import viewsets
+from .models import Library, AuthorsDb, BooksDb
+from .serializers import LibrarySerializer, AuthorsDbSerializer, BooksDbSerializer
 
+class LibraryViewSet(viewsets.ModelViewSet):
+    queryset = Library.objects.all()
+    serializer_class = LibrarySerializer
 
-@api_view(['GET'])
-def getData(request):
-  person = {'name': 'Dennis', 'age': 28}
-  return Response(person)
+class AuthorsDbViewSet(viewsets.ModelViewSet):
+    queryset = AuthorsDb.objects.all()
+    serializer_class = AuthorsDbSerializer
+    
+class BooksDbViewSet(viewsets.ModelViewSet):
+    queryset = BooksDb.objects.all()
+    serializer_class = BooksDbSerializer
