@@ -1,11 +1,10 @@
-"use client"
 import Score from "@/components/score";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import clsx from "clsx";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
 
-interface ImageData {
+export interface ImageData {
   id: number,
   title: string,
   available: boolean,
@@ -13,12 +12,12 @@ interface ImageData {
   coverURL: string
 }
 
-interface CommonBookGenres {
+export interface CommonBookGenres {
   id: number,
   name: string
 }
 
-const images: ImageData[] = [
+export const images: ImageData[] = [
   {
     id: 1,
     title: "Architektura API",
@@ -56,7 +55,7 @@ const images: ImageData[] = [
   },
 ]
 
-const commonBookGenres: CommonBookGenres[] = [
+export const commonBookGenres: CommonBookGenres[] = [
   { id: 1, name: "Fiction" },
   { id: 2, name: "Non-fiction" },
   { id: 3, name: "Mystery" },
@@ -94,10 +93,11 @@ function HomepageRowV2({genres}: {genres: CommonBookGenres[]}) {
   )
 }
 
-function HomepageRow({images, title}: {images: ImageData[], title: string}) {
+export function HomepageRow({images, title}: {images: ImageData[], title: string}) {
   return (
-    <div>
-      <h2 className="text-2xl py-2">{title}</h2>
+    <div className="flex flex-col gap-2">
+      <h2 className="text-2xl pt-2 leading-none">{title}</h2>
+      <Separator orientation="horizontal" className="mb-1"/>
       <div className="flex gap-2 overflow-auto">
         {images.map((image) => 
             <BookCard key={image.id} image={image}></BookCard>
@@ -109,16 +109,16 @@ function HomepageRow({images, title}: {images: ImageData[], title: string}) {
 
 
 function BookCard({image}: {image: ImageData}) {
-  const baseUrl = "/book";
+  const baseUrl = "/books";
   return (
-    <div className="min-w-48">
+    <div className="min-w-44">
       <Link href={baseUrl + "/" + image.id}>
-        <Image className="rounded-md" alt="" height={100} width={192} src={image.coverURL} />
+        <Image className="rounded-md" alt="" height={100} width={176} src={image.coverURL} />
       </Link>
       <div className="px-1 py-2">
         <h3 className="font-medium leading-none tracking-tight">
           {image.title}
-        </h3> 
+        </h3>
         <div className="flex justify-between">
           <Score score={image.user_score} />
           {/* Or maybe genre? Since avaliability is dependent on library */}

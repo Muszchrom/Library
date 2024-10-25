@@ -22,10 +22,12 @@ export async function SiteHeader() {
   return (
     <header className="">
       <div className="container px-4 md:px-8 mx-auto flex h-14 max-w-screen-2xl items-center justify-between ">
-        <h1 className="scroll-m-20 text-xl font-bold tracking-tight inline-flex gap-1 items-center">
-          <BookCheckIcon className="h-5 w-5"/>  
-          library
-        </h1>
+        <Link href="/">
+          <span className="scroll-m-20 text-xl font-bold tracking-tight inline-flex gap-1 items-center">
+            <BookCheckIcon className="h-5 w-5"/>  
+            library
+          </span>
+        </Link>
         <Sheet>
           <SheetTrigger className="h-9 py-2 ml-2 px-0 bg-transparent hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 ">
             <svg strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 [transform:rotateZ(180deg)]">
