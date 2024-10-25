@@ -1,7 +1,9 @@
 "use client"
+import Score from "@/components/score";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ImageData {
   id: number,
@@ -9,6 +11,11 @@ interface ImageData {
   available: boolean,
   user_score: number,
   coverURL: string
+}
+
+interface CommonBookGenres {
+  id: number,
+  name: string
 }
 
 const images: ImageData[] = [
@@ -49,12 +56,12 @@ const images: ImageData[] = [
   },
 ]
 
-const commonBookGenres = [
-  "Fiction",
-  "Non-fiction",
-  "Mystery",
-  "Romance",
-  "Fantasy",
+const commonBookGenres: CommonBookGenres[] = [
+  { id: 1, name: "Fiction" },
+  { id: 2, name: "Non-fiction" },
+  { id: 3, name: "Mystery" },
+  { id: 4, name: "Romance" },
+  { id: 5, name: "Fantasy" },
 ];
 
 export default function Home() {
@@ -64,21 +71,21 @@ export default function Home() {
 
       <HomepageRowV2 genres={commonBookGenres}></HomepageRowV2>
 
-      <HomepageRow images={images} title="Zawsze najlepsze"/>
+      <HomepageRow images={images} title="Najlepsze w okolicy"/>
 
-      <HomepageRow images={images} title="Zawsze najlepsz"/>
+      <HomepageRow images={images} title="Najlepsze w ostatnim czasie"/>
     </div>
   );
 }
 
-function HomepageRowV2({genres}: {genres: string[]}) {
+function HomepageRowV2({genres}: {genres: CommonBookGenres[]}) {
   return (
-    <div className="flex gap-2 overflow-auto">
+    <div className="flex gap-2 overflow-auto py-2">
       {genres.map((genre) => (
-        <Card className="h-36 aspect-square">
+        <Card key={genre.id} className="h-36 aspect-square">
           <CardHeader className="flex items-center justify-center h-full w-30">
             <CardTitle>
-              {genre}
+              {genre.name}
             </CardTitle>
           </CardHeader>
         </Card>
@@ -92,9 +99,9 @@ function HomepageRow({images, title}: {images: ImageData[], title: string}) {
     <div>
       <h2 className="text-2xl py-2">{title}</h2>
       <div className="flex gap-2 overflow-auto">
-        {images.map((image) => {
-            return <BookCard key={image.id} image={image}></BookCard>
-          })}
+        {images.map((image) => 
+            <BookCard key={image.id} image={image}></BookCard>
+        )}
       </div>
     </div>
   )
@@ -102,37 +109,27 @@ function HomepageRow({images, title}: {images: ImageData[], title: string}) {
 
 
 function BookCard({image}: {image: ImageData}) {
+  const baseUrl = "/book";
   return (
-    <div className="min-w-40">
-      <Image className="rounded-md" alt="" height={100} width={160} src={image.coverURL} />
+    <div className="min-w-48">
+      <Link href={baseUrl + "/" + image.id}>
+        <Image className="rounded-md" alt="" height={100} width={192} src={image.coverURL} />
+      </Link>
       <div className="px-1 py-2">
         <h3 className="font-medium leading-none tracking-tight">
           {image.title}
         </h3> 
-        <Score score={image.user_score} />
-        <span className={clsx(
-          "px-2 py-0.5 bg-primary text-secondary rounded-full text-sm",
-          // image.available && bg-
-        )}>
-          {image.available ? "Dostępna" : "Niedostępna"}
-        </span>
+        <div className="flex justify-between">
+          <Score score={image.user_score} />
+          {/* Or maybe genre? Since avaliability is dependent on library */}
+          {/* Availablitity in current library */}
+          <div className="overflow-auto">
+            <span className="px-2 py-0.5 bg-primary text-secondary rounded-full text-sm">
+              +99 km
+            </span>
+          </div>
+        </div>
       </div>
-    </div>
-  )
-}
-
-function Score({score}: {score: number}) {
-  return (
-    <div>
-      {Array.from(Array(Math.floor(score)).keys()).map((sc) => 
-        <span className="text-sm">⭐</span>
-      )}
-      {!!(score - Math.floor(score)) && (
-        <span className="relative text-sm">
-          ⭐
-          <div className="absolute top-0 bottom-0 right-0 left-1/2 bg-background"></div>
-        </span>
-      )}
     </div>
   )
 }
