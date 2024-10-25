@@ -7,12 +7,11 @@ class Library(models.Model):
         if self.city:
             self.city = self.city.capitalize()
         super().save(*args, **kwargs)
-
     def __str__(self):
         return self.library_name
-        
     class Meta:
         db_table = 'libraries_db'
+
 
 class AuthorsDb(models.Model):
     first_name = models.CharField(max_length=255)
@@ -21,6 +20,7 @@ class AuthorsDb(models.Model):
         return f"{self.first_name} {self.second_name}"
     class Meta:
         db_table = 'authors_db'
+
 
 class BooksDb(models.Model):
     author_id = models.BigIntegerField()
@@ -33,3 +33,41 @@ class BooksDb(models.Model):
         return self.title
     class Meta:
         db_table = 'books_db'
+
+
+class Genre(models.Model):                                          #gatunki
+    genre = models.CharField(max_length=50)
+    def __str__(self):
+        return self.genre
+    class Meta:
+        db_table = 'genres_db'
+
+
+class BookGenre(models.Model):                                      #gatunek - ksiazka (relacja wiele do wielu)
+    book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
+    genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'book_genres_db'
+        unique_together = (('book', 'genre'),)                      # Zapewnia unikalność kombinacji książka-gatunek
+
+
+class LibraryBook(models.Model):                                    #ksiazka - biblioteka
+    book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
+    library = models.ForeignKey('Library', on_delete=models.CASCADE)
+    book_count = models.IntegerField()
+    class Meta:
+        db_table = 'library_books_db'
+        unique_together = (('book', 'library'),)                    # Zapewnia unikalność kombinacji książka-biblioteka
+
+
+class Rental(models.Model):                                         #śledzenie wypożyczeń
+    user_id = models.BigIntegerField()  
+    book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
+    library = models.ForeignKey('Library', on_delete=models.CASCADE)
+    rental_status = models.CharField(max_length=25)
+    rental_date = models.DateField()
+    due_date = models.DateField()
+    return_date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'rentals_db'
