@@ -16,6 +16,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()                                       # oryginalny queryset
         city = self.request.query_params.get('city', None)                      # Pobierz parametr city z zapytania
         if city is not None:
+            city = city.capitalize()
             queryset = queryset.filter(city__iexact=city)                       # Filtrowanie bibliotek po mieście
             if not queryset.exists():  
                 #return Response({"detail": "No libraries found in this city."}, status=status.HTTP_404_NOT_FOUND)
