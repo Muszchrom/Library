@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: "static01.helion.com.pl"
+      }
+    ]
+  }
+};
 
 export default nextConfig;
