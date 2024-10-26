@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Library, AuthorsDb, BooksDb, GenresDb, BookGenresDb
+from .models import Library, AuthorsDb, BooksDb, GenresDb, BookGenresDb, LibraryBooksDb
 
 class LibrarySerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +51,6 @@ class GenresDbSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This genre already exists.")
         return formatted_value
 
-
 class BookGenresDbSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookGenresDb
@@ -68,3 +67,14 @@ class BookGenresDbSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Ta relacja już istnieje.")
 
         return super().create(validated_data)
+
+class LibraryBooksDbSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LibraryBooksDb
+        fields = '__all__'
+        # fields = ['book_id', 'library_id', 'book_count']
+        
+    def validate_book_count(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Book count cannot be negative.")
+        return value

@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet
+from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet
 
 
 router = DefaultRouter()
@@ -13,6 +13,7 @@ router.register(r'books', views.BooksDbViewSet)
 router.register(r'genres', views.GenreDbViewSet, basename='genres')
 
 router.register(r'book-genres', views.BookGenresDbViewSet)  
+router.register(r'library-books', views.LibraryBooksDbViewSet)  
 
 
 urlpatterns = [

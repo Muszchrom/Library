@@ -61,3 +61,10 @@ class BookGenresDb(models.Model):                                      #gatunek 
         unique_together = (('book_id', 'genre_id'),)   
 
 
+class LibraryBooksDb(models.Model):                                    #ksiazka - biblioteka
+    book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
+    library = models.ForeignKey('Library', on_delete=models.CASCADE)
+    book_count = models.IntegerField()
+    class Meta:
+        db_table = 'library_books_db'
+        unique_together = (('book', 'library'),)                    # Zapewnia unikalność kombinacji książka-biblioteka
