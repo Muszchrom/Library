@@ -1,19 +1,22 @@
 from rest_framework import viewsets
 from rest_framework import status
 
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 
 from .models import (
     Library, 
     AuthorsDb, 
-    BooksDb
+    BooksDb,
+    GenresDb
 )
 
 from .serializers import (
     LibrarySerializer, 
     AuthorsDbSerializer, 
-    BooksDbSerializer
+    BooksDbSerializer,
+    GenresDbSerializer
 )
 
 '''             OBSŁUGA BIBLIOTEK            '''
@@ -103,21 +106,68 @@ class BooksDbViewSet(viewsets.ModelViewSet):
     serializer_class = BooksDbSerializer
 
     def create(self, request, *args, **kwargs):
-        # Tworzenie kopii request.data jako słownik
         data = request.data.copy()
-        author_id = data.get('author')  # Oczekujemy ID autora jako string
+        author_id = data.get('author')
 
         if author_id:
             try:
                 author = AuthorsDb.objects.get(id=author_id)
-                data['author'] = author.id  # Przypisz ID autora do skopiowanych danych
+                data['author'] = author.id
             except AuthorsDb.DoesNotExist:
                 return Response({"error": "Author does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Author is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=data)  # Użyj skopiowanych danych
-        if serializer.is_valid():
+        serializer = self.get_serializer(data=data)
+        try:
+            serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except serializers.ValidationError as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+'''             OBSŁUGA GATUNKÓW KSIĄŻEK            '''
+class GenreDbViewSet(viewsets.ModelViewSet):
+    queryset = GenresDb.objects.all()
+    serializer_class = GenresDbSerializer
+
+    def create(self, request, *args, **kwargs):
+        genre_name = request.data.get('genre', '').title()
+        existing_genre = GenresDb.objects.filter(genre__iexact=genre_name).first()
+        
+        if existing_genre:
+            return Response({
+                'message': f"Genre '{existing_genre.genre}' already exists.",
+                'id': existing_genre.id,
+                'genre': existing_genre.genre
+            }, status=status.HTTP_200_OK)
+
+        # Użycie serializer z walidacją
+        serializer = self.get_serializer(data={'genre': genre_name})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        lookup_value = kwargs.get('pk')
+
+        if lookup_value == "all":
+            queryset = self.get_queryset()
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+
+        if lookup_value.isdigit():
+            return super().retrieve(request, *args, **kwargs)  # ID-based retrieval
+        try:
+            genre = GenresDb.objects.get(genre__iexact=lookup_value.title())  # Name-based retrieval
+            serializer = self.get_serializer(genre)
+            return Response(serializer.data)
+        except GenresDb.DoesNotExist:
+            raise NotFound(detail=f"Genre '{lookup_value}' does not exist.")
