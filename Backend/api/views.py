@@ -179,6 +179,7 @@ class GenreDbViewSet(viewsets.ModelViewSet):
 class BookGenresDbViewSet(viewsets.ModelViewSet):
     queryset = BookGenresDb.objects.all()
     serializer_class = BookGenresDbSerializer
+
     def create(self, request, *args, **kwargs):
         book_id = request.data.get('book')
         genre_id = request.data.get('genre')
@@ -187,12 +188,27 @@ class BookGenresDbViewSet(viewsets.ModelViewSet):
             return Response({"error": "Both book and genre are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+
             book = BooksDb.objects.get(id=book_id)
             genre = GenresDb.objects.get(id=genre_id)
-        except (BooksDb.DoesNotExist, GenresDb.DoesNotExist):
-            return Response({"error": "Book or genre does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
-        book_genre = BookGenresDb(book=book, genre=genre)
-        book_genre.save()
+            if BookGenresDb.objects.filter(book=book, genre=genre).exists():
+                return Response({"error": "This book-genre relation already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"book": book_id, "genre": genre_id}, status=status.HTTP_201_CREATED)
+            book_genre = BookGenresDb(book=book, genre=genre)
+            book_genre.save()
+
+            return Response({"book": book_id, "genre": genre_id}, status=status.HTTP_201_CREATED)
+
+        except BooksDb.DoesNotExist:
+            return Response({"error": "Book does not exist."}, status=status.HTTP_404_NOT_FOUND)
+        except GenresDb.DoesNotExist:
+            return Response({"error": "Genre does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+    def destroy(self, request, pk=None):
+        try:
+            book_genre = self.get_object()
+            book_genre.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except BookGenresDb.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

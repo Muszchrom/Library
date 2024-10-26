@@ -58,3 +58,13 @@ class BookGenresDbSerializer(serializers.ModelSerializer):
         fields = '__all__'
         #fields = ['book', 'genre']
         #fields = ['book_id', 'genre_id']
+
+    def create(self, validated_data):
+        book = validated_data.get('book')
+        genre = validated_data.get('genre')
+
+        # Sprawdź, czy relacja już istnieje
+        if BookGenresDb.objects.filter(book=book, genre=genre).exists():
+            raise serializers.ValidationError("Ta relacja już istnieje.")
+
+        return super().create(validated_data)

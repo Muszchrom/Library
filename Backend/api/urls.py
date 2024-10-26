@@ -9,13 +9,10 @@ router = DefaultRouter()
 router.register(r'libraries', views.LibraryViewSet)
 router.register(r'authors', views.AuthorsDbViewSet)
 router.register(r'books', views.BooksDbViewSet)
-#router.register(r'books/genres', views.GenreDbViewSet)
+#router.register(r'books/genres', views.GenreDbViewSet) =====> JESZCZE NIE DZIAŁA
 router.register(r'genres', views.GenreDbViewSet, basename='genres')
-# router.register(r'books/genres', views.GenreDbViewSet, basename='genres')
+
 router.register(r'book-genres', views.BookGenresDbViewSet)  
-
-
-
 
 
 urlpatterns = [
@@ -23,9 +20,8 @@ urlpatterns = [
     path('libraries/<str:pk>/', LibraryViewSet.as_view({'get': 'retrieve'}), name='library-by-identifier'), 
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),  
 
-    #path('books/genres/', views.GenreDbViewSet.as_view({'get': 'list'}), name='genre-list'),  # Nowy endpoint
+    #path('books/genres/', views.GenreDbViewSet.as_view({'get': 'list'}), name='genre-list'),  t
     #path('books/genres/<str:pk>/', GenreDbViewSet.as_view({'get': 'retrieve'}), name='genre-detail'),
-
 
 
     #path('books/genres/<str:genre_name>/', GenreDbViewSet.as_view({'get': 'retrieve_by_genre_name'}), name='genre-by-name'),
