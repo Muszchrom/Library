@@ -9,9 +9,9 @@ class LibrarySerializer(serializers.ModelSerializer):
 class AuthorsDbSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuthorsDb
-        fields = '__all__'
+        fields = ['id', 'first_name', 'second_name']
 
 class BooksDbSerializer(serializers.ModelSerializer):
     class Meta:
         model = BooksDb
-        fields = '__all__'
+        fields = ['id', 'author_id', 'isbn', 'isbn13', 'title', 'description', 'publication_date']

@@ -5,12 +5,15 @@ class Library(models.Model):
     city = models.CharField(max_length=100)
     def save(self, *args, **kwargs):
         if self.city:
-            self.city = self.city.capitalize()
+            self.city = self.city.title()
         super().save(*args, **kwargs)
     def __str__(self):
         return self.library_name
     class Meta:
+        unique_together = ('library_name', 'city')
         db_table = 'libraries_db'
+
+
 
 
 class AuthorsDb(models.Model):
