@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
           const res = await fetch("http://gateway:8081/auth/login", {
             method: "POST",
@@ -70,9 +70,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, user }: { token: JWT, user: User }) {
       if (user) {
-        token.id = user.id,
-        token.username = user.username,
-        token.role = user.role,
+        token.id = user.id
+        token.username = user.username
+        token.role = user.role
         token.APIToken = user.token
       }
       return token;
