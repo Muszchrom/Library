@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.user_db (
   password                VARCHAR(255) NOT NULL,
   email                   VARCHAR(255) NOT NULL,
   phone                   INTEGER NOT NULL,
-  role                    INTEGER NOT NULL DEFAULT 2,
+  role                    INTEGER NOT NULL DEFAULT 3,
   
   -- Optional
   age                     INTEGER,
