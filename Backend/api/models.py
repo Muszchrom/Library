@@ -26,7 +26,8 @@ class AuthorsDb(models.Model):
 
 
 class BooksDb(models.Model):
-    author_id = models.BigIntegerField()
+    author = models.ForeignKey(AuthorsDb, on_delete=models.CASCADE)
+    #author_id = models.BigIntegerField()
     isbn = models.CharField(max_length=10)
     isbn13 = models.CharField(max_length=13)
     title = models.CharField(max_length=255)
@@ -36,6 +37,7 @@ class BooksDb(models.Model):
         return self.title
     class Meta:
         db_table = 'books_db'
+        unique_together = (('isbn', 'author'),)  # Unikalna kombinacja ISBN i autora
 
 
 class Genre(models.Model):                                          #gatunki

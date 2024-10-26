@@ -93,10 +93,31 @@ class AuthorsDbViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(data=author_data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-
             return Response(serializer.data, status=201)
 
 
+
+'''             OBSŁUGA KSIĄŻEK            '''
 class BooksDbViewSet(viewsets.ModelViewSet):
     queryset = BooksDb.objects.all()
     serializer_class = BooksDbSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Tworzenie kopii request.data jako słownik
+        data = request.data.copy()
+        author_id = data.get('author')  # Oczekujemy ID autora jako string
+
+        if author_id:
+            try:
+                author = AuthorsDb.objects.get(id=author_id)
+                data['author'] = author.id  # Przypisz ID autora do skopiowanych danych
+            except AuthorsDb.DoesNotExist:
+                return Response({"error": "Author does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "Author is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=data)  # Użyj skopiowanych danych
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
