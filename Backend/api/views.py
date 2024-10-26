@@ -9,14 +9,16 @@ from .models import (
     Library, 
     AuthorsDb, 
     BooksDb,
-    GenresDb
+    GenresDb,
+    BookGenresDb
 )
 
 from .serializers import (
     LibrarySerializer, 
     AuthorsDbSerializer, 
     BooksDbSerializer,
-    GenresDbSerializer
+    GenresDbSerializer,
+    BookGenresDbSerializer
 )
 
 '''             OBSŁUGA BIBLIOTEK            '''
@@ -171,3 +173,26 @@ class GenreDbViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         except GenresDb.DoesNotExist:
             raise NotFound(detail=f"Genre '{lookup_value}' does not exist.")
+
+
+'''             RELACJA KSIĄŻKA GATUNEK            '''
+class BookGenresDbViewSet(viewsets.ModelViewSet):
+    queryset = BookGenresDb.objects.all()
+    serializer_class = BookGenresDbSerializer
+    def create(self, request, *args, **kwargs):
+        book_id = request.data.get('book')
+        genre_id = request.data.get('genre')
+
+        if not book_id or not genre_id:
+            return Response({"error": "Both book and genre are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            book = BooksDb.objects.get(id=book_id)
+            genre = GenresDb.objects.get(id=genre_id)
+        except (BooksDb.DoesNotExist, GenresDb.DoesNotExist):
+            return Response({"error": "Book or genre does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
+        book_genre = BookGenresDb(book=book, genre=genre)
+        book_genre.save()
+
+        return Response({"book": book_id, "genre": genre_id}, status=status.HTTP_201_CREATED)

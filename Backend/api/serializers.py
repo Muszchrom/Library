@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Library, AuthorsDb, BooksDb, GenresDb  
+from .models import Library, AuthorsDb, BooksDb, GenresDb, BookGenresDb
 
 class LibrarySerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,14 +37,24 @@ class BooksDbSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Title is required.")
         return value.title()  # Zwracanie tytułu z wielkiej litery
 
-
 class GenresDbSerializer(serializers.ModelSerializer):
     class Meta:
         model = GenresDb  
         fields = ['id', 'genre']
     
     def validate_genre(self, value):    
-        formatted_value = value.title()                                             
-        if GenresDb.objects.filter(genre__iexact=formatted_value).exists():              # Formatowanie na `.title()` oraz sprawdzenie, czy gatunek już istnieje
+        if not value:
+            raise serializers.ValidationError("This field cannot be empty.")
+        
+        formatted_value = value.title()
+        if GenresDb.objects.filter(genre__iexact=formatted_value).exists():
             raise serializers.ValidationError("This genre already exists.")
         return formatted_value
+
+
+class BookGenresDbSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookGenresDb
+        fields = '__all__'
+        #fields = ['book', 'genre']
+        #fields = ['book_id', 'genre_id']

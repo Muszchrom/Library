@@ -52,31 +52,12 @@ class GenresDb(models.Model):                                          #gatunki
         db_table = 'genres_db'
 
 
-# class BookGenre(models.Model):                                      #gatunek - ksiazka (relacja wiele do wielu)
-#     book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
-#     genre = models.ForeignKey('GenresDb', on_delete=models.CASCADE)
-#     class Meta:
-#         db_table = 'book_genres_db'
-#         unique_together = (('book', 'genre'),)                      # Zapewnia unikalność kombinacji książka-gatunek
+class BookGenresDb(models.Model):                                      #gatunek - ksiazka (relacja wiele do wielu)
+    book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
+    genre = models.ForeignKey('GenresDb', on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table = 'book_genres_db'
+        unique_together = (('book_id', 'genre_id'),)   
 
 
-# class LibraryBook(models.Model):                                    #ksiazka - biblioteka
-#     book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
-#     library = models.ForeignKey('Library', on_delete=models.CASCADE)
-#     book_count = models.IntegerField()
-#     class Meta:
-#         db_table = 'library_books_db'
-#         unique_together = (('book', 'library'),)                    # Zapewnia unikalność kombinacji książka-biblioteka
-
-
-# class Rental(models.Model):                                         #śledzenie wypożyczeń
-#     user_id = models.BigIntegerField()  
-#     book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
-#     library = models.ForeignKey('Library', on_delete=models.CASCADE)
-#     rental_status = models.CharField(max_length=25)
-#     rental_date = models.DateField()
-#     due_date = models.DateField()
-#     return_date = models.DateField(blank=True, null=True)
-
-#     class Meta:
-#         db_table = 'rentals_db'
