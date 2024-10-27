@@ -21,6 +21,8 @@ urlpatterns = [
     path('libraries/<str:pk>/', LibraryViewSet.as_view({'get': 'retrieve'}), name='library-by-identifier'), 
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),   # Lista książek w bibliotece
 
+    path('books/<int:pk>/update-rating/', BooksDbViewSet.as_view({'patch': 'update_rating'}), name='update-rating'),    #update rating
+
     #path('books/genres/', views.GenreDbViewSet.as_view({'get': 'list'}), name='genre-list'),  t
     #path('books/genres/<str:pk>/', GenreDbViewSet.as_view({'get': 'retrieve'}), name='genre-detail'),
 

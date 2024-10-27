@@ -14,7 +14,7 @@ class AuthorsDbSerializer(serializers.ModelSerializer):
 class BooksDbSerializer(serializers.ModelSerializer):
     class Meta:
         model = BooksDb
-        fields = ['id', 'author', 'isbn', 'isbn13', 'title', 'description', 'publication_date',]
+        fields = ['id', 'author', 'isbn', 'isbn13', 'title', 'description', 'publication_date','rating']
 
     def validate(self, data):
         # Sprawdzanie, czy książka już istnieje
@@ -35,7 +35,12 @@ class BooksDbSerializer(serializers.ModelSerializer):
     def validate_title(self, value):
         if not value:
             raise serializers.ValidationError("Title is required.")
-        return value.title()  # Zwracanie tytułu z wielkiej litery
+        return value.title()  
+
+    def validate_rating(self, value):                                                                   #sprawdzenie poprawności opinii
+        if value is not None and (value < 1 or value > 5 or (value * 2) % 1 != 0):
+            raise serializers.ValidationError("Ocena musi być liczbą od 1 do 5, z krokiem 0.5")
+        return value
 
 class GenresDbSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,7 +83,6 @@ class LibraryBooksDbSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Book count cannot be negative.")
         return value
-
 
 class RentalsDbSerializer(serializers.ModelSerializer):
     class Meta:

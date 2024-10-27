@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import status
 
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
@@ -132,6 +133,21 @@ class BooksDbViewSet(viewsets.ModelViewSet):
         except serializers.ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=['patch'])
+    def update_rating(self, request, pk=None):
+        book = self.get_object()
+        rating = request.data.get('rating')
+
+        if rating is not None:
+            try:
+                # Zakładam, że rating to float
+                book.rating = rating
+                book.save()
+                return Response({"message": "Rating updated successfully."}, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "Rating is required."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 '''             OBSŁUGA GATUNKÓW KSIĄŻEK            '''

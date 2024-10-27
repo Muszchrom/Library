@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
+
 
 class Library(models.Model):
     library_name = models.CharField(max_length=255)
@@ -32,11 +35,28 @@ class BooksDb(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True, null=True)
     publication_date = models.DateField()
+
+    rating = models.DecimalField(                                                               #RATING GWIAZDECZKI
+        max_digits=2,
+        decimal_places=1,
+        validators=[MinValueValidator(Decimal('1.0')), MaxValueValidator(Decimal('5.0'))],
+        blank=True,
+        null=True  
+    )
+
     def __str__(self):
         return self.title
     class Meta:
         db_table = 'books_db'
         unique_together = (('isbn', 'author'),)  # Unikalna kombinacja ISBN i autora
+    
+    def update_rating(self, new_rating):
+        if Decimal('1.0') <= new_rating <= Decimal('5.0') and (new_rating * 2) % 1 == 0:
+            self.rating = new_rating
+            self.save()
+            return f"Ocena książki '{self.title}' została zaktualizowana na {new_rating}"
+        else:
+            raise ValueError("Ocena musi być liczbą od 1 do 5, z krokiem 0.5")
 
 
 class GenresDb(models.Model):                                          #gatunki
