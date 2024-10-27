@@ -289,7 +289,7 @@ class RentalsDbViewSet(viewsets.ModelViewSet):
     serializer_class = RentalsDbSerializer
 
 
-
+'''             TWORZENIE AUTORÓW           '''
 class CreateAuthors(APIView):
     authors_data = [
         {"first_name": "Jacek", "second_name": "Dukaj"},
@@ -452,7 +452,51 @@ class CreateAuthors(APIView):
 
         return created_authors, skipped_authors
 
-    def delete(self, request):
-        AuthorsDb.objects.all().delete()
-        return Response({"message": "All authors deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+    # def delete(self, request):
+    #     AuthorsDb.objects.all().delete()
+    #     return Response({"message": "All authors deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
 
+
+class CreateGenres(APIView):
+    genres_data = [
+        {"genre": "Fantastyka"},
+        {"genre": "Powieść psychologiczna"},
+        {"genre": "Kryminał"},
+        {"genre": "Romans"},
+        {"genre": "Powieść historyczna"},
+        {"genre": "Literatura współczesna"},
+        {"genre": "Reportaż"},
+        {"genre": "Psychologia"},
+        {"genre": "Literatura piękna"},
+        {"genre": "Literatura młodzieżowa"},
+        {"genre": "Science fiction"},
+        {"genre": "Horror"},
+    ]
+
+    def get(self, request):
+        created, skipped = self.create_genres()
+        return Response(
+            {
+                "message": "Genres processed successfully!",
+                "created": created,
+                "skipped": skipped,
+            },
+            status=status.HTTP_200_OK  # Użyj HTTP_200_OK dla poprawnych zapytań GET
+        )
+
+    def create_genres(self):
+        created_genres = []
+        skipped_genres = []
+
+        for genre in self.genres_data:
+            if GenresDb.objects.filter(genre__iexact=genre['genre']).exists():  # Użyj 'genre' zamiast 'name'
+                skipped_genres.append(genre['genre'])
+            else:
+                serializer = GenresDbSerializer(data=genre)
+                if serializer.is_valid():
+                    serializer.save()
+                    created_genres.append(genre['genre'])
+                else:
+                    print(serializer.errors)  # Log błędów
+
+        return created_genres, skipped_genres

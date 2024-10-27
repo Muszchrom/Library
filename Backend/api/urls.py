@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors
+from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors, CreateGenres
 
 
 
@@ -25,7 +25,10 @@ urlpatterns = [
 
     path('books/<int:pk>/update-rating/', BooksDbViewSet.as_view({'patch': 'update_rating'}), name='update-rating'),    #update rating
 
+
+    #uzupełnianie bazy
     path('create-authors/', CreateAuthors.as_view(), name='create-authors'),
+    path('create-genres/', CreateGenres.as_view(), name='create-genres'),
  
 
 
