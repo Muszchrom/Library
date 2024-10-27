@@ -1,7 +1,9 @@
-import Image from "next/image"
-import { HomepageRow, images } from "../../page";
+import Image from "next/image";
 import Score from "@/components/score";
 import { Button } from "@/components/ui/button";
+import BooksRow from "@/components/books-row";
+import { BookData } from "@/interfaces";
+
 
 // const libraries = [
 //   {
@@ -12,6 +14,44 @@ import { Button } from "@/components/ui/button";
 //     }
 //   }
 // ]
+
+const images: BookData[] = [
+  {
+    id: 1,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 2,
+    title: "Architektura API",
+    available: false,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 3,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 4,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 5,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+]
 
 export default function Page({ params }: { params: { book: number }}) {
   const image = images[params.book];
@@ -35,7 +75,7 @@ export default function Page({ params }: { params: { book: number }}) {
       </div>
       <LibrariesList />
       <div className="my-4"></div>
-      <HomepageRow images={images} title="Podobne książki" />
+      <BooksRow bookDataArray={images} title="Podobne książki" />
       <div className="my-4"></div>
     </>
   );
