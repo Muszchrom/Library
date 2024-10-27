@@ -2,7 +2,9 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet
+from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors
+
+
 
 
 router = DefaultRouter()
@@ -22,6 +24,10 @@ urlpatterns = [
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),   # Lista książek w bibliotece
 
     path('books/<int:pk>/update-rating/', BooksDbViewSet.as_view({'patch': 'update_rating'}), name='update-rating'),    #update rating
+
+    path('create-authors/', CreateAuthors.as_view(), name='create-authors'),
+ 
+
 
     #path('books/genres/', views.GenreDbViewSet.as_view({'get': 'list'}), name='genre-list'),  t
     #path('books/genres/<str:pk>/', GenreDbViewSet.as_view({'get': 'retrieve'}), name='genre-detail'),

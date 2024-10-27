@@ -287,3 +287,172 @@ class LibraryBooksDbViewSet(viewsets.ModelViewSet):
 class RentalsDbViewSet(viewsets.ModelViewSet):
     queryset = RentalsDb.objects.all()
     serializer_class = RentalsDbSerializer
+
+
+
+class CreateAuthors(APIView):
+    authors_data = [
+        {"first_name": "Jacek", "second_name": "Dukaj"},
+        {"first_name": "Fiodor", "second_name": "Dostojewski"},
+        {"first_name": "Krzysztof", "second_name": "Beśka"},
+        {"first_name": "Kristin", "second_name": "Hannah"},
+        {"first_name": "Hanya", "second_name": "Yanagihara"},
+        {"first_name": "Margaret", "second_name": "Mitchell"},
+        {"first_name": "Viktor", "second_name": "Frankl"},
+        {"first_name": "Svetlana", "second_name": "Aleksievich"},
+        {"first_name": "Wisława", "second_name": "Szymborska"},
+        {"first_name": "Dorota", "second_name": "Terakowska"},
+        {"first_name": "Jane", "second_name": "Austen"},
+        {"first_name": "John", "second_name": "Steinbeck"},
+        {"first_name": "George", "second_name": "Orwell"},
+        {"first_name": "Bolesław", "second_name": "Prus"},
+        {"first_name": "Stephen", "second_name": "King"},
+
+        ##fantastyka
+        {"first_name": "J.R.R.", "second_name": "Tolkien"},
+        {"first_name": "George R.R.", "second_name": "Martin"},
+        {"first_name": "J.K.", "second_name": "Rowling"},
+        {"first_name": "Patrick", "second_name": "Rothfuss"},
+        {"first_name": "Leigh", "second_name": "Bardugo"},
+        {"first_name": "Brandon", "second_name": "Sanderson"},
+
+        ###powieść psychologiczna
+        {"first_name": "Fyodor", "second_name": "Dostoevsky"},
+        {"first_name": "Virginia", "second_name": "Woolf"},
+        {"first_name": "Franz", "second_name": "Kafka"},
+        {"first_name": "Sylvia", "second_name": "Plath"},
+        {"first_name": "Kazuo", "second_name": "Ishiguro"},
+        {"first_name": "Haruki", "second_name": "Murakami"},
+        
+        ## kryminał
+        {"first_name": "Agatha", "second_name": "Christie"},
+        {"first_name": "Arthur", "second_name": "Conan Doyle"},
+        {"first_name": "Gillian", "second_name": "Flynn"},
+        {"first_name": "Raymond", "second_name": "Chandler"},
+        {"first_name": "James", "second_name": "Ellroy"},
+        {"first_name": "Tess", "second_name": "Gerritsen"},
+        {"first_name": "Patricia", "second_name": "Highsmith"},
+        {"first_name": "Henning", "second_name": "Mankell"},
+        {"first_name": "Harlan", "second_name": "Coben"},
+        {"first_name": "Donna", "second_name": "Tartt"},
+
+        ## romans
+        {"first_name": "Jane", "second_name": "Austen"},
+        {"first_name": "Nicholas", "second_name": "Sparks"},
+        {"first_name": "E.L.", "second_name": "James"},
+        {"first_name": "Diana", "second_name": "Gabaldon"},
+        {"first_name": "Colleen", "second_name": "Hoover"},
+        {"first_name": "Kristin", "second_name": "Hannah"},
+        {"first_name": "Agnieszka", "second_name": "Krawczyk"},
+        {"first_name": "Natasza", "second_name": "Socha"},
+        {"first_name": "Katarzyna", "second_name": "Bonda"},
+        {"first_name": "Dorota", "second_name": "Terakowska"},
+
+        ## poweieść historyczna
+        {"first_name": "Henryk", "second_name": "Sienkiewicz"},
+        {"first_name": "Ken", "second_name": "Follett"},
+        {"first_name": "Umberto", "second_name": "Eco"},
+        {"first_name": "Olga", "second_name": "Tokarczuk"},
+        {"first_name": "Bernard", "second_name": "Cornwell"},
+
+        ## reportaż
+        {"first_name": "Olga", "second_name": "Tokarczuk"},
+        {"first_name": "Hanya", "second_name": "Yanagihara"},
+        {"first_name": "David", "second_name": "Foster Wallace"},
+        {"first_name": "Svetlana", "second_name": "Aleksievich"},
+        {"first_name": "Haruki", "second_name": "Murakami"},
+
+        ## Reportaż
+        {"first_name": "Svetlana", "second_name": "Aleksievich"},
+        {"first_name": "Ryszard", "second_name": "Kapuściński"},
+        {"first_name": "Mariusz", "second_name": "Szczygieł"},
+        {"first_name": "Hannah", "second_name": "Arendt"},
+        {"first_name": "Truman", "second_name": "Capote"},
+        {"first_name": "John", "second_name": "Hersey"},
+        {"first_name": "Lynn", "second_name": "Perry"},
+        {"first_name": "Barbara", "second_name": "Włodarczyk"},
+
+
+        ## Psychologia
+        {"first_name": "Sigmund", "second_name": "Freud"},
+        {"first_name": "Carl", "second_name": "Jung"},
+        {"first_name": "Albert", "second_name": "Ellis"},
+        {"first_name": "Brené", "second_name": "Brown"},
+        {"first_name": "Irvin", "second_name": "D. Yalom"},
+        {"first_name": "Maria", "second_name": "Zsuzsanna"},
+        {"first_name": "Wojciech", "second_name": "Eichelberger"},
+        {"first_name": "Anna", "second_name": "Szmigiel"},
+
+
+        ##Literatura piękna
+        {"first_name": "Wisława", "second_name": "Szymborska"},
+        {"first_name": "Olga", "second_name": "Tokarczuk"},
+        {"first_name": "Bolesław", "second_name": "Prus"},
+        {"first_name": "Jacek", "second_name": "Dukaj"},
+        {"first_name": "Marcel", "second_name": "Proust"},
+        {"first_name": "Gabriel", "second_name": "García Márquez"},
+        {"first_name": "Virginia", "second_name": "Woolf"},
+        {"first_name": "James", "second_name": "Joyce"},
+
+
+        ## literatura młodzieżowa
+        {"first_name": "Michał", "second_name": "Cholewa"},
+        {"first_name": "Joanne", "second_name": "Rowling"},
+        {"first_name": "John", "second_name": "Green"},
+        {"first_name": "Katherine", "second_name": "Applegate"},
+        {"first_name": "Tadeusz", "second_name": "Różewicz"},
+        {"first_name": "Maggie", "second_name": "Stiefvater"},
+        {"first_name": "Cassandra", "second_name": "Clare"},
+        {"first_name": "Harlan", "second_name": "Coben"},
+
+        ## science fiction
+        {"first_name": "Stanislaw", "second_name": "Lem"},
+        {"first_name": "Isaac", "second_name": "Asimov"},
+        {"first_name": "Philip", "second_name": "K. Dick"},
+        {"first_name": "Arthur", "second_name": "C. Clarke"},
+        {"first_name": "Ursula", "second_name": "K. Le Guin"},
+        {"first_name": "H.G.", "second_name": "Wells"},
+        {"first_name": "Andrzej", "second_name": "Sapkowski"},
+        {"first_name": "Margaret", "second_name": "Atwood"},
+
+        ## horror
+        {"first_name": "Stephen", "second_name": "King"},
+        {"first_name": "H.P.", "second_name": "Lovecraft"},
+        {"first_name": "Clive", "second_name": "Barker"},
+        {"first_name": "Shirley", "second_name": "Jackson"},
+        {"first_name": "Bram", "second_name": "Stoker"},
+        {"first_name": "Anne", "second_name": "Rice"},
+        {"first_name": "Jakub", "second_name": "Ćwiek"},
+        {"first_name": "Maja", "second_name": "Lidia Kossakowska"},
+    ]
+
+    def get(self, request):
+        created, skipped = self.create_authors()
+        return Response(
+            {"message": "Authors processed successfully!", "created": created, "skipped": skipped},
+            status=status.HTTP_201_CREATED
+        )
+
+    def create_authors(self):
+        created_authors = []
+        skipped_authors = []
+        
+        for author in self.authors_data:
+            if AuthorsDb.objects.filter(first_name=author['first_name'], second_name=author['second_name']).exists():
+
+                skipped_authors.append(author)
+            else:
+
+                serializer = AuthorsDbSerializer(data=author)
+                if serializer.is_valid():
+                    serializer.save()
+                    created_authors.append(author)
+                else:
+                    print(serializer.errors)  # Można także dodać logowanie błędów
+
+        return created_authors, skipped_authors
+
+    def delete(self, request):
+        AuthorsDb.objects.all().delete()
+        return Response({"message": "All authors deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+
