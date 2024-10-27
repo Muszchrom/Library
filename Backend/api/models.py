@@ -68,3 +68,16 @@ class LibraryBooksDb(models.Model):                                    #ksiazka 
     class Meta:
         db_table = 'library_books_db'
         unique_together = (('book', 'library'),)                    # Zapewnia unikalność kombinacji książka-biblioteka
+
+
+class RentalsDb(models.Model):                                         #śledzenie wypożyczeń
+    user_id = models.BigIntegerField()  
+    book = models.ForeignKey('BooksDb', on_delete=models.CASCADE)
+    library = models.ForeignKey('Library', on_delete=models.CASCADE)
+    rental_status = models.CharField(max_length=25)
+    rental_date = models.DateField()
+    due_date = models.DateField()
+    return_date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'rentals_db'

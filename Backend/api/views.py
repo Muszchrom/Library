@@ -11,7 +11,8 @@ from .models import (
     BooksDb,
     GenresDb,
     BookGenresDb,
-    LibraryBooksDb
+    LibraryBooksDb,
+    RentalsDb
 )
 
 from .serializers import (
@@ -20,7 +21,8 @@ from .serializers import (
     BooksDbSerializer,
     GenresDbSerializer,
     BookGenresDbSerializer,
-    LibraryBooksDbSerializer
+    LibraryBooksDbSerializer,
+    RentalsDbSerializer
 )
 
 '''             OBSŁUGA BIBLIOTEK            '''
@@ -263,3 +265,9 @@ class LibraryBooksDbViewSet(viewsets.ModelViewSet):
             return Response({"error": "Library book relation does not exist."}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError:
             return Response({"error": "A database integrity error occurred."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+'''             OBSŁUGA WYPOŻYCZEŃ            '''
+class RentalsDbViewSet(viewsets.ModelViewSet):
+    queryset = RentalsDb.objects.all()
+    serializer_class = RentalsDbSerializer

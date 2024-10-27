@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Library, AuthorsDb, BooksDb, GenresDb, BookGenresDb, LibraryBooksDb
+from .models import Library, AuthorsDb, BooksDb, GenresDb, BookGenresDb, LibraryBooksDb, RentalsDb
 
 class LibrarySerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,3 +78,10 @@ class LibraryBooksDbSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Book count cannot be negative.")
         return value
+
+
+class RentalsDbSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentalsDb
+        fields = '__all__'
+        #fields = ['id', 'user_id', 'book_id', 'library_id', 'rental_status', 'rental_date', 'due_date', 'return_date']
