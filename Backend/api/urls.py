@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from . import views
 from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors, CreateGenres, CreateBooks, CreateBookGenres
 
+from .dev_views import generateTemplateData
 
 
 
@@ -20,6 +21,7 @@ router.register(r'rentals', views.RentalsDbViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('generate', generateTemplateData),
     path('libraries/<str:pk>/', LibraryViewSet.as_view({'get': 'retrieve'}), name='library-by-identifier'), 
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),   # Lista książek w bibliotece
 
