@@ -1,17 +1,56 @@
-import Image from "next/image"
-import { HomepageRow, images } from "../../page";
+import Image from "next/image";
 import Score from "@/components/score";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import BooksRow from "@/components/books-row";
+import { BookData } from "@/interfaces";
 
-const libraries = [
+
+// const libraries = [
+//   {
+//     name: "",
+//     localization: {
+//       city: "",
+//       street: ""
+//     }
+//   }
+// ]
+
+const images: BookData[] = [
   {
-    name: "",
-    localization: {
-      city: "",
-      street: ""
-    }
-  }
+    id: 1,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 2,
+    title: "Architektura API",
+    available: false,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 3,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 4,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
+  {
+    id: 5,
+    title: "Architektura API",
+    available: true,
+    user_score: 4.5,
+    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
+  },
 ]
 
 export default function Page({ params }: { params: { book: number }}) {
@@ -26,7 +65,7 @@ export default function Page({ params }: { params: { book: number }}) {
           <h2 className="text-xl font-semibold tracking-tight">{image.title}</h2>
           <Score score={image.user_score}/>
           <p className="text-muted-foreground text-sm leading-tight">
-            Jeśli dopiero zaczynasz swoją przygodę z tworzeniem API, książka "Architektura API" 
+            Jeśli dopiero zaczynasz swoją przygodę z tworzeniem API, książka &quot;Architektura API&quot;
             to doskonałe miejsce do rozpoczęcia nauki. Autorzy w przystępny sposób tłumaczą 
             złożone zagadnienia związane z projektowaniem i implementacją interfejsów API. 
             Znajdziesz tu wiele praktycznych przykładów i wskazówek, które pomogą Ci szybko 
@@ -34,29 +73,35 @@ export default function Page({ params }: { params: { book: number }}) {
           </p>
         </div>
       </div>
-      <div className="flex flex-col gap-4 mt-4">
-        <div className="flex gap-4">
-          <Button variant={"outline"}>Odległość 👇</Button>
-          <Button variant={"outline"}>Domyślnie 👇</Button>
-          <Button variant={"outline"}>Dostawa ✅</Button>
-        </div>
-        <LibraryCard />
-        <LibraryCard />
-        <LibraryCard />
-        <LibraryCard />
-        <LibraryCard />
-      </div>
+      <LibrariesList />
       <div className="my-4"></div>
-      <HomepageRow images={images} title="Podobne książki" />
+      <BooksRow bookDataArray={images} title="Podobne książki" />
       <div className="my-4"></div>
     </>
   );
 }
 
+function LibrariesList() {
+  return (
+    <div className="flex flex-col gap-4 mt-4">
+      <div className="flex gap-4">
+        <Button variant={"outline"}>Odległość 👇</Button>
+        <Button variant={"outline"}>Domyślnie 👇</Button>
+        <Button variant={"outline"}>Dostawa ✅</Button>
+      </div>
+      <LibraryCard />
+      <LibraryCard />
+      <LibraryCard />
+      <LibraryCard />
+      <LibraryCard />
+    </div>
+  )
+}
+
 function LibraryCard() {
   return (
     <div className="rounded-xl border bg-card text-card-foreground shadow">
-      <div className="flex  p-4">
+      <div className="flex p-4 justify-between">
         <div className="flex flex-col justify-between gap-2">
           <h3 className="font-semibold leading-none tracking-tight">Miejska Biblioteka Publiczna im. H. Łopacińskiego Filia nr 25</h3>
           <p className="text-sm text-muted-foreground">Sympatyczna 16, 20-530 Lublin</p>

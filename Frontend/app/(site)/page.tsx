@@ -1,23 +1,8 @@
-import Score from "@/components/score";
+import BooksRow from "@/components/books-row";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
-import Link from "next/link";
+import { BookData, CommonBookGenres } from "@/interfaces";
 
-export interface ImageData {
-  id: number,
-  title: string,
-  available: boolean,
-  user_score: number,
-  coverURL: string
-}
-
-export interface CommonBookGenres {
-  id: number,
-  name: string
-}
-
-export const images: ImageData[] = [
+const images: BookData[] = [
   {
     id: 1,
     title: "Architektura API",
@@ -55,7 +40,7 @@ export const images: ImageData[] = [
   },
 ]
 
-export const commonBookGenres: CommonBookGenres[] = [
+const commonBookGenres: CommonBookGenres[] = [
   { id: 1, name: "Fiction" },
   { id: 2, name: "Non-fiction" },
   { id: 3, name: "Mystery" },
@@ -66,13 +51,13 @@ export const commonBookGenres: CommonBookGenres[] = [
 export default function Home() {
   return (
     <div className="flex flex-col gap-2">
-      <HomepageRow images={images} title="Zawsze najlepsze"/>
+      <BooksRow bookDataArray={images} title="Zawsze najlepsze"/>
 
       <HomepageRowV2 genres={commonBookGenres}></HomepageRowV2>
 
-      <HomepageRow images={images} title="Najlepsze w okolicy"/>
+      <BooksRow bookDataArray={images} title="Najlepsze w okolicy"/>
 
-      <HomepageRow images={images} title="Najlepsze w ostatnim czasie"/>
+      <BooksRow bookDataArray={images} title="Najlepsze w ostatnim czasie"/>
     </div>
   );
 }
@@ -93,43 +78,3 @@ function HomepageRowV2({genres}: {genres: CommonBookGenres[]}) {
   )
 }
 
-export function HomepageRow({images, title}: {images: ImageData[], title: string}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-2xl pt-2 leading-none">{title}</h2>
-      <Separator orientation="horizontal" className="mb-1"/>
-      <div className="flex gap-2 overflow-auto">
-        {images.map((image) => 
-            <BookCard key={image.id} image={image}></BookCard>
-        )}
-      </div>
-    </div>
-  )
-}
-
-
-function BookCard({image}: {image: ImageData}) {
-  const baseUrl = "/books";
-  return (
-    <div className="min-w-44">
-      <Link href={baseUrl + "/" + image.id}>
-        <Image className="rounded-md" alt="" height={100} width={176} src={image.coverURL} />
-      </Link>
-      <div className="px-1 py-2">
-        <h3 className="font-medium leading-none tracking-tight">
-          {image.title}
-        </h3>
-        <div className="flex justify-between">
-          <Score score={image.user_score} />
-          {/* Or maybe genre? Since avaliability is dependent on library */}
-          {/* Availablitity in current library */}
-          <div className="overflow-auto">
-            <span className="px-2 py-0.5 bg-primary text-secondary rounded-full text-sm">
-              +99 km
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
