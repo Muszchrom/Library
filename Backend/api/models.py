@@ -17,7 +17,6 @@ class Library(models.Model):
         db_table = 'libraries_db'
 
 
-
 class AuthorsDb(models.Model):
     first_name = models.CharField(max_length=255)
     second_name = models.CharField(max_length=255)

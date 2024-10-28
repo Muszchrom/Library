@@ -465,6 +465,7 @@ class CreateGenres(APIView):
         {"genre": "Kryminał"},
         {"genre": "Romans"},
         {"genre": "Powieść historyczna"},
+        {"genre": "Powieść "},
         {"genre": "Literatura współczesna"},
         {"genre": "Reportaż"},
         {"genre": "Psychologia"},
@@ -507,7 +508,8 @@ class CreateGenres(APIView):
 '''             TWORZENIE KSIĄŻEK           '''
 class CreateBooks(APIView):
     books_data = [
-    {   "id": 1,
+{
+        "id": 1,
         "author": 1,
         "isbn": "8377995817",
         "isbn13": "9788377995817",
@@ -525,9 +527,158 @@ class CreateBooks(APIView):
         "description": "Klasyczna powieść o moralnych dylematach.",
         "publication_date": "1886-01-01",
         "rating": "4.5"
+    },
+    {
+        "id": 3,
+        "author": 3,
+        "isbn": "8324028873",
+        "isbn13": "9788324028873",
+        "title": "Cicha Noc",
+        "description": "Kryminał osadzony w przedwojennym Krakowie.",
+        "publication_date": "2015-11-25",
+        "rating": "4.0"
+    },
+    {
+        "id": 4,
+        "author": 3,
+        "isbn": "8366089258",
+        "isbn13": "9788366089258",
+        "title": "Wielka Samotność",
+        "description": "Historia miłości i przetrwania w trudnych czasach.",
+        "publication_date": "2018-04-01",
+        "rating": "4.5"
+    },
+    {
+        "id": 5,
+        "author": 48,
+        "isbn": "8381981077",
+        "isbn13": "9788381981077",
+        "title": "Księgi Jakubowe",
+        "description": "Epicka powieść o Jakubie Franku.",
+        "publication_date": "2014-04-15",
+        "rating": "5.0"
+    },
+    {
+        "id": 6,
+        "author": 5,
+        "isbn": "8365999915",
+        "isbn13": "9788365999915",
+        "title": "Małe Życie",
+        "description": "Opowieść o przyjaźni i traumach.",
+        "publication_date": "2015-03-04",
+        "rating": "4.0"
+    },
+    {
+        "id": 7,
+        "author": 6,
+        "isbn": "8376270063",
+        "isbn13": "9788376270063",
+        "title": "Przeminęło Z Wiatrem",
+        "description": "Powieść o miłości i wojnie secesyjnej.",
+        "publication_date": "1936-01-01",
+        "rating": "3.0"
+    },
+    {
+        "id": 8,
+        "author": 48,
+        "isbn": "8377540366",
+        "isbn13": "9788377540366",
+        "title": "Bieguni",
+        "description": "Książka o podróżnikach i ich losach.",
+        "publication_date": "2007-03-01",
+        "rating": "5.0"
+    },
+    {
+        "id": 9,
+        "author": 8,
+        "isbn": "8380493674",
+        "isbn13": "9788380493674",
+        "title": "Wojna Nie Ma W Sobie Nic Z Kobiety",
+        "description": "Reportaż o kobietach w czasie II wojny światowej.",
+        "publication_date": "1985-01-01",
+        "rating": "5.0"
+    },
+    {
+        "id": 10,
+        "author": 7,
+        "isbn": "8375032518",
+        "isbn13": "9788375032518",
+        "title": "Człowiek W Poszukiwaniu Sensu",
+        "description": "Książka o sensie życia w obliczu cierpienia.",
+        "publication_date": "1946-01-01",
+        "rating": "3.5"
+    },
+    {
+        "id": 11,
+        "author": 9,
+        "isbn": "8388581686",
+        "isbn13": "9788388581686",
+        "title": "Sztuka Kochania",
+        "description": "Książka o miłości i relacjach międzyludzkich.",
+        "publication_date": "1975-01-01",
+        "rating": "4.5"
+    },
+    {
+        "id": 12,
+        "author": 10,
+        "isbn": "8381981718",
+        "isbn13": "9788381981718",
+        "title": "Córka",
+        "description": "Opowieść o relacjach rodzinnych.",
+        "publication_date": "2003-01-01",
+        "rating": "4.0"
+    },
+    {
+        "id": 13,
+        "author": 11,
+        "isbn": "8375082376",
+        "isbn13": "9788375082376",
+        "title": "Duma I Uprzedzenie",
+        "description": "Klasyczna powieść o miłości i klasach społecznych.",
+        "publication_date": "1813-01-28",
+        "rating": "3.5"
+    },
+    {
+        "id": 14,
+        "author": 12,
+        "isbn": "8371415177",
+        "isbn13": "9788371415177",
+        "title": "Na Wschód Od Edenu",
+        "description": "Powieść o konflikcie dobra i zła w Kalifornii.",
+        "publication_date": "1952-01-01",
+        "rating": "4.0"
+    },
+    {
+        "id": 15,
+        "author": 13,
+        "isbn": "8375103421",
+        "isbn13": "9788375103421",
+        "title": "Rok 1984",
+        "description": "Dystopijna wizja totalitarnego państwa.",
+        "publication_date": "1949-01-01",
+        "rating": "3.0"
+    },
+    {
+        "id": 16,
+        "author": 14,
+        "isbn": "8380017937",
+        "isbn13": "9788380017937",
+        "title": "Lalka",
+        "description": "Powieść o życiu polskiego chłopstwa.",
+        "publication_date": "1890-01-01",
+        "rating": "5.0"
+    },
+    {
+        "id": 17,
+        "author": 15,
+        "isbn": "8377651831",
+        "isbn13": "9788377651831",
+        "title": "Lśnienie",
+        "description": "Powieść grozy o zjawiskach paranormalnych.",
+        "publication_date": "1977-01-01",
+        "rating": "3.5"
     }
     ]
-
     def get(self, request):
         created, skipped = self.create_books()
         return Response(
@@ -556,3 +707,105 @@ class CreateBooks(APIView):
 
         return created_books, skipped_books
 
+
+'''             TWORZENIE KSIĄŻEK           '''
+class CreateBookGenres(APIView):
+    # Example data structure for book-genre relationships
+    books_genres_data = [
+    {
+        "book": 1,
+        "genre": 1
+    },
+    {
+        "book": 2,
+        "genre": 2
+    },
+    {
+        "book": 3,
+        "genre": 3
+    },
+    {
+        "book": 4,
+        "genre": 4
+    },
+    {
+        "book": 5,
+        "genre": 5
+    },
+    {
+        "book": 6,
+        "genre": 6
+    },
+    {
+        "book": 7,
+        "genre": 5
+    },
+    {
+        "book": 8,
+        "genre": 6
+    },
+    {
+        "book": 9,
+        "genre": 7
+    },
+    {
+        "book": 10,
+        "genre": 8
+    },
+    {
+        "book": 11,
+        "genre": 9
+    },
+    {
+        "book": 12,
+        "genre": 10
+    },
+    {
+        "book": 13,
+        "genre": 9
+    },
+    {
+        "book": 15,
+        "genre": 11
+    },
+    {
+        "book": 16,
+        "genre": 13
+    },
+    {
+        "book": 17,
+        "genre": 12
+    }
+    ]
+
+    def get(self, request):
+        created, skipped = self.create_book_genres()
+        return Response(
+            {
+                "message": "Book-Genre relationships processed successfully!",
+                "created": created,
+                "skipped": skipped,
+            },
+            status=status.HTTP_200_OK
+        )
+
+    def create_book_genres(self):
+        created_entries = []
+        skipped_entries = []
+
+        for entry in self.books_genres_data:
+            book_id = entry["book"]
+            genre_id = entry["genre"]
+
+            if BookGenresDb.objects.filter(book_id=book_id, genre_id=genre_id).exists():
+                skipped_entries.append(entry)
+            else:
+
+                serializer = BookGenresDbSerializer(data=entry)
+                if serializer.is_valid():
+                    serializer.save()
+                    created_entries.append(entry)
+                else:
+                    print(serializer.errors)  
+
+        return created_entries, skipped_entries
