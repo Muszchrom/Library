@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Separator } from "@/components/ui/separator";
 import SeparatorWithText from "@/components/separator-with-text";
 import React from "react";
 
