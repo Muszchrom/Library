@@ -39,7 +39,7 @@ public class GatewayApplication {
 						.path("/login/**","/logout")
 						.and()
 						.method(HttpMethod.GET,HttpMethod.POST)
-						.uri("http://localhost:3000")
+						.uri("http://backend:8000")
 				)
 
 				.route("Admin auth", p -> p
@@ -49,7 +49,7 @@ public class GatewayApplication {
 							f.filter(authFilterAdmin);
 							return f;
 						})
-						.uri("http://localhost:3000/admin")
+						.uri("http://backend:8000/admin")
 				)
 
 				.route("Employee auth", p -> p
@@ -59,7 +59,7 @@ public class GatewayApplication {
 							f.filter(authFilterEmployee);
 							return f;
 						})
-						.uri("http://localhost:3000/employee")
+						.uri("http://backend:8000/employee")
 				)
 
 				.route("User auth", p -> p
@@ -69,7 +69,7 @@ public class GatewayApplication {
 							f.filter(authFilterUser);
 							return f;
 						})
-						.uri("http://localhost:3000/user")
+						.uri("http://backend:8000/user")
 				)
 
 				.build();
