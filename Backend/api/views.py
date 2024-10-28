@@ -457,6 +457,7 @@ class CreateAuthors(APIView):
     #     return Response({"message": "All authors deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
 
 
+'''             TWORZENIE GATUNKÓW           '''
 class CreateGenres(APIView):
     genres_data = [
         {"genre": "Fantastyka"},
@@ -485,6 +486,7 @@ class CreateGenres(APIView):
         )
 
     def create_genres(self):
+
         created_genres = []
         skipped_genres = []
 
@@ -500,3 +502,57 @@ class CreateGenres(APIView):
                     print(serializer.errors)  # Log błędów
 
         return created_genres, skipped_genres
+
+
+'''             TWORZENIE KSIĄŻEK           '''
+class CreateBooks(APIView):
+    books_data = [
+    {   "id": 1,
+        "author": 1,
+        "isbn": "8377995817",
+        "isbn13": "9788377995817",
+        "title": "Czarny Pająk",
+        "description": "Opowieść o zmaganiach z mrocznymi siłami.",
+        "publication_date": "2015-03-30",
+        "rating": "4.0"
+    },
+    {
+        "id": 2,
+        "author": 2,
+        "isbn": "8324028620",
+        "isbn13": "9788324028620",
+        "title": "Zbrodnia I Kara",
+        "description": "Klasyczna powieść o moralnych dylematach.",
+        "publication_date": "1886-01-01",
+        "rating": "4.5"
+    }
+    ]
+
+    def get(self, request):
+        created, skipped = self.create_books()
+        return Response(
+            {
+                "message": "Books processed successfully!",
+                "created": created,
+                "skipped": skipped,
+            },
+            status=status.HTTP_200_OK  
+        )
+
+    def create_books(self):
+        created_books = []
+        skipped_books = []
+
+        for book in self.books_data:
+            if BooksDb.objects.filter(isbn=book['isbn']).exists():
+                skipped_books.append(book['title'])
+            else:
+                serializer = BooksDbSerializer(data=book)
+                if serializer.is_valid():
+                    serializer.save()
+                    created_books.append(book['title'])
+                else:
+                    print(serializer.errors)  
+
+        return created_books, skipped_books
+
