@@ -42,35 +42,44 @@ public class GatewayApplication {
 						.uri("http://backend:8000")
 				)
 
-				.route("Admin auth", p -> p
-						.path("/admin/**")
-						.filters(f -> {
-							f.filter(authFilter);
-							f.filter(authFilterAdmin);
-							return f;
-						})
-						.uri("http://backend:8000/admin")
-				)
+        .route("GET from all" , p-> p
+            .path("/waz/**")
+            .filters( f -> {
+              f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+              return f;
+            })
+            .uri("http://backend:8000")
+        )
 
-				.route("Employee auth", p -> p
-						.path("/employee/**")
-						.filters(f -> {
-							f.filter(authFilter);
-							f.filter(authFilterEmployee);
-							return f;
-						})
-						.uri("http://backend:8000/employee")
-				)
+				// .route("Admin auth", p -> p
+				// 		.path("/admin/**")
+				// 		.filters(f -> {
+				// 			f.filter(authFilter);
+				// 			f.filter(authFilterAdmin);
+				// 			return f;
+				// 		})
+				// 		.uri("http://backend:8000/admin")
+				// )
 
-				.route("User auth", p -> p
-						.path("/user/**")
-						.filters(f -> {
-							f.filter(authFilter);
-							f.filter(authFilterUser);
-							return f;
-						})
-						.uri("http://backend:8000/user")
-				)
+				// .route("Employee auth", p -> p
+				// 		.path("/employee/**")
+				// 		.filters(f -> {
+				// 			f.filter(authFilter);
+				// 			f.filter(authFilterEmployee);
+				// 			return f;
+				// 		})
+				// 		.uri("http://backend:8000/employee")
+				// )
+
+				// .route("User auth", p -> p
+				// 		.path("/user/**")
+				// 		.filters(f -> {
+				// 			f.filter(authFilter);
+				// 			f.filter(authFilterUser);
+				// 			return f;
+				// 		})
+				// 		.uri("http://backend:8000/user")
+				// )
 
 				.build();
 	}
