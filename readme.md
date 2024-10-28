@@ -7,7 +7,7 @@ run: docker compose -f docker-compose.dev.yml up --build -d
 ### Backend
 If after building the application, the backed container does not start, you need to remove the 'migrations' folders
 
-* URLS:
+  URLS:
   * `http://localhost:8000/libraries/`                  <= returns json with available libraries
   * `http://localhost:8000/libraries/?city=<city>`      <= returns json with available libraries in the city
   * `http://localhost:8000/libraries/id`                <= returns json with a specific library
