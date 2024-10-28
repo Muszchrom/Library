@@ -7,6 +7,28 @@ run: docker compose -f docker-compose.dev.yml up --build -d
 ### Backend
 If after building the application, the backed container does not start, you need to remove the 'migrations' folders
 
+  URLS:
+  * `http://localhost:8000/libraries/`                  <= returns json with available libraries
+  * `http://localhost:8000/libraries/?city=<city>`      <= returns json with available libraries in the city
+  * `http://localhost:8000/libraries/id`                <= returns json with a specific library
+
+  * `http://localhost:8000/authors/`                    <= returns json with available authors
+  * `http://localhost:8000/authors/id`                  <= returns json with a specific author
+
+  * `http://localhost:8000/books/`                      <= returns json with available books
+  * `http://localhost:8000/books/id`                    <= returns json with a specific book
+
+  * `books/genres`                                       <= not implemented yet
+
+  * `http://localhost:8000/genres/`                       <= returns json with available genres
+  * `http://localhost:8000/genres/Fantastyka`             <= returns json with a specific genre by name in database
+
+  * `http://localhost:8000/book-genres/`                  <= returns json with available relation book - genres
+  * `http://localhost:8000/book-genres/id`                <= returns json with a specific relation book - genres
+
+  * `http://localhost:8000/library-books/`              <= not implemented yet
+  * `http://localhost:8000/rentals/`                    <= not implemented yet
+
 
 ### Connecting to PostgreSQL server
 * On host go to `localhost:5420`
