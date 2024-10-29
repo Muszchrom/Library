@@ -51,7 +51,7 @@ def getAuthorsFromBooksRawData():
 @api_view(['GET'])
 def generateTemplateData(request):
   # remove all records
-  # cleanup()
+  cleanup()
 
 
   # Generate genres
@@ -84,7 +84,8 @@ def generateTemplateData(request):
       isbn13=book["isbn13"],
       title=book["title"],
       description=book["description"],
-      publication_date=book["publication_date"]
+      publication_date=book["publication_date"],
+      rating = book["rating"]
     )
     b.save()
 

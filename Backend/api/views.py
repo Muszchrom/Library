@@ -287,7 +287,7 @@ class LibraryBooksDbViewSet(viewsets.ModelViewSet):
 
 '''                BESTSELLERY            '''
 class BestSellerBooksViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = BooksDb.objects.order_by('-rating')[:5]
+    queryset = BooksDb.objects.order_by('-rating')[:15]
     serializer_class = BooksDbSerializer
 
     def list(self, request, *args, **kwargs):
