@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet, BooksDbViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors, CreateGenres, CreateBooks, CreateBookGenres
+from .views import LibraryViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors, CreateGenres, CreateBooks, CreateBookGenres
 
 from .dev_views import generateTemplateData
 
@@ -16,7 +16,8 @@ router.register(r'books', views.BooksDbViewSet)
 router.register(r'genres', views.GenreDbViewSet, basename='genres')
 router.register(r'book-genres', views.BookGenresDbViewSet)  
 router.register(r'library-books', views.LibraryBooksDbViewSet)
-router.register(r'rentals', views.RentalsDbViewSet)    
+router.register(r'rentals', views.RentalsDbViewSet)  
+router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-books')  
 
 
 urlpatterns = [
@@ -33,6 +34,7 @@ urlpatterns = [
     path('create-genres/', CreateGenres.as_view(), name='create-genres'),
     path('create-books/', CreateBooks.as_view(), name='create-books'),
     path('create-book-genres/', CreateBookGenres.as_view(), name='create-book-genres'),
+    # path('bestseller/', best_seller_books, name='bestseller-books'),
 
  
 

@@ -2,9 +2,11 @@ from rest_framework import viewsets
 from rest_framework import status
 
 from rest_framework.decorators import action
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
+
 
 from .models import (
     Library, 
@@ -13,7 +15,7 @@ from .models import (
     GenresDb,
     BookGenresDb,
     LibraryBooksDb,
-    RentalsDb
+    RentalsDb,
 )
 
 from .serializers import (
@@ -23,7 +25,7 @@ from .serializers import (
     GenresDbSerializer,
     BookGenresDbSerializer,
     LibraryBooksDbSerializer,
-    RentalsDbSerializer
+    RentalsDbSerializer,
 )
 
 '''             OBSŁUGA BIBLIOTEK            '''
@@ -281,7 +283,17 @@ class LibraryBooksDbViewSet(viewsets.ModelViewSet):
             return Response({"error": "Library book relation does not exist."}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError:
             return Response({"error": "A database integrity error occurred."}, status=status.HTTP_400_BAD_REQUEST)
+        
 
+'''                BESTSELLERY            '''
+class BestSellerBooksViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = BooksDb.objects.order_by('-rating')[:5]
+    serializer_class = BooksDbSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 '''             OBSŁUGA WYPOŻYCZEŃ            '''
 class RentalsDbViewSet(viewsets.ModelViewSet):
