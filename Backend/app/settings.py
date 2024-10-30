@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-88&!c%(+_w!ete$7qkj@rnv#yf6swf8uk!om@ho1d0tda7tsd-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+  "localhost", # allow django UI to access it's api
+  "backend" # i don't really know why this has to be "backend" and not "gateway" or "frontend" or "localhost"
+]
 
 
 # Application definition
@@ -110,8 +113,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://frontend:3000', 
+    'http://localhost:3000', # CORS for frontend client components
+    'http://frontend:3000', # CORS for nextjs server app
 ]
 
 

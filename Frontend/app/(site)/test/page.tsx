@@ -6,7 +6,7 @@ export default function() {
   useEffect(() => {
     (async () => {
       // http://frontend:3000
-      const res = await fetch("http://localhost:8000");
+      const res = await fetch("http://localhost:8081/waz/books/");
       const data = await res.json();
       console.log(data);
     })()
