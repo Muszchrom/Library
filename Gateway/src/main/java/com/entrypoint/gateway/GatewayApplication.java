@@ -35,6 +35,143 @@ public class GatewayApplication {
 	public RouteLocator myRoutes(RouteLocatorBuilder builder){
 		return builder.routes()
 
+				// books routes
+				.route("books for users", p-> p
+						.path("/books")
+						.and()
+						.method(HttpMethod.GET)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterUser);
+							return f;
+						})
+						.uri("http://backend:8000/books/")
+				)
+
+				.route("books for employee", p-> p
+						.path("/books")
+						.and()
+						.method(HttpMethod.POST)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterEmployee);
+							return f;
+						})
+						.uri("http://backend:8000/books/")
+				)
+
+				.route("books for admin", p-> p
+						.path("/books")
+						.and()
+						.method(HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterAdmin);
+							return f;
+						})
+						.uri("http://backend:8000/books/")
+				)
+
+				//genres routes
+				.route("genres for users", p-> p
+						.path("/genres")
+						.and()
+						.method(HttpMethod.GET)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterUser);
+							return f;
+						})
+						.uri("http://backend:8000/genres/")
+				)
+
+				.route("genres for admin", p-> p
+						.path("/genres")
+						.and()
+						.method(HttpMethod.POST,HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterAdmin);
+							return f;
+						})
+						.uri("http://backend:8000/genres/")
+				)
+
+				//authors routes
+				.route("authors for users", p-> p
+						.path("/authors")
+						.and()
+						.method(HttpMethod.GET)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterUser);
+							return f;
+						})
+						.uri("http://backend:8000/authors/")
+				)
+
+				.route("authors for employee", p-> p
+						.path("/authors")
+						.and()
+						.method(HttpMethod.POST)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterEmployee);
+							return f;
+						})
+						.uri("http://backend:8000/authors/")
+				)
+
+				.route("authors for admin", p-> p
+						.path("/authors")
+						.and()
+						.method(HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterAdmin);
+							return f;
+						})
+						.uri("http://backend:8000/authors/")
+				)
+
+				//book-genres routes
+				.route("book-genres for users", p-> p
+						.path("/book-genres")
+						.and()
+						.method(HttpMethod.GET)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterUser);
+							return f;
+						})
+						.uri("http://backend:8000/book-genres/")
+				)
+
+				.route("book-genres for employee", p-> p
+						.path("/book-genres")
+						.and()
+						.method(HttpMethod.POST)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterEmployee);
+							return f;
+						})
+						.uri("http://backend:8000/book-genres/")
+				)
+
+				.route("book-genres for admin", p-> p
+						.path("/book-genres")
+						.and()
+						.method(HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterAdmin);
+							return f;
+						})
+						.uri("http://backend:8000/book-genres/")
+				)
+
+				//login route
 				.route("login and logout page" ,p -> p
 						.path("/login/**","/logout")
 						.and()
@@ -42,35 +179,15 @@ public class GatewayApplication {
 						.uri("http://backend:8000")
 				)
 
-				.route("Admin auth", p -> p
-						.path("/admin/**")
-						.filters(f -> {
-							f.filter(authFilter);
-							f.filter(authFilterAdmin);
-							return f;
-						})
-						.uri("http://backend:8000/admin")
-				)
-
-				.route("Employee auth", p -> p
-						.path("/employee/**")
-						.filters(f -> {
-							f.filter(authFilter);
-							f.filter(authFilterEmployee);
-							return f;
-						})
-						.uri("http://backend:8000/employee")
-				)
-
-				.route("User auth", p -> p
-						.path("/user/**")
-						.filters(f -> {
-							f.filter(authFilter);
-							f.filter(authFilterUser);
-							return f;
-						})
-						.uri("http://backend:8000/user")
-				)
+				//allow everything for everyone
+//				.route("GET from all" , p-> p
+//						.path("/waz/**")
+//						.filters( f -> {
+//							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+//							return f;
+//						})
+//						.uri("http://backend:8000")
+//				)
 
 				.build();
 	}
