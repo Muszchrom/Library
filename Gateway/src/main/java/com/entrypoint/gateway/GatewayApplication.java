@@ -179,6 +179,7 @@ public class GatewayApplication {
 						.uri("http://backend:8000")
 				)
 
+				//jebanygit
 				//allow everything for everyone
 //				.route("GET from all" , p-> p
 //						.path("/waz/**")
