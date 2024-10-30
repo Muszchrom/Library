@@ -10,7 +10,7 @@ export default function SiteLayout({
     <>
       <SiteHeader />
         <main className="flex-1">
-          <div className="border-b">
+          <div className="">
             <div className="container flex-1 items-start mx-auto px-4 md:px-8 max-w-screen-2xl">
               {children}
             </div>
