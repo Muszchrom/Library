@@ -55,21 +55,21 @@ And to get secret key run this command in ubuntu: `openssl rand -base64 32`
   * 3 - User
 
 #### Config
-/books  
-role 1 - DELETE,PUT,PATCH
-role 2 - POST
-role 3 - GET
+* /books  
+  `role 1 - DELETE,PUT,PATCH`     
+  `role 2 - POST`   
+  `role 3 - GET`
 
-/genres  
-role 1 - POST,DELETE,PUT,PATCH
-role 3 - GET
+* /genres  
+  `role 1 - POST,DELETE,PUT,PATCH`  
+  `role 3 - GET`
 
-/authors
-role 1 - DELETE,PUT,PATCH
-role 2 - POST
-role 3 - GET
+* /authors  
+  `role 1 - DELETE,PUT,PATCH`   
+  `role 2 - POST`   
+  `role 3 - GET`
 
-/books-genres  
-role 1 - DELETE,PUT,PATCH
-role 2 - POST
-role 3 - GET
+* /books-genres      
+  `role 1 - DELETE,PUT,PATCH`   
+  `role 2 - POST`   
+  `role 3 - GET`
