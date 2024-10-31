@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import magglass from "@/components/svg/magglass.svg";
-import BookCard, { BookCardExperimental } from "@/components/book-card";
+import { BookCardExperimental } from "@/components/book-card";
 import { images } from "@/app/raw-dev-data";
 
 export default function BrowseBooksPage() {
@@ -34,7 +34,6 @@ export default function BrowseBooksPage() {
         <BookCardExperimental bookData={images[1]}/>
         <BookCardExperimental bookData={images[1]}/>
       </div>
-      <BookCard bookData={images[1]}/>
     </>
   );
 }
