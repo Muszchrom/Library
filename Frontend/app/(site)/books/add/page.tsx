@@ -1,5 +1,7 @@
+import { BookForm } from "./book-form";
+
 export default function AddBooksPage() {
   return (
-    <h1>Dodaj</h1>
+    <BookForm />
   );
 }
