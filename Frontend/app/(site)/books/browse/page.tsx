@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import magglass from "@/components/svg/magglass.svg";
 import { BookCardExperimental } from "@/components/book-card";
@@ -9,7 +8,6 @@ import { images } from "@/app/raw-dev-data";
 export default function BrowseBooksPage() {
   return (
     <>
-      <Separator orientation="horizontal"/>
       <div className="relative">
         <Image alt="" src={magglass} className="absolute w-5 left-2 top-1/2 transform -translate-y-1/2"/>
         <Input className="pl-8"/>

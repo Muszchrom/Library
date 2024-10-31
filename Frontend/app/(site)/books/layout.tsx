@@ -1,4 +1,5 @@
 import ButtonLink from "@/components/button-link";
+import { Separator } from "@/components/ui/separator";
 import React from "react";
 
 export default function BookLayout({children}: {children: React.ReactNode}) {
@@ -9,6 +10,7 @@ export default function BookLayout({children}: {children: React.ReactNode}) {
         <ButtonLink to="/books/add" emoji="➕">Dodaj</ButtonLink>
         <ButtonLink to="/books/stats" emoji="📈">Statystyki</ButtonLink>
       </div>
+      <Separator orientation="horizontal"/>
       {children}
     </div>
   )
