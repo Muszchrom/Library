@@ -1,5 +1,6 @@
 "use client"
 
+import ImageInput from "@/components/image-input";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
@@ -86,6 +87,8 @@ export function BookForm() {
   return (
     <Form {...uploadBookForm}>
       <form onSubmit={uploadBookForm.handleSubmit(onSubmit)}>
+        <FormLabel>Zdjęcie okładki</FormLabel>
+        <ImageInput />
         <FormField 
           control={uploadBookForm.control}
           name="title"
