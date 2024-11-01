@@ -1,5 +1,3 @@
-import random
-
 books = [
     {
         "isbn": "8324100671",

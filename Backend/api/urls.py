@@ -34,7 +34,7 @@ urlpatterns = [
     path('create-genres/', CreateGenres.as_view(), name='create-genres'),
     path('create-books/', CreateBooks.as_view(), name='create-books'),
     path('create-book-genres/', CreateBookGenres.as_view(), name='create-book-genres'),
-    # path('bestseller/', best_seller_books, name='bestseller-books'),
+
 
  
 
