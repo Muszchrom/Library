@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 
+
 from .models import (
     Library, 
     AuthorsDb, 
@@ -281,7 +282,17 @@ class LibraryBooksDbViewSet(viewsets.ModelViewSet):
             return Response({"error": "Library book relation does not exist."}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError:
             return Response({"error": "A database integrity error occurred."}, status=status.HTTP_400_BAD_REQUEST)
+        
 
+'''                BESTSELLERY            '''
+class BestSellerBooksViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = BooksDb.objects.order_by('-rating')[:15]
+    serializer_class = BooksDbSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 '''             OBSŁUGA WYPOŻYCZEŃ            '''
 class RentalsDbViewSet(viewsets.ModelViewSet):
