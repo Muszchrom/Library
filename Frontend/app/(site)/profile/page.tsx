@@ -8,26 +8,28 @@ export default async function Page() {
 
   return (
     <>
-      <h1>Profil</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Profil</h1>
       <div>
-        <span>id</span>
-        <span>{user.id}</span>
-      </div>
-      <div>
-        <span>username</span>
-        <span>{user.username}</span>
-      </div>
-      <div>
-        <span>email</span>
-        <span>{user.email}</span>
-      </div>
-      <div>
-        <span>phone</span>
-        <span>{user.phone}</span>
-      </div>
-      <div>
-        <span>role</span>
-        <span>{user.role}</span>
+        <div className="flex justify-between">
+          <span>id</span>
+          <span>{user.id}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>username</span>
+          <span>{user.username}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>email</span>
+          <span>{user.email}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>phone</span>
+          <span>{user.phone}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>role</span>
+          <span>{user.role}</span>
+        </div>
       </div>
     </>
   );
