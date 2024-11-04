@@ -57,17 +57,6 @@ export function BookForm() {
   identifying the library. This identity data has to be stored
   somewhere too
   */
-
-  const xd = {
-    "author": 1,
-    "isbn": "123123d231",
-    "isbn13": "1231d31231231",
-    "title": "123123d1231",
-    "description": "1231231231d",
-    "publication_date": "2024-10-27",
-    "rating": 4.5
-  }
-
   const uploadBookForm = useForm<z.infer<typeof uploadBookSchema>>({
     resolver: zodResolver(uploadBookSchema),
     defaultValues: {
