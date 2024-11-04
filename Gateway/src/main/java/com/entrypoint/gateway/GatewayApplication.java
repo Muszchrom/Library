@@ -51,7 +51,7 @@ public class GatewayApplication {
 				.route("books for employee", p-> p
 						.path("/books")
 						.and()
-						.method(HttpMethod.POST)
+						.method(HttpMethod.GET,HttpMethod.PATCH,HttpMethod.POST)
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterEmployee);
@@ -62,8 +62,6 @@ public class GatewayApplication {
 
 				.route("books for admin", p-> p
 						.path("/books")
-						.and()
-						.method(HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
@@ -85,10 +83,20 @@ public class GatewayApplication {
 						.uri("http://backend:8000/genres/")
 				)
 
-				.route("genres for admin", p-> p
+				.route("genres for employee", p-> p
 						.path("/genres")
 						.and()
-						.method(HttpMethod.POST,HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
+						.method(HttpMethod.GET,HttpMethod.PATCH,HttpMethod.POST)
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterEmployee);
+							return f;
+						})
+						.uri("http://backend:8000/genres/")
+				)
+
+				.route("genres for admin", p-> p
+						.path("/genres")
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
@@ -112,8 +120,6 @@ public class GatewayApplication {
 
 				.route("authors for employee", p-> p
 						.path("/authors")
-						.and()
-						.method(HttpMethod.POST)
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterEmployee);
@@ -124,8 +130,6 @@ public class GatewayApplication {
 
 				.route("authors for admin", p-> p
 						.path("/authors")
-						.and()
-						.method(HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
@@ -150,7 +154,7 @@ public class GatewayApplication {
 				.route("book-genres for employee", p-> p
 						.path("/book-genres")
 						.and()
-						.method(HttpMethod.POST)
+						.method(HttpMethod.GET,HttpMethod.PATCH,HttpMethod.POST)
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterEmployee);
@@ -161,9 +165,7 @@ public class GatewayApplication {
 
 				.route("book-genres for admin", p-> p
 						.path("/book-genres")
-						.and()
-						.method(HttpMethod.DELETE,HttpMethod.PUT,HttpMethod.PATCH)
-						.filters(f-> {
+						.filters(f -> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
 							return f;
@@ -172,14 +174,47 @@ public class GatewayApplication {
 				)
 
 				//login route
-				.route("login and logout page" ,p -> p
+				.route("login and logout page", p -> p
 						.path("/login/**","/logout")
 						.and()
 						.method(HttpMethod.GET,HttpMethod.POST)
 						.uri("http://backend:8000")
 				)
 
-				//jebanygitKURWA
+				//libraries routes
+				.route("lobraries for users", p -> p
+				.path("/libraries")
+				.and()
+				.method(HttpMethod.GET)
+				.filters(f-> {
+					f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+					f.filter(authFilterUser);
+					return f;
+				})
+				.uri("http://backend:8000/libraries/")
+				)
+
+				.route("libraries for employee", p-> p
+				.path("/libraries")
+				.and()
+				.method(HttpMethod.GET)
+				.filters(f-> {
+					f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+					f.filter(authFilterEmployee);
+					return f;
+				})
+				.uri("http://backend:8000/libraries/")
+				)
+
+				.route("libraries for admin", p-> p
+						.path("/libraries")
+						.filters(f-> {
+							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.filter(authFilterAdmin);
+							return f;
+						})
+						.uri("http://backend:8000/libraries/")
+				)
 				//allow everything for everyone
 //				.route("GET from all" , p-> p
 //						.path("/waz/**")

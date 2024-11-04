@@ -1,5 +1,6 @@
 "use client"
 
+import ImageInput from "@/components/image-input";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
@@ -56,17 +57,6 @@ export function BookForm() {
   identifying the library. This identity data has to be stored
   somewhere too
   */
-
-  const xd = {
-    "author": 1,
-    "isbn": "123123d231",
-    "isbn13": "1231d31231231",
-    "title": "123123d1231",
-    "description": "1231231231d",
-    "publication_date": "2024-10-27",
-    "rating": 4.5
-  }
-
   const uploadBookForm = useForm<z.infer<typeof uploadBookSchema>>({
     resolver: zodResolver(uploadBookSchema),
     defaultValues: {
@@ -86,6 +76,8 @@ export function BookForm() {
   return (
     <Form {...uploadBookForm}>
       <form onSubmit={uploadBookForm.handleSubmit(onSubmit)}>
+        <FormLabel>Zdjęcie okładki</FormLabel>
+        <ImageInput />
         <FormField 
           control={uploadBookForm.control}
           name="title"
