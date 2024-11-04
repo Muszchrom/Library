@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/sheet"
 import { BookCheckIcon } from "lucide-react";
 import Link from "next/link";
-import LogInOutThing from "./log-in-out-provider";
 import React from "react";
+import LinkLoggedInDependantProvider from "./link-logged-in-dependant-provider";
 
 
 export async function SiteHeader() {
@@ -44,7 +44,11 @@ export async function SiteHeader() {
             </SheetTitle>
             <div className="my-4 pb-10 pr-6 flex-[1_1_0] flex flex-col">
               <div className="flex flex-col space-y-3">
-                <NavLink to="/profile">Profil</NavLink>
+                <LinkLoggedInDependantProvider 
+                  type="sheet-link"
+                  linkHref="/profile"
+                  loggedInText="Profil"
+                />
                 <NavLink to="/books/browse">Książki</NavLink>
                 {links.map((lnk) => 
                   <SheetClose asChild key={lnk.id}>
@@ -70,7 +74,11 @@ export async function SiteHeader() {
 
               <div className="mt-auto">
               <SheetClose asChild>
-                <LogInOutThing />
+                <LinkLoggedInDependantProvider 
+                  type="log-in-out"
+                  loggedInText="Wyloguj się"
+                  notLoggedInText="Zaloguj się"
+                />
               </SheetClose>
               </div>
             </div>
