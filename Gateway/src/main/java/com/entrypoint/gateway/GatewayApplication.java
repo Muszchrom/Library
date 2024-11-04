@@ -62,7 +62,6 @@ public class GatewayApplication {
 
 				.route("books for admin", p-> p
 						.path("/books")
-						.and()
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
@@ -98,7 +97,6 @@ public class GatewayApplication {
 
 				.route("genres for admin", p-> p
 						.path("/genres")
-						.and()
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
@@ -122,8 +120,6 @@ public class GatewayApplication {
 
 				.route("authors for employee", p-> p
 						.path("/authors")
-						.and()
-						.c
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterEmployee);
@@ -134,7 +130,6 @@ public class GatewayApplication {
 
 				.route("authors for admin", p-> p
 						.path("/authors")
-						.and()
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
@@ -170,8 +165,7 @@ public class GatewayApplication {
 
 				.route("book-genres for admin", p-> p
 						.path("/book-genres")
-						.and()
-						.filters(f-> {
+						.filters(f -> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
 							return f;
@@ -180,7 +174,7 @@ public class GatewayApplication {
 				)
 
 				//login route
-				.route("login and logout page" ,p -> p
+				.route("login and logout page", p -> p
 						.path("/login/**","/logout")
 						.and()
 						.method(HttpMethod.GET,HttpMethod.POST)
@@ -188,7 +182,7 @@ public class GatewayApplication {
 				)
 
 				//libraries routes
-				.route("lobraries for users".p ->p
+				.route("lobraries for users", p -> p
 				.path("/libraries")
 				.and()
 				.method(HttpMethod.GET)
@@ -214,7 +208,6 @@ public class GatewayApplication {
 
 				.route("libraries for admin", p-> p
 						.path("/libraries")
-						.and()
 						.filters(f-> {
 							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
