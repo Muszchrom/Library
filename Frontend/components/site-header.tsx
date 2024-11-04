@@ -45,7 +45,7 @@ export async function SiteHeader() {
             <div className="my-4 pb-10 pr-6 flex-[1_1_0] flex flex-col">
               <div className="flex flex-col space-y-3">
                 <NavLink to="/profile">Profil</NavLink>
-                <NavLink to="/books">Książki</NavLink>
+                <NavLink to="/books/browse">Książki</NavLink>
                 {links.map((lnk) => 
                   <SheetClose asChild key={lnk.id}>
                     <Link href={lnk.path}>
