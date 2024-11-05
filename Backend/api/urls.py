@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, CreateAuthors, CreateGenres, CreateBooks, CreateBookGenres
+from .views import LibraryViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet
 
 from .dev_views import generateTemplateData
 
@@ -22,27 +22,19 @@ router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-book
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('generate', generateTemplateData),
+    
     path('libraries/<str:pk>/', LibraryViewSet.as_view({'get': 'retrieve'}), name='library-by-identifier'), 
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),   # Lista książek w bibliotece
 
     path('books/<int:pk>/update-rating/', BooksDbViewSet.as_view({'patch': 'update_rating'}), name='update-rating'),    #update rating
 
+    #generowanie danych
+    path('generate', generateTemplateData),
 
-    #uzupełnianie bazy
-    path('create-authors/', CreateAuthors.as_view(), name='create-authors'),
-    path('create-genres/', CreateGenres.as_view(), name='create-genres'),
-    path('create-books/', CreateBooks.as_view(), name='create-books'),
-    path('create-book-genres/', CreateBookGenres.as_view(), name='create-book-genres'),
-
-
- 
 
 
     #path('books/genres/', views.GenreDbViewSet.as_view({'get': 'list'}), name='genre-list'),  t
     #path('books/genres/<str:pk>/', GenreDbViewSet.as_view({'get': 'retrieve'}), name='genre-detail'),
-
-
     #path('books/genres/<str:genre_name>/', GenreDbViewSet.as_view({'get': 'retrieve_by_genre_name'}), name='genre-by-name'),
     #path('books/<int:book_id>/rentals/', views.RentalsDbViewSet.as_view({'post': 'create'}), name='rent-book'),  # Wypożyczenie książki
     #path('rentals/<int:rental_id>/return/', views.RentalsDbViewSet.as_view({'post': 'return_book'}), name='return-book'),  # Zwrot książki
