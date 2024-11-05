@@ -61,7 +61,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         city = request.data.get('city', instance.city).title()
         library_name = request.data.get('library_name', instance.library_name)
-        
+
         if not library_name:
             raise ValidationError("Library name is required.")
 
@@ -90,38 +90,38 @@ class LibraryViewSet(viewsets.ModelViewSet):
 
 '''             OBSŁUGA AUTORÓW            '''
 class AuthorsDbViewSet(viewsets.ModelViewSet):
-    queryset = AuthorsDb.objects.all()
+    queryset = AuthorsDb.objects.all()  
     serializer_class = AuthorsDbSerializer
+
     def create(self, request, *args, **kwargs):
-            first_name = request.data.get('first_name')                                 #pobieranie imie i nazwisko
-            second_name = request.data.get('second_name')
+        first_name = request.data.get('first_name', '').strip()
+        second_name = request.data.get('second_name', '').strip()
 
-            formatted_first_name = first_name.title() if first_name else None           # .title()
-            formatted_second_name = second_name.title() if second_name else None
+        if not first_name:
+            raise ValidationError("First name is required.")
+        if not second_name:
+            raise ValidationError("Second name is required.")
 
-            existing_author = AuthorsDb.objects.filter(                                 # spradzanie filtrowanie czy istnieje juz
-                first_name__iexact=formatted_first_name,
-                second_name__iexact=formatted_second_name
-            ).first()
+        existing_author = AuthorsDb.objects.filter(
+            first_name__iexact=first_name,
+            second_name__iexact=second_name
+        ).first()
 
-            if existing_author:                                                         #jesli istnieje zwraca id imie nazwisko
-                return Response({
-                    'message': f'Autor {existing_author.first_name} {existing_author.second_name} już istnieje.',           #TO POLE DO TESTOWANIA, MOŻNA USUNAC
-                    'id': existing_author.id,
-                    'first_name': existing_author.first_name,
-                    'second_name': existing_author.second_name
-                }, status=200)
+        if existing_author:
+            return Response({
+                'message': f'Autor {existing_author.first_name} {existing_author.second_name} już istnieje.',
+                'id': existing_author.id,
+            }, status=200)
 
-            author_data = {                                                            # Jeśli autor nie istnieje, tworzy nwoego
-                'first_name': formatted_first_name,
-                'second_name': formatted_second_name
-            }
+        author_data = {
+            'first_name': first_name.title(),
+            'second_name': second_name.title(),
+        }
 
-            serializer = self.get_serializer(data=author_data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=201)
-
+        serializer = self.get_serializer(data=author_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=201)
 
 
 '''             OBSŁUGA KSIĄŻEK            '''
