@@ -142,6 +142,51 @@ class BooksDbViewSet(viewsets.ModelViewSet):
         else:
             return Response({"error": "Author is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Sprawdzenie, czy tytuł jest pusty
+        title = data.get('title', '').strip()
+        if not title:
+            return Response({"error": "Title cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # Sprawdzanie, czy przynajmniej jedno z pól ISBN jest wypełnione
+        isbn = data.get('isbn', '').strip()
+        isbn13 = data.get('isbn13', '').strip()
+        if not isbn and not isbn13:
+            return Response({"error": "Either ISBN or ISBN-13 is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Sprawdzenie, czy data publikacji jest pusta
+        publication_date = data.get('publication_date', '').strip()
+        if not publication_date:
+            return Response({"error": "Publication date cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # Automatyczne przekształcanie ISBN-10 do ISBN-13 i odwrotnie
+        isbn = data.get('isbn', '').strip()
+        isbn13 = data.get('isbn13', '').strip()
+
+        if isbn and len(isbn) == 10:
+            # Przekształcenie ISBN-10 do ISBN-13
+            data['isbn13'] = '978' + isbn[:-1]  # Dodaj '978' i usuń ostatnią cyfrę ISBN-10
+        elif isbn13 and len(isbn13) == 13:
+            # Przekształcenie ISBN-13 do ISBN-10
+            if isbn13.startswith('978'):
+                data['isbn'] = isbn13[3:]  # Usuń '978' z ISBN-13
+            else:
+                return Response({"error": "Invalid ISBN-13 format. It should start with '978'."}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "Invalid ISBN format."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Sprawdzenie, czy książka o tym samym tytule, ISBN i autorze już istnieje
+        existing_book = BooksDb.objects.filter(title__iexact=data.get('title'),isbn=data.get('isbn'),author=author).first()
+        if existing_book:
+            return Response({
+                "message": "Książka już istnieje.",
+                "id": existing_book.id,
+                "title": existing_book.title,
+                "isbn": existing_book.isbn
+            }, status=status.HTTP_200_OK)
+
         serializer = self.get_serializer(data=data)
         try:
             serializer.is_valid(raise_exception=True)
@@ -150,21 +195,99 @@ class BooksDbViewSet(viewsets.ModelViewSet):
         except serializers.ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['patch'])
-    def update_rating(self, request, pk=None):
-        book = self.get_object()
-        rating = request.data.get('rating')
 
+    def update(self, request, *args, **kwargs):
+        book = self.get_object()  # Pobierz obiekt książki
+        data = request.data.copy()  # Skopiuj dane żądania
+
+        # Sprawdzenie, czy tytuł jest pusty
+        title = data.get('title', '').strip()
+        if title:
+            book.title = title  # Ustaw nowy tytuł
+
+        # Sprawdzenie, czy autor jest w danych żądania
+        author_id = data.get('author')
+        if author_id:
+            try:
+                author = AuthorsDb.objects.get(id=author_id)
+                book.author = author  # Ustaw nowego autora
+            except AuthorsDb.DoesNotExist:
+                return Response({"error": "Author does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Sprawdzanie i aktualizacja ISBN oraz ISBN-13
+        isbn = data.get('isbn', '').strip()
+        isbn13 = data.get('isbn13', '').strip()
+
+        # Walidacja i automatyczne ustawianie ISBN i ISBN-13
+        if isbn:
+            if len(isbn) != 10:
+                return Response({"error": "ISBN must be 10 characters."}, status=status.HTTP_400_BAD_REQUEST)
+            book.isbn = isbn  # Ustaw ISBN
+
+        if isbn13:
+            if not isbn13.startswith('978') or len(isbn13) != 13:
+                return Response({"error": "ISBN-13 must start with '978' and be 13 characters long."}, status=status.HTTP_400_BAD_REQUEST)
+            book.isbn13 = isbn13  # Ustaw ISBN-13
+            if not isbn:  # Automatycznie uzupełnij ISBN, jeśli nie jest podany
+                book.isbn = isbn13[3:]  # Usuń '978' z ISBN-13
+
+        # Sprawdzenie daty publikacji
+        publication_date = data.get('publication_date', '').strip()
+        if publication_date:
+            book.publication_date = publication_date  # Ustaw datę publikacji
+
+        # Sprawdzenie, czy ocena jest w danych żądania
+        rating = data.get('rating')
         if rating is not None:
             try:
-                # Zakładam, że rating to float
-                book.rating = rating
-                book.save()
-                return Response({"message": "Rating updated successfully."}, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"error": "Rating is required."}, status=status.HTTP_400_BAD_REQUEST)
+                rating = float(rating)
+                if 1.0 <= rating <= 5.0:
+                    book.rating = rating  # Ustaw nową ocenę
+                else:
+                    return Response({"error": "Rating must be between 1.0 and 5.0."}, status=status.HTTP_400_BAD_REQUEST)
+            except ValueError:
+                return Response({"error": "Invalid rating format."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Zapisz zmiany w obiekcie książki
+        book.save()  # Zapisz wszystkie zmiany
+
+        return Response({"message": "Book updated successfully.", "book": book.title}, status=status.HTTP_200_OK)
+
+    # def update(self, request, *args, **kwargs):
+    #     book = self.get_object()  # Pobierz obiekt książki
+    #     rating = request.data.get('rating')  # Pobierz ocenę z danych żądania
+
+    #     if rating is None:
+    #         return Response({"error": "Rating is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         rating = float(rating)
+    #         if 1.0 <= rating <= 5.0:
+    #             book.rating = rating  # Ustaw nową ocenę
+    #             book.save()  # Zapisz zmiany
+    #             return Response({"message": "Rating updated successfully.", "new_rating": book.rating}, status=status.HTTP_200_OK)
+    #         else:
+    #             return Response({"error": "Rating must be between 1.0 and 5.0."}, status=status.HTTP_400_BAD_REQUEST)
+    #     except ValueError:
+    #         return Response({"error": "Invalid rating format."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+    # @action(detail=True, methods=['patch'])
+    # def update_rating(self, request, pk=None):
+    #     book = self.get_object()
+    #     rating = request.data.get('rating')
+
+    #     if rating is not None:
+    #         try:
+    #             # Zakładam, że rating to float
+    #             book.rating = rating
+    #             book.save()
+    #             return Response({"message": "Rating updated successfully."}, status=status.HTTP_200_OK)
+    #         except Exception as e:
+    #             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    #     else:
+    #         return Response({"error": "Rating is required."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 '''             OBSŁUGA GATUNKÓW KSIĄŻEK            '''

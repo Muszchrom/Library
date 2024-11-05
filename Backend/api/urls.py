@@ -17,6 +17,7 @@ router.register(r'genres', views.GenreDbViewSet, basename='genres')
 router.register(r'book-genres', views.BookGenresDbViewSet)  
 router.register(r'library-books', views.LibraryBooksDbViewSet)
 router.register(r'rentals', views.RentalsDbViewSet)  
+
 router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-books')  
 
 
