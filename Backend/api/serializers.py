@@ -14,10 +14,11 @@ class AuthorsDbSerializer(serializers.ModelSerializer):
 class BooksDbSerializer(serializers.ModelSerializer):
     class Meta:
         model = BooksDb
-        fields = ['id', 'author', 'isbn', 'isbn13', 'title', 'description', 'publication_date','rating']
+        fields = '__all__'
+        #fields = ['id', 'author', 'isbn', 'isbn13', 'title', 'description', 'publication_date','rating']
 
     def validate(self, data):
-        # Sprawdzanie, czy książka już istnieje
+
         if BooksDb.objects.filter(isbn=data['isbn'], author=data['author']).exists():
             raise serializers.ValidationError("This book with the same ISBN by this author already exists.")
         return data
