@@ -34,13 +34,6 @@ public class GatewayApplication {
 	@Bean
 	public RouteLocator myRoutes(RouteLocatorBuilder builder){
 		return builder.routes()
-				//login route
-				.route("login and logout page", p -> p
-						.path("/login/**","/logout")
-						.and()
-						.method(HttpMethod.GET,HttpMethod.POST)
-						.uri("http://backend:8000")
-				)
 				
 				// books routes
 				.route("books for users", p-> p
@@ -52,6 +45,7 @@ public class GatewayApplication {
 							return f;
 						})
 						.uri("http://backend:8000")
+
 				)
 
 				.route("books for employee", p-> p

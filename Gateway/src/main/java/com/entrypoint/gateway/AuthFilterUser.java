@@ -13,20 +13,35 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthFilterUser implements GatewayFilter {
 
+    private static final String TOKEN_PREFIX = "Bearer ";
+
     @Override
-    public Mono<Void> filter (ServerWebExchange exchange, GatewayFilterChain chain){
-        String token = exchange.getRequest().getCookies().getFirst("JWT").getValue();
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-        Claims claims = (Claims) Jwts.parser().verifyWith(JWTUtil.getSecretKey()).build().parseSignedClaims(token);
+        if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
+            String token = authorizationHeader.substring(7);
 
-            // Sprawdzenie, czy rola ma wartość 1
-            Integer role = (Integer) claims.get("role");
-            if (role != null && role == 3) {
-                return chain.filter(exchange);
-            }else{
+            try {
+                Claims claims = (Claims) Jwts.parser().setSigningKey(JWTUtil.getSecretKey()).build().parse(token).getBody();
+
+                Integer role = (Integer) claims.get("role");
+                if (role != null && role == 3) {
+                    return chain.filter(exchange);
+                } else {
+                    ServerHttpResponse response = exchange.getResponse();
+                    response.setStatusCode(HttpStatus.FORBIDDEN);
+                    return response.setComplete();
+                }
+            } catch (Exception e) {
                 ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(HttpStatus.FORBIDDEN);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
+        } else {
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            return response.setComplete();
+        }
     }
 }
