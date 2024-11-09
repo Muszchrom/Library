@@ -16,7 +16,8 @@ public class AuthFilterAdmin implements GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
-    
+        System.out.println("Admin");
+        System.out.println(authorizationHeader);
     
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);

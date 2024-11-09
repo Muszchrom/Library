@@ -18,7 +18,8 @@ public class AuthFilterEmployee implements GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
-
+        System.out.println("Employee");
+        System.out.println(authorizationHeader);
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             String token = authorizationHeader.substring(7);
 
