@@ -12,12 +12,9 @@ class Library(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if self.city:
-            self.city = self.city.title()
+        if self.latitude and self.longitude:
+            self.location = Point(float(self.longitude), float(self.latitude))
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.library_name
 
     class Meta:
         unique_together = ('library_name', 'city')

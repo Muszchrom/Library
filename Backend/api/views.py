@@ -6,6 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
+from geopy.distance import geodesic
+from django.shortcuts import get_object_or_404
 
 
 from .models import (
@@ -73,9 +75,8 @@ class LibraryViewSet(viewsets.ModelViewSet):
 
         if not city:
             raise ValidationError("City is required.")
-        
         if not latitude or not longitude:
-            raise ValidationError("Latitude and longitude are required.")  
+            raise ValidationError("Latitude and longitude are required.")
 
         if Library.objects.exclude(id=instance.id).filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
@@ -323,3 +324,49 @@ class BestSellerBooksViewSet(viewsets.ReadOnlyModelViewSet):
 class RentalsDbViewSet(viewsets.ModelViewSet):
     queryset = RentalsDb.objects.all()
     serializer_class = RentalsDbSerializer
+
+#               OBSŁUGA BEST-NEAREST
+class BestNearestView(APIView):
+    def get(self, request):
+        default_location = (51.246452, 22.568446)  # default location if user doesnt allow location access
+        latitude = request.query_params.get('latitude')
+        longitude = request.query_params.get('longitude')
+
+        if latitude and longitude:
+            try:
+                user_location = (float(latitude), float(longitude))
+            except ValueError:
+                return Response({"message": "Invalid coordinates"}, status=400)
+        else:
+            user_location = default_location
+
+        libraries = Library.objects.all()
+        if not libraries:
+            return Response({"message": "No libraries found"}, status=404)
+
+        
+        libraries_with_distance = [
+            (library, geodesic(user_location, (library.latitude, library.longitude)).kilometers)
+            for library in libraries
+        ]
+       
+        nearest_libraries = sorted(libraries_with_distance, key=lambda x: x[1])[:5]
+    
+        books = []
+        book_ids = set()
+        for library, distance in nearest_libraries:
+            library_books = LibraryBooksDb.objects.filter(library=library).select_related('book').order_by('-book__rating')
+            for library_book in library_books:
+                if library_book.book.id not in book_ids:
+                    books.append(library_book.book)
+                    book_ids.add(library_book.book.id)
+                if len(books) == 25:
+                    break
+            if len(books) == 25:
+                break
+
+        
+        books = sorted(books, key=lambda book: book.rating, reverse=True)
+
+        serializer = BooksDbSerializer(books, many=True)
+        return Response(serializer.data)
