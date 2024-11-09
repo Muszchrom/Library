@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import random
+from django.db import connection
 
 from .models import (
   Library, 
@@ -16,23 +18,28 @@ from .template_data import (
 )
 
 
+def reset_sequences(model):
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT setval(pg_get_serial_sequence('{model._meta.db_table}', 'id'), 1, false);")
+
 def cleanup():
     Library.objects.all().delete()
-
-    for item in AuthorsDb.objects.all():
-        item.delete()
+    reset_sequences(Library)
+    
+    AuthorsDb.objects.all().delete()
+    reset_sequences(AuthorsDb)
   
-    for item in BooksDb.objects.all():
-        item.delete()
+    BooksDb.objects.all().delete()
+    reset_sequences(BooksDb)
   
-    for item in GenresDb.objects.all():
-        item.delete()
-
-    for item in BookGenresDb.objects.all():
-        item.delete()
-
-    for item in LibraryBooksDb.objects.all():
-        item.delete()
+    GenresDb.objects.all().delete()
+    reset_sequences(GenresDb)
+  
+    BookGenresDb.objects.all().delete()
+    reset_sequences(BookGenresDb)
+  
+    LibraryBooksDb.objects.all().delete()
+    reset_sequences(LibraryBooksDb)
 
 def getGenresFromBooksRawData():
   arr = []
@@ -99,6 +106,14 @@ def generateTemplateData(request):
     )
     b.save()
 
+    for lib in Library.objects.all():
+      if random.choice([True, False]):
+        lb = LibraryBooksDb(
+          library = lib,
+          book = b,
+          book_count = random.randint(1, 10)
+        )
+        lb.save()
 
     # Generate book genres
     book_id = b.id
