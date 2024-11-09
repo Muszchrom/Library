@@ -11,28 +11,28 @@ from .models import (
 )
 
 from .template_data import (
-  books
+  books,
+  libraries
 )
 
 
 def cleanup():
-  for item in Library.objects.all():
-    item.delte()
+    Library.objects.all().delete()
 
-  for item in AuthorsDb.objects.all():
-    item.delete()
+    for item in AuthorsDb.objects.all():
+        item.delete()
   
-  for item in BooksDb.objects.all():
-    item.delete()
+    for item in BooksDb.objects.all():
+        item.delete()
   
-  for item in GenresDb.objects.all():
-    item.delete()
+    for item in GenresDb.objects.all():
+        item.delete()
 
-  for item in BookGenresDb.objects.all():
-    item.delete()
+    for item in BookGenresDb.objects.all():
+        item.delete()
 
-  for item in LibraryBooksDb.objects.all():
-    item.delete()
+    for item in LibraryBooksDb.objects.all():
+        item.delete()
 
 def getGenresFromBooksRawData():
   arr = []
@@ -64,6 +64,16 @@ def generateTemplateData(request):
     a = AuthorsDb(first_name=author["first_name"], second_name=author["second_name"])
     a.save()
 
+  # Generate libraries
+  for library in libraries:
+    l = Library(
+      library_name=library["library_name"],
+      city=library["city"],
+      latitude=library["latitude"],
+      longitude=library["longitude"]
+    )
+    l.save()
+
   # Generate books 
   for book in books:
     genres = []
@@ -89,12 +99,13 @@ def generateTemplateData(request):
     )
     b.save()
 
+
     # Generate book genres
     book_id = b.id
     for genre in genres:
       BookGenresDb(book=b, genre=genre).save()
 
-  # remove all records
+  # ## remove all records
   # cleanup()
   return Response({
     "message": "Data saved"

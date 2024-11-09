@@ -2,9 +2,10 @@ from rest_framework import serializers
 from .models import Library, AuthorsDb, BooksDb, GenresDb, BookGenresDb, LibraryBooksDb, RentalsDb
 
 class LibrarySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Library
-        fields = ['id','library_name','city']
+        fields = ['id','library_name', 'city', 'latitude', 'longitude']
 
 class AuthorsDbSerializer(serializers.ModelSerializer):
     class Meta:

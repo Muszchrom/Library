@@ -33,18 +33,30 @@ class LibraryViewSet(viewsets.ModelViewSet):
     queryset = Library.objects.all()
     serializer_class = LibrarySerializer
     def get_queryset(self):
-        queryset = super().get_queryset()                                       # oryginalny queryset
-        city = self.request.query_params.get('city', None)                      # Pobierz parametr city z zapytania
+        queryset = super().get_queryset()                                       
+        city = self.request.query_params.get('city', None)                      
         if city is not None:
             city = city.title()
-            queryset = queryset.filter(city__iexact=city)                       # Filtrowanie bibliotek po mieście
+            queryset = queryset.filter(city__iexact=city)                      
             if not queryset.exists():  
-                raise NotFound(detail=f"No libraries found in {city}.")      # 
+                raise NotFound(detail=f"No libraries found in {city}.")      
         return queryset
 
     def create(self, request, *args, **kwargs):
-        city = request.data.get('city', '').title()
-        library_name = request.data.get('library_name')
+        city = request.data.get('city', '').strip()
+        library_name = request.data.get('library_name', '').strip()
+        latitude = request.data.get('latitude', None)
+        longitude = request.data.get('longitude', None)
+
+        #sprawdzanie pustych pól
+        if not city:
+            raise ValidationError("City is required.")
+        if not library_name:
+            raise ValidationError("Library name is required.")
+        if not latitude or not longitude:
+            raise ValidationError("Latitude and longitude are required.")
+
+        #sprawdzamy czy biblioteka już istnieje przy tworzeniu
         if Library.objects.filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
         return super().create(request, *args, **kwargs)
@@ -53,6 +65,15 @@ class LibraryViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         city = request.data.get('city', instance.city).title()
         library_name = request.data.get('library_name', instance.library_name)
+        lalitude = request.data.get('latitude', instance.latitude)
+        longitude = request.data.get('longitude', instance.longitude)
+
+        if not library_name:
+            raise ValidationError("Library name is required.")
+
+        if not city:
+            raise ValidationError("City is required.")
+
         if Library.objects.exclude(id=instance.id).filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
         return super().update(request, *args, **kwargs)

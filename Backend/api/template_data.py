@@ -559,3 +559,114 @@ books = [
         "genres": ["Young Adult Fantasy"]
     }
 ]
+
+libraries = [
+    {
+        "library_name": "Wojewódzka Biblioteka Publiczna im. Hieronima Łopacińskiego",
+        "city": "Lublin",
+        "latitude": 51.2465,
+        "longitude": 22.5684
+    },
+    {
+        "library_name": "Biblio - biblioteka multimedialna",
+        "city": "Lublin",
+        "latitude": 51.2398,
+        "longitude": 22.5473
+    },
+    {
+        "library_name": "Miejska Biblioteka Publiczna im. H. Łopacińskiego Filia nr 24",
+        "city": "Lublin",
+        "latitude": 51.2356,
+        "longitude": 22.5499
+    },
+    {
+        "library_name": "Biblioteka Narodowa w Książnicy Pomorskiej",
+        "city": "Szczecin",
+        "latitude": 53.4285,
+        "longitude": 14.5528
+    },
+    {
+        "library_name": "Biblioteka Raczyńskich",
+        "city": "Poznań",
+        "latitude": 52.4064,
+        "longitude": 16.9252
+    },
+    {
+        "library_name": "Biblioteka Uniwersytecka w Białymstoku",
+        "city": "Białystok",
+        "latitude": 53.1325,
+        "longitude": 23.1688
+    },
+    {
+        "library_name": "Biblioteka Podlaska",
+        "city": "Białystok",
+        "latitude": 53.1325,
+        "longitude": 23.1688
+    },
+    {
+        "library_name": "Biblioteka Ossolineum",
+        "city": "Wrocław",
+        "latitude": 51.109,
+        "longitude": 17.0325
+    },
+    {
+        "library_name": "Biblioteka Uniwersytecka w Poznaniu",
+        "city": "Poznań",
+        "latitude": 52.4064,
+        "longitude": 16.9252
+    },
+    {
+        "library_name": "Biblioteka Kórnicka",
+        "city": "Kórnik",
+        "latitude": 52.2475,
+        "longitude": 17.0894
+    },
+    {
+        "library_name": "Biblioteka Uniwersytecka w Toruniu",
+        "city": "Toruń",
+        "latitude": 53.0139,
+        "longitude": 18.5981
+    },
+    {
+        "library_name": "Biblioteka Uniwersytecka w Łodzi",
+        "city": "Łódź",
+        "latitude": 51.7594,
+        "longitude": 19.4572
+    },
+    {
+        "library_name": "Biblioteka Uniwersytecka w Szczecinie",
+        "city": "Szczecin",
+        "latitude": 53.4285,
+        "longitude": 14.5528
+    },
+    {
+        "library_name": "Biblioteka Narodowa",
+        "city": "Warszawa",
+        "latitude": 52.2145,
+        "longitude": 21.0362
+    },
+    {
+        "library_name": "Biblioteka Jagiellońska",
+        "city": "Kraków",
+        "latitude": 50.0647,
+        "longitude": 19.9232
+    },
+    {
+        "library_name": "Biblioteka Uniwersytetu Wrocławskiego",
+        "city": "Wrocław",
+        "latitude": 51.109,
+        "longitude": 17.0325
+    },
+    {
+        "library_name": "Biblioteka Śląska",
+        "city": "Katowice",
+        "latitude": 50.2584,
+        "longitude": 19.0216
+    },
+    {
+        "library_name": "Biblioteka Gdańska",
+        "city": "Gdańsk",
+        "latitude": 54.3520,
+        "longitude": 18.6466
+    }
+]
