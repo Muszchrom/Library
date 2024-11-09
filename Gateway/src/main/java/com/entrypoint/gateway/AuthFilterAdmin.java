@@ -14,19 +14,38 @@ import reactor.core.publisher.Mono;
 public class AuthFilterAdmin implements GatewayFilter {
 
     @Override
-    public Mono<Void> filter (ServerWebExchange exchange, GatewayFilterChain chain){
-        String token = exchange.getRequest().getCookies().getFirst("JWT").getValue();
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
+    
+    
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+    
+            try {
+                //Claims claims = (Claims) Jwts.parser().setSigningKey(JWTUtil.getSecretKey()).parseClaimsJws(token).getBody();
+                Claims claims = Jwts.parser().setSigningKey(JWTUtil.getSecretKey()).build().parseSignedClaims(token).getPayload();
 
-        Claims claims = (Claims) Jwts.parser().verifyWith(JWTUtil.getSecretKey()).build().parseSignedClaims(token);
-
-            // Sprawdzenie, czy rola ma wartość 1
-            Integer role = (Integer) claims.get("role");
-            if (role != null && role == 1) {
-                return chain.filter(exchange);
-            }else{
+    
+                Integer role = (Integer) claims.get("role");
+                if (role != null && role == 1) {
+                    return chain.filter(exchange);
+                } else {
+                    ServerHttpResponse response = exchange.getResponse();
+                    response.setStatusCode(HttpStatus.FORBIDDEN); 
+    
+                    return response.setComplete();
+                }
+            } catch (Exception e) {
                 ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(HttpStatus.FORBIDDEN);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+    
                 return response.setComplete();
             }
+        } else {
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            return
+     response.setComplete();
+        }
     }
 }
