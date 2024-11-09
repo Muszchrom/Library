@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet
+from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet
 
 from .dev_views import generateTemplateData
 
@@ -17,6 +17,7 @@ router.register(r'genres', views.GenreDbViewSet, basename='genres')
 router.register(r'book-genres', views.BookGenresDbViewSet)  
 router.register(r'library-books', views.LibraryBooksDbViewSet)
 router.register(r'rentals', views.RentalsDbViewSet)  
+
 router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-books')  
 
 
@@ -32,11 +33,5 @@ urlpatterns = [
     path('generate', generateTemplateData),
 
 
-
-    #path('books/genres/', views.GenreDbViewSet.as_view({'get': 'list'}), name='genre-list'),  t
-    #path('books/genres/<str:pk>/', GenreDbViewSet.as_view({'get': 'retrieve'}), name='genre-detail'),
-    #path('books/genres/<str:genre_name>/', GenreDbViewSet.as_view({'get': 'retrieve_by_genre_name'}), name='genre-by-name'),
-    #path('books/<int:book_id>/rentals/', views.RentalsDbViewSet.as_view({'post': 'create'}), name='rent-book'),  # Wypożyczenie książki
-    #path('rentals/<int:rental_id>/return/', views.RentalsDbViewSet.as_view({'post': 'return_book'}), name='return-book'),  # Zwrot książki
 ]
 

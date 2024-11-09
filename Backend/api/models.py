@@ -35,8 +35,8 @@ class AuthorsDb(models.Model):
 class BooksDb(models.Model):
     author = models.ForeignKey(AuthorsDb, on_delete=models.CASCADE)
     #author_id = models.BigIntegerField()
-    isbn = models.CharField(max_length=10)
-    isbn13 = models.CharField(max_length=13)
+    isbn = models.CharField(max_length=10,blank=True, null=True)
+    isbn13 = models.CharField(max_length=13,blank=True, null=True)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True, null=True)
     publication_date = models.DateField()
