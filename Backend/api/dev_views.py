@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import random
+from django.db import connection
 
 from .models import (
   Library, 
@@ -11,28 +13,33 @@ from .models import (
 )
 
 from .template_data import (
-  books
+  books,
+  libraries
 )
 
 
+def reset_sequences(model):
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT setval(pg_get_serial_sequence('{model._meta.db_table}', 'id'), 1, false);")
+
 def cleanup():
-  for item in Library.objects.all():
-    item.delte()
-
-  for item in AuthorsDb.objects.all():
-    item.delete()
+    Library.objects.all().delete()
+    reset_sequences(Library)
+    
+    AuthorsDb.objects.all().delete()
+    reset_sequences(AuthorsDb)
   
-  for item in BooksDb.objects.all():
-    item.delete()
+    BooksDb.objects.all().delete()
+    reset_sequences(BooksDb)
   
-  for item in GenresDb.objects.all():
-    item.delete()
-
-  for item in BookGenresDb.objects.all():
-    item.delete()
-
-  for item in LibraryBooksDb.objects.all():
-    item.delete()
+    GenresDb.objects.all().delete()
+    reset_sequences(GenresDb)
+  
+    BookGenresDb.objects.all().delete()
+    reset_sequences(BookGenresDb)
+  
+    LibraryBooksDb.objects.all().delete()
+    reset_sequences(LibraryBooksDb)
 
 def getGenresFromBooksRawData():
   arr = []
@@ -64,6 +71,16 @@ def generateTemplateData(request):
     a = AuthorsDb(first_name=author["first_name"], second_name=author["second_name"])
     a.save()
 
+  # Generate libraries
+  for library in libraries:
+    l = Library(
+      library_name=library["library_name"],
+      city=library["city"],
+      latitude=library["latitude"],
+      longitude=library["longitude"]
+    )
+    l.save()
+
   # Generate books 
   for book in books:
     genres = []
@@ -89,12 +106,21 @@ def generateTemplateData(request):
     )
     b.save()
 
+    for lib in Library.objects.all():
+      if random.choice([True, False]):
+        lb = LibraryBooksDb(
+          library = lib,
+          book = b,
+          book_count = random.randint(1, 10)
+        )
+        lb.save()
+
     # Generate book genres
     book_id = b.id
     for genre in genres:
       BookGenresDb(book=b, genre=genre).save()
 
-  # remove all records
+  # ## remove all records
   # cleanup()
   return Response({
     "message": "Data saved"

@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet
+from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, BestNearestView
 
 from .dev_views import generateTemplateData
 
@@ -18,7 +18,8 @@ router.register(r'book-genres', views.BookGenresDbViewSet)
 router.register(r'library-books', views.LibraryBooksDbViewSet)
 router.register(r'rentals', views.RentalsDbViewSet)  
 
-router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-books')  
+router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-books')
+  
 
 
 urlpatterns = [
@@ -31,6 +32,8 @@ urlpatterns = [
 
     #generowanie danych
     path('generate', generateTemplateData),
+    path('best-nearest/', BestNearestView.as_view(), name='best-nearest')
+    
 
 
 ]

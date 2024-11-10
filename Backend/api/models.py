@@ -3,19 +3,22 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 
 
+
+
 class Library(models.Model):
     library_name = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+
     def save(self, *args, **kwargs):
-        if self.city:
-            self.city = self.city.title()
+        if self.latitude and self.longitude:
+            self.location = Point(float(self.longitude), float(self.latitude))
         super().save(*args, **kwargs)
-    def __str__(self):
-        return self.library_name
+
     class Meta:
         unique_together = ('library_name', 'city')
         db_table = 'libraries_db'
-
 
 class AuthorsDb(models.Model):
     first_name = models.CharField(max_length=255)
