@@ -1,10 +1,12 @@
 import BooksRow from "@/components/books-row";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { commonBookGenres, images } from "../raw-dev-data";
-import { CommonBookGenres } from "@/interfaces";
+import { commonBookGenres } from "../raw-dev-data";
+import { Book, CommonBookGenres } from "@/interfaces";
 
 
-export default function Home() {
+export default async function Home() {
+  const res = await fetch(process.env.GATEWAY_URL + "waz/books/");
+  const images: Book[] = await res.json();
   return (
     <div className="flex flex-col gap-2">
       <BooksRow bookDataArray={images} title="Zawsze najlepsze"/>

@@ -12,14 +12,6 @@ import LinkLoggedInDependantProvider from "./link-logged-in-dependant-provider";
 
 
 export async function SiteHeader() {
-  const links = [
-    { id: 1, title: "Lorem", path: "lorem" },
-    { id: 2, title: "Ipsum", path: "ipsum" },
-    { id: 3, title: "Dolor", path: "dolor" },
-    { id: 4, title: "Sit", path: "sit" },
-    { id: 5, title: "Amet", path: "amet" }
-  ];
-
   return (
     <header className="">
       <div className="container px-4 md:px-8 mx-auto flex h-14 max-w-screen-2xl items-center justify-between ">
@@ -50,26 +42,6 @@ export async function SiteHeader() {
                   loggedInText="Profil"
                 />
                 <NavLink to="/books/browse">Książki</NavLink>
-                {links.map((lnk) => 
-                  <SheetClose asChild key={lnk.id}>
-                    <Link href={lnk.path}>
-                      {lnk.title}
-                    </Link>
-                  </SheetClose>
-                )}
-              </div>
-              <div className="pt-6">
-                <div className="flex flex-col space-y-3 pt-4">
-                  <h4 className="font-medium">Miejsca</h4>
-                  {links.map((lnk) => 
-                    <SheetClose asChild key={lnk.id}>
-                      <Link className="text-muted-foreground" href={lnk.path}>
-                        {lnk.title}
-                      </Link>
-                    </SheetClose>
-                  )}
-                </div>
-                
               </div>
 
               <div className="mt-auto">

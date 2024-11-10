@@ -2,74 +2,28 @@ import Image from "next/image";
 import Score from "@/components/score";
 import { Button } from "@/components/ui/button";
 import BooksRow from "@/components/books-row";
-import { BookData } from "@/interfaces";
+import { Book, BookData } from "@/interfaces";
 
+export default async function Page({ params }: { params: { book: number }}) {
+  const res = await fetch(process.env.GATEWAY_URL + "waz/books/" + params.book + "/");
+  const image: Book = await res.json();
 
-// const libraries = [
-//   {
-//     name: "",
-//     localization: {
-//       city: "",
-//       street: ""
-//     }
-//   }
-// ]
+  const res2 = await fetch(process.env.GATEWAY_URL + "waz/books/");
+  const images: Book[] = await res2.json();
 
-const images: BookData[] = [
-  {
-    id: 1,
-    title: "Architektura API",
-    available: true,
-    user_score: 4.5,
-    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
-  },
-  {
-    id: 2,
-    title: "Architektura API",
-    available: false,
-    user_score: 4.5,
-    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
-  },
-  {
-    id: 3,
-    title: "Architektura API",
-    available: true,
-    user_score: 4.5,
-    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
-  },
-  {
-    id: 4,
-    title: "Architektura API",
-    available: true,
-    user_score: 4.5,
-    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
-  },
-  {
-    id: 5,
-    title: "Architektura API",
-    available: true,
-    user_score: 4.5,
-    coverURL: "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
-  },
-]
+  const temp_cover = "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
 
-export default function Page({ params }: { params: { book: number }}) {
-  const image = images[params.book];
   return (
     <>
       <div className="flex gap-4">
         <div className="flex-shrink-0 flex-grow-0 basis-40">
-          <Image className="rounded-md" alt="" height={252} width={160} src={image.coverURL} />
+          <Image className="rounded-md" alt="" height={252} width={160} src={temp_cover} />
         </div>
         <div>
           <h2 className="text-xl font-semibold tracking-tight">{image.title}</h2>
-          <Score score={image.user_score}/>
+          <Score score={image.rating || 0}/>
           <p className="text-muted-foreground text-sm leading-tight">
-            Jeśli dopiero zaczynasz swoją przygodę z tworzeniem API, książka &quot;Architektura API&quot;
-            to doskonałe miejsce do rozpoczęcia nauki. Autorzy w przystępny sposób tłumaczą 
-            złożone zagadnienia związane z projektowaniem i implementacją interfejsów API. 
-            Znajdziesz tu wiele praktycznych przykładów i wskazówek, które pomogą Ci szybko 
-            opanować podstawy i stworzyć swoje pierwsze API.
+            {image.description}
           </p>
         </div>
       </div>

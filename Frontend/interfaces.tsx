@@ -1,3 +1,14 @@
+export interface Book {
+  id: number,
+  isbn: string,
+  isbn13: string,
+  title: string,
+  description: string,
+  publication_date: string,
+  rating: null | number,
+  author: number
+}
+
 export interface BookData {
   id: number,
   title: string,
