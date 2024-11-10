@@ -1,6 +1,11 @@
+import os
+from django.core.files import File
+from django.conf import settings
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.files.base import ContentFile
 from decimal import Decimal
+from django.core.validators import FileExtensionValidator
 
 
 
@@ -10,12 +15,8 @@ class Library(models.Model):
     city = models.CharField(max_length=100)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if self.latitude and self.longitude:
-            self.location = Point(float(self.longitude), float(self.latitude))
-        super().save(*args, **kwargs)
-
+    def __str__(self):
+        return f"{self.library_name} ({self.city})"
     class Meta:
         unique_together = ('library_name', 'city')
         db_table = 'libraries_db'
@@ -45,7 +46,22 @@ class BooksDb(models.Model):
         blank=True,
         null=True  
     )
+    cover_book = models.ImageField(
+        upload_to='covers/', 
+        null=True, 
+        blank=True,
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp'])]
+    )
 
+    def save(self, *args, **kwargs):
+        if not self.cover_book:
+            default_cover_path = os.path.join(settings.MEDIA_ROOT, 'covers', 'default_cover.jpg')
+            if os.path.exists(default_cover_path):
+                with open(default_cover_path, 'rb') as f:
+                    self.cover_book.save('default_cover.jpg', ContentFile(f.read()), save=False)
+            else:
+                print(f"Default cover image not found at {default_cover_path}")
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.title
     class Meta:

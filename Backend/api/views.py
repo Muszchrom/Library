@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 from geopy.distance import geodesic
 from django.shortcuts import get_object_or_404
+from django.core.files import File
+from django.conf import settings
 
 
 from .models import (
@@ -151,6 +153,14 @@ class BooksDbViewSet(viewsets.ModelViewSet):
                 return Response({"error": "Author does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Author is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if 'cover_book' in request.FILES:
+            cover_book = request.FILES['cover_book']
+        else:
+            default_cover_path = settings.MEDIA_ROOT / 'covers' / 'default_cover.png'
+            cover_book = File(open(default_cover_path, 'rb'), name='default_cover.png')
+            data['cover_book'] = cover_book
+        
 
         serializer = self.get_serializer(data=data)
         try:
