@@ -368,3 +368,25 @@ class BestNearestView(APIView):
 
         serializer = BooksDbSerializer(books, many=True)
         return Response(serializer.data)
+
+
+class BooksByGenreView(APIView):
+    def get(self, request, genre_id):
+        books = BooksDb.objects.filter(bookgenresdb__genre_id=genre_id).distinct()
+        serializer = BooksDbSerializer(books, many=True)
+        return Response(serializer.data)
+    
+class LibraryBooksByGenreView(APIView):
+    def get(self, request, library_id, genre_id):
+        try:
+            library = Library.objects.get(id=library_id)
+        except Library.DoesNotExist:
+            raise NotFound(detail="Library not found.")
+
+        books = BooksDb.objects.filter(
+            librarybooksdb__library=library,
+            bookgenresdb__genre_id=genre_id
+        ).distinct()
+
+        serializer = BooksDbSerializer(books, many=True)
+        return Response(serializer.data)
