@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 from geopy.distance import geodesic
@@ -153,39 +154,26 @@ class BooksDbViewSet(viewsets.ModelViewSet):
                 return Response({"error": "Author does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Author is required."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        if 'cover_book' in request.FILES:
-            cover_book = request.FILES['cover_book']
-        else:
-            default_cover_path = settings.MEDIA_ROOT / 'covers' / 'default_cover.png'
-            cover_book = File(open(default_cover_path, 'rb'), name='default_cover.png')
-            data['cover_book'] = cover_book
-        
 
         serializer = self.get_serializer(data=data)
         try:
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            book = serializer.save()  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except serializers.ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['patch'])
-    def update_rating(self, request, pk=None):
-        book = self.get_object()
-        rating = request.data.get('rating')
+    @action(detail=True, methods=['post'], parser_classes=[MultiPartParser], url_path='upload-cover')
+    def upload_cover(self, request, pk=None):
+        book = self.get_object() 
+        if 'cover_book' not in request.FILES:
+            return Response({"error": "No cover image provided."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        cover_book = request.FILES['cover_book']
+        book.cover_book.save(cover_book.name, cover_book, save=True)
 
-        if rating is not None:
-            try:
-                # Zakładam, że rating to float
-                book.rating = rating
-                book.save()
-                return Response({"message": "Rating updated successfully."}, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"error": "Rating is required."}, status=status.HTTP_400_BAD_REQUEST)
-
+        serializer = self.get_serializer(book)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 '''             OBSŁUGA GATUNKÓW KSIĄŻEK            '''
 class GenreDbViewSet(viewsets.ModelViewSet):
@@ -377,6 +365,28 @@ class BestNearestView(APIView):
 
         
         books = sorted(books, key=lambda book: book.rating, reverse=True)
+
+        serializer = BooksDbSerializer(books, many=True)
+        return Response(serializer.data)
+
+
+class BooksByGenreView(APIView):
+    def get(self, request, genre_id):
+        books = BooksDb.objects.filter(bookgenresdb__genre_id=genre_id).distinct()
+        serializer = BooksDbSerializer(books, many=True)
+        return Response(serializer.data)
+    
+class LibraryBooksByGenreView(APIView):
+    def get(self, request, library_id, genre_id):
+        try:
+            library = Library.objects.get(id=library_id)
+        except Library.DoesNotExist:
+            raise NotFound(detail="Library not found.")
+
+        books = BooksDb.objects.filter(
+            librarybooksdb__library=library,
+            bookgenresdb__genre_id=genre_id
+        ).distinct()
 
         serializer = BooksDbSerializer(books, many=True)
         return Response(serializer.data)
