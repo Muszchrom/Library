@@ -114,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', # CORS for frontend client components
     'http://frontend:3000', # CORS for nextjs server app
 ]
 
