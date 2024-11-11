@@ -10,7 +10,8 @@ books = [
             "first_name": "Adam",
             "second_name": "Mickiewicz"
         },
-        "genres": ["Epopeja", "Poemat", "Historyczna"]
+        "genres": ["Epopeja", "Poemat", "Historyczna"],
+        "cover_book": "/covers/pan_tadeusz.jpeg"
     },
     {
         "isbn": "0143111580",
@@ -23,7 +24,8 @@ books = [
             "first_name": "Stanisław",
             "second_name": "Lem"
         },
-        "genres": ["Science Fiction", "Filozoficzna"]
+        "genres": ["Science Fiction", "Filozoficzna"],
+        "cover_book": "/covers/solaris.jpg"
     },
     {
         "isbn": "8375080701",
@@ -36,7 +38,8 @@ books = [
             "first_name": "Bolesław",
             "second_name": "Prus"
         },
-        "genres": ["Realizm", "Historyczna"]
+        "genres": ["Realizm", "Historyczna"],
+        "cover_book": "/covers/lalka.jpg"
     },
     {
         "isbn": "1857546571",
@@ -49,7 +52,8 @@ books = [
             "first_name": "Jan",
             "second_name": "Potocki"
         },
-        "genres": ["Gothic", "Fantasy"]
+        "genres": ["Gothic", "Fantasy"],
+        "cover_book": "/covers/rekopis_znaleziony_w_saragossie.jpg"
     },
     {
         "isbn": "0141191762",
@@ -62,7 +66,8 @@ books = [
             "first_name": "Bruno",
             "second_name": "Schulz"
         },
-        "genres": ["Opowiadania", "Surrealizm"]
+        "genres": ["Opowiadania", "Surrealizm"],
+        "cover_book": "/covers/sklepy_cynamonowe.jpeg"
     },
     {
         "isbn": "1860497761",
@@ -75,7 +80,8 @@ books = [
             "first_name": "Władysław",
             "second_name": "Szpilman"
         },
-        "genres": ["Pamiętnik", "Historia"]
+        "genres": ["Pamiętnik", "Historia"],
+        "cover_book": "/covers/pianista.jpg"
     },
     {
         "isbn": "8390326315",
@@ -88,7 +94,8 @@ books = [
             "first_name": "Witold",
             "second_name": "Gombrowicz"
         },
-        "genres": ["Satyra", "Filozoficzna"]
+        "genres": ["Satyra", "Filozoficzna"],
+        "cover_book": "/covers/ferdydurke.jpg"
     },
     {
         "isbn": "8375080589",
@@ -101,7 +108,8 @@ books = [
             "first_name": "Henryk",
             "second_name": "Sienkiewicz"
         },
-        "genres": ["Literacka", "Historyczna"]
+        "genres": ["Literacka", "Historyczna"],
+        "cover_book": "/covers/rodzina_polanieckich.jpg"
     },
     {
         "isbn": "8375080589",
@@ -114,7 +122,8 @@ books = [
             "first_name": "Tadeusz",
             "second_name": "Konwicki"
         },
-        "genres": ["Literacka", "Polityczna"]
+        "genres": ["Literacka", "Polityczna"],
+        "cover_book": "/covers/polski_kompleks.jpg"
     },
     {
         "isbn": "7455651532",
@@ -127,7 +136,8 @@ books = [
             "first_name": "Michaił",
             "second_name": "Bułhakow"
         },
-        "genres": ["Fantasy"]
+        "genres": ["Fantasy"],
+        "cover_book": "/covers/mistrz_i_malgorzata.jpg"
     },
     {
         "isbn": "7535796112",
@@ -140,7 +150,8 @@ books = [
             "first_name": "Henryk",
             "second_name": "Sienkiewicz"
         },
-        "genres": ["Adventure"]
+        "genres": ["Adventure"],
+        "cover_book": "/covers/w_pustyni_i_w_puszczy.jpg"
     },
     {
         "isbn": "3129307675",
@@ -153,7 +164,8 @@ books = [
             "first_name": "J.K.",
             "second_name": "Rowling"
         },
-        "genres": ["Fantasy"]
+        "genres": ["Fantasy"],
+        "cover_book": "/covers/harry_potter_i_kamien_filozoficzny.jpg"
     },
     {
         "isbn": "2820460146",
@@ -166,7 +178,8 @@ books = [
             "first_name": "J.R.R.",
             "second_name": "Tolkien"
         },
-        "genres": ["Fantasy"]
+        "genres": ["Fantasy"],
+        "cover_book": "/covers/wladca_pierscieni.jpg"
     },
     {
         "isbn": "1096252541",
@@ -179,7 +192,9 @@ books = [
             "first_name": "George",
             "second_name": "Orwell"
         },
-        "genres": ["Dystopian Fiction"]
+        "genres": ["Dystopian Fiction"],
+        "cover_book": "/covers/1984.jpg"
+
     },
     {
         "isbn": "6224307550",
@@ -192,7 +207,8 @@ books = [
             "first_name": "Stephen",
             "second_name": "King"
         },
-        "genres": ["Horror"]
+        "genres": ["Horror"],
+        "cover_book": "/covers/to.jpg"
     },
     {
         "isbn": "7404660649",
@@ -205,7 +221,8 @@ books = [
             "first_name": "Adam",
             "second_name": "Mickiewicz"
         },
-        "genres": ["Drama"]
+        "genres": ["Drama"],
+        "cover_book": "/covers/dziady.jpg"
     },
     {
         "isbn": "2335689564",
@@ -218,7 +235,8 @@ books = [
             "first_name": "Franz",
             "second_name": "Kafka"
         },
-        "genres": ["Philosophical Novel"]
+        "genres": ["Philosophical Novel"],
+        "cover_book": "/covers/proces.jpg"
     },
     {
         "isbn": "6992320427",
@@ -231,7 +249,8 @@ books = [
             "first_name": "Bolesław",
             "second_name": "Prus"
         },
-        "genres": ["Social Novel"]
+        "genres": ["Social Novel"],
+        "cover_book": "/covers/lalka.jpg"
     },
     {
         "isbn": "6862167809",
@@ -244,7 +263,8 @@ books = [
             "first_name": "Margaret",
             "second_name": "Atwood"
         },
-        "genres": ["Dystopian Fiction"]
+        "genres": ["Dystopian Fiction"],
+        "cover_book": "/covers/opowiesc_podrecznej.jpg"
     },
     {
         "isbn": "9759248591",
@@ -257,7 +277,8 @@ books = [
             "first_name": "Victoria",
             "second_name": "Aveyard"
         },
-        "genres": ["Fantasy"]
+        "genres": ["Fantasy"],
+        "cover_book": "/covers/czerwona_krolowa.jpg"
     },
     {
         "isbn": "7225850115",
@@ -270,7 +291,8 @@ books = [
             "first_name": "Harper",
             "second_name": "Lee"
         },
-        "genres": ["Legal Thriller"]
+        "genres": ["Legal Thriller"],
+        "cover_book": "/covers/zabic_drozda.jpg"
     },
     {
         "isbn": "2577808070",
@@ -283,7 +305,8 @@ books = [
             "first_name": "Emily",
             "second_name": "Brontë"
         },
-        "genres": ["Gothic Novel"]
+        "genres": ["Gothic Novel"],
+        "cover_book": "/covers/wichrowe_wzgorza.jpg"
     },
     {
         "isbn": "1538036697",
@@ -296,7 +319,8 @@ books = [
             "first_name": "Andrzej",
             "second_name": "Sapkowski"
         },
-        "genres": ["Fantasy"]
+        "genres": ["Fantasy"],
+        "cover_book": "/covers/czas_burzy.jpg"
     },
     {
         "isbn": "3869020009",
@@ -309,7 +333,8 @@ books = [
             "first_name": "Carlos",
             "second_name": "Ruiz Zafón"
         },
-        "genres": ["Mystery"]
+        "genres": ["Mystery"],
+        "cover_book": "/covers/cien_wiatru.jpg"
     },
     {
         "isbn": "2529170921",
@@ -322,7 +347,8 @@ books = [
             "first_name": "Paula",
             "second_name": "Hawkins"
         },
-        "genres": ["Thriller"]
+        "genres": ["Thriller"],
+        "cover_book": "/covers/dziewczyna_z_pociagu.jpg"
     },
     {
         "isbn": "7975826218",
@@ -335,7 +361,8 @@ books = [
             "first_name": "Dan",
             "second_name": "Brown"
         },
-        "genres": ["Thriller"]
+        "genres": ["Thriller"],
+        "cover_book": "/covers/kod_leonarda_da_vinci.jpg"
     },
     {
         "isbn": "5400372221",
@@ -348,7 +375,8 @@ books = [
             "first_name": "Remigiusz",
             "second_name": "Mróz"
         },
-        "genres": ["Crime Fiction"]
+        "genres": ["Crime Fiction"],
+        "cover_book": "/covers/nieodnaleziona.jpg"
     },
     {
         "isbn": "4730185804",
@@ -361,7 +389,8 @@ books = [
             "first_name": "Stephen",
             "second_name": "King"
         },
-        "genres": ["Horror"]
+        "genres": ["Horror"],
+        "cover_book": "/covers/outsider.jpg"
     },
     {
         "isbn": "9499447731",
@@ -374,7 +403,8 @@ books = [
             "first_name": "Andrzej",
             "second_name": "Pilipiuk"
         },
-        "genres": ["Humoristic Fantasy"]
+        "genres": ["Humoristic Fantasy"],
+        "cover_book": "/covers/kroniki_jakuba_wedrowycza.jpg"
     },
     {
         "isbn": "4488985662",
@@ -387,7 +417,8 @@ books = [
             "first_name": "George",
             "second_name": "R. R. Martin"
         },
-        "genres": ["Fantasy"]
+        "genres": ["Fantasy"],
+        "cover_book": "/covers/gra_o_tron.jpg"
     },
     {
         "isbn": "1366046764",
@@ -400,7 +431,8 @@ books = [
             "first_name": "Fiodor",
             "second_name": "Dostojewski"
         },
-        "genres": ["Philosophical Novel"]
+        "genres": ["Philosophical Novel"],
+        "cover_book": "/covers/zbrodnia_i_kara.jpg"
     },
     {
         "isbn": "3886597589",
@@ -413,7 +445,8 @@ books = [
             "first_name": "Albert",
             "second_name": "Camus"
         },
-        "genres": ["Existential Fiction"]
+        "genres": ["Existential Fiction"],
+        "cover_book": "/covers/dzuma.jpeg"
     },
     {
         "isbn": "7935403554",
@@ -426,7 +459,8 @@ books = [
             "first_name": "Ryszard",
             "second_name": "Kapuściński"
         },
-        "genres": ["Biographical Novel"]
+        "genres": ["Biographical Novel"],
+        "cover_book": "/covers/szachinszach.jpg"
     },
     {
         "isbn": "8641461582",
@@ -439,7 +473,8 @@ books = [
             "first_name": "Bram",
             "second_name": "Stoker"
         },
-        "genres": ["Gothic Horror"]
+        "genres": ["Gothic Horror"],
+        "cover_book": "/covers/dracula.jpg"
     },
     {
         "isbn": "8779396323",
@@ -452,7 +487,8 @@ books = [
             "first_name": "Franz",
             "second_name": "Kafka"
         },
-        "genres": ["Philosophical Novel"]
+        "genres": ["Philosophical Novel"],
+        "cover_book": "/covers/zamek.jpg"
     },
     {
         "isbn": "4991647186",
@@ -465,7 +501,8 @@ books = [
             "first_name": "Leo",
             "second_name": "Tolstoy"
         },
-        "genres": ["Literary Fiction"]
+        "genres": ["Literary Fiction"],
+        "cover_book": "/covers/anna_karenina.jpg"
     },
     {
         "isbn": "5800028701",
@@ -478,7 +515,8 @@ books = [
             "first_name": "Orson",
             "second_name": "Scott Card"
         },
-        "genres": ["Science Fiction"]
+        "genres": ["Science Fiction"],
+        "cover_book": "/covers/gra_endera.jpg"
     },
     {
         "isbn": "9566278395",
@@ -491,7 +529,8 @@ books = [
             "first_name": "Peter",
             "second_name": "Watts"
         },
-        "genres": ["Hard Science Fiction"]
+        "genres": ["Hard Science Fiction"],
+        "cover_book": "/covers/slepowidzenie.jpg"
     },
     {
         "isbn": "8588952087",
@@ -504,7 +543,8 @@ books = [
             "first_name": "Natasha",
             "second_name": "Pulley"
         },
-        "genres": ["Historical Fantasy"]
+        "genres": ["Historical Fantasy"],
+        "cover_book": "/covers/zegarmistrz_z_filigree_street.jpg"
     },
     {
         "isbn": "8406401213",
@@ -517,7 +557,8 @@ books = [
             "first_name": "Chuck",
             "second_name": "Palahniuk"
         },
-        "genres": ["Contemporary Fiction"]
+        "genres": ["Contemporary Fiction"],
+        "cover_book": "/covers/podziemny_krag.jpg"
     },
     {
         "isbn": "8508009993",
@@ -530,7 +571,8 @@ books = [
             "first_name": "Daphne",
             "second_name": "du Maurier"
         },
-        "genres": ["Gothic Fiction"]
+        "genres": ["Gothic Fiction"],
+        "cover_book": "/covers/rebeka.jpg"
     },
     {
         "isbn": "1567569458",
@@ -543,7 +585,8 @@ books = [
             "first_name": "David",
             "second_name": "Benioff"
         },
-        "genres": ["Historical Fiction"]
+        "genres": ["Historical Fiction"],
+        "cover_book": "/covers/miasto_zlodziei.jpg"
     },
     {
         "isbn": "4989544996",
@@ -556,7 +599,8 @@ books = [
             "first_name": "Julie",
             "second_name": "Kagawa"
         },
-        "genres": ["Young Adult Fantasy"]
+        "genres": ["Young Adult Fantasy"],
+        "cover_book": "/covers/zelazny_rycerz.jpg"
     }
 ]
 
