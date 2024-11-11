@@ -102,7 +102,8 @@ def generateTemplateData(request):
       title=book["title"],
       description=book["description"],
       publication_date=book["publication_date"],
-      rating = book["rating"]
+      rating = book["rating"],
+      cover_book = book["cover_book"]
     )
     b.save()
 
