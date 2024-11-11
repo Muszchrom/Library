@@ -1,7 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Input } from "./ui/input";
+import { FormControl, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { ControllerRenderProps, UseFormRegisterReturn } from "react-hook-form";
 
-export default function ImageInput() {
+export default function ImageInput({ field, fileRef }: 
+  { field: ControllerRenderProps<{
+      author: number;
+      isbn: string;
+      isbn13: string;
+      title: string;
+      description: string;
+      publication_date: string;
+      cover?: any;
+    }, "cover">, 
+    fileRef: UseFormRegisterReturn<"cover">}) {
+
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownBox = useRef<HTMLDivElement>(null);
   const [draggedOver, setDraggedOver] = useState(false);
@@ -16,6 +29,7 @@ export default function ImageInput() {
   }, [userImage])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    field.onChange(e.target?.files ?? undefined)
     if (!e.target.files) return;
     setUserImage(e.target.files[0]);
   }
@@ -36,28 +50,37 @@ export default function ImageInput() {
   }
 
   return (
-    <>
-      <Input ref={inputRef} 
-             onChange={handleChange} 
-             type="file" 
-             accept="image/*" 
-             className="hidden"/>
-      <div ref={dropdownBox}
-           title="Drop image here"
-           className="w-full aspect-video border flex items-center justify-center"
-           onDrop={handleDrop}
-           onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
-           onDragEnter={() => setDraggedOver(true)}
-           onDragLeave={() => setDraggedOver(false)}
-           onClick={() => inputRef.current!.click()}>
-        {imageUrl.length ? (
-          <img src={imageUrl} style={{filter: draggedOver ? "brightness(0.9)" : "brightness(1)"}}/>
-        ) : (
-          <svg className="stroke-foreground" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
-            <path d="M4 14V18H20V14M12 6L8 10M12 6L16 10M12 6V14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        )}
-      </div>
-    </>
+    <FormItem>
+      <FormLabel>Zdjęcie okładki</FormLabel>
+      <FormControl>
+        <>
+          <Input 
+            { ...fileRef }
+            ref={inputRef} 
+            onChange={handleChange} 
+            type="file" 
+            accept="image/*" 
+            className="hidden "/>
+          <div 
+            ref={dropdownBox}
+            title="Drop image here"
+            className="w-full aspect-video border flex items-center justify-center rounded-md overflow-hidden"
+            onDrop={handleDrop}
+            onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
+            onDragEnter={() => setDraggedOver(true)}
+            onDragLeave={() => setDraggedOver(false)}
+            onClick={() => inputRef.current!.click()}>
+            {imageUrl.length ? (
+              <img src={imageUrl} style={{filter: draggedOver ? "brightness(0.9)" : "brightness(1)"}}/>
+            ) : (
+              <svg className="stroke-foreground" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
+                <path d="M4 14V18H20V14M12 6L8 10M12 6L16 10M12 6V14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </div>
+        </>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
   );
 }

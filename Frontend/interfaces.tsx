@@ -6,7 +6,19 @@ export interface Book {
   description: string,
   publication_date: string,
   rating: null | number,
+  cover_book: string,
   author: number
+}
+
+export interface Genre {
+  id: number,
+  genre: string
+}
+
+export interface Author {
+  first_name: string,
+  second_name: string,
+  id: number
 }
 
 export interface BookData {

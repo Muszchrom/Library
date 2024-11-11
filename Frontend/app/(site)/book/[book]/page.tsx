@@ -11,13 +11,11 @@ export default async function Page({ params }: { params: { book: number }}) {
   const res2 = await fetch(process.env.GATEWAY_URL + "waz/books/");
   const images: Book[] = await res2.json();
 
-  const temp_cover = "https://static01.helion.com.pl/global/okladki/vbig/arcapi.jpg"
-
   return (
     <>
       <div className="flex gap-4">
         <div className="flex-shrink-0 flex-grow-0 basis-40">
-          <Image className="rounded-md" alt="" height={252} width={160} src={temp_cover} />
+          <Image className="rounded-md" alt="" height={252} width={160} src={image.cover_book} />
         </div>
         <div>
           <h2 className="text-xl font-semibold tracking-tight">{image.title}</h2>

@@ -11,9 +11,9 @@ export default function BookCard({bookData}: {bookData: Book}) {
   return (
     <div className="w-full h-full flex flex-col">
       <Link href={baseUrl + "/" + bookData.id}>
-        <Image className="rounded-md w-full" alt="" height={100} width={176} src={temp_cover} />
+        <Image className="rounded-md w-full" alt="" height={100} width={176} src={bookData.cover_book} />
       </Link>
-      <h3 className="font-medium leading-none tracking-tight px-1 pt-2">
+      <h3 className="font-medium leading-none tracking-tight px-1 pt-2 break-words">
         {bookData.title}
       </h3>
       <div className="flex justify-between mt-auto px-1 pb-2">
