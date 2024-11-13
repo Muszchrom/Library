@@ -2,6 +2,8 @@ import { BookForm } from "./book-form";
 
 export default function AddBooksPage() {
   return (
-    <BookForm />
+    <div className="w-full flex flex-col items-center">
+      <BookForm />
+    </div>
   );
 }

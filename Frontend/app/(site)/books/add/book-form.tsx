@@ -1,6 +1,6 @@
 "use client"
 
-import ImageInput from "@/components/image-input";
+import ImageInput from "./image-input";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
