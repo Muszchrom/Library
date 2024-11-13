@@ -201,6 +201,13 @@ public class GatewayApplication {
 						})
 						.uri("http://backend:8000/libraries/")
 				)
+				.route("files", p -> p
+						.path("/waz/media/covers/**")
+						.and()
+						.method(HttpMethod.GET, HttpMethod.HEAD, HttpMethod.OPTIONS)
+						.filters(f -> f.rewritePath("/waz/(?<segment>.*)", "/${segment}"))
+						.uri("http://backend:8000")
+				)
 				//allow everything for everyone
 //				.route("GET from all" , p-> p
 //						.path("/waz/**")
