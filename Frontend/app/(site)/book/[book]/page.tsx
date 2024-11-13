@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { book: number }}) {
   const image: Book = await res.json();
 
   const res2 = await fetch(process.env.GATEWAY_URL + "waz/books/");
-  const images: Book[] = await res2.json();
+  const books: Book[] = await res2.json();
 
   return (
     <>
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { book: number }}) {
       </div>
       <LibrariesList />
       <div className="my-4"></div>
-      <BooksRow bookDataArray={images} title="Podobne książki" />
+      <BooksRow books={books} title="Podobne książki" />
       <div className="my-4"></div>
     </>
   );
