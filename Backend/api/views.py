@@ -177,6 +177,27 @@ class BooksDbViewSet(viewsets.ModelViewSet):
     queryset = BooksDb.objects.all()
     serializer_class = BooksDbSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        genre_name = self.request.query_params.get('genre', None)
+        if genre_name:
+            queryset = queryset.filter(bookgenresdb__genre__genre__iexact=genre_name)
+
+        author_name = self.request.query_params.get('author', None)
+        if author_name:
+            queryset = queryset.filter(author__name__iexact=author_name)
+
+        rating = self.request.query_params.get('rating', None)
+        if rating:
+            try:
+                rating = float(rating)
+                queryset = queryset.filter(rating=rating)
+            except ValueError:
+                raise serializers.ValidationError("Rating must be a valid number.")
+
+        return queryset
+
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         author_id = data.get('author')
