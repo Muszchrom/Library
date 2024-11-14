@@ -226,13 +226,34 @@ class GenreDbViewSet(viewsets.ModelViewSet):
                 'genre': existing_genre.genre
             }, status=status.HTTP_200_OK)
 
-        # Użycie serializer z walidacją
         serializer = self.get_serializer(data={'genre': genre_name})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
+        genre_id = request.query_params.get('id', None)
+        genre_name = request.query_params.get('genre', None)
+
+        if genre_id:
+            try:
+                genre = GenresDb.objects.get(id=genre_id)
+                books = BooksDb.objects.filter(bookgenresdb__genre=genre).distinct()
+                books_serializer = BooksDbSerializer(books, many=True)
+                return Response(books_serializer.data)
+            except GenresDb.DoesNotExist:
+                raise NotFound(detail=f"Genre with id '{genre_id}' does not exist.")
+        
+        if genre_name:
+            genre_name = genre_name.title()
+            try:
+                genre = GenresDb.objects.get(genre__iexact=genre_name)
+                books = BooksDb.objects.filter(bookgenresdb__genre=genre).distinct()
+                books_serializer = BooksDbSerializer(books, many=True)
+                return Response(books_serializer.data)
+            except GenresDb.DoesNotExist:
+                raise NotFound(detail=f"Genre '{genre_name}' does not exist.")
+        
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -246,9 +267,9 @@ class GenreDbViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         if lookup_value.isdigit():
-            return super().retrieve(request, *args, **kwargs)  # ID-based retrieval
+            return super().retrieve(request, *args, **kwargs)  
         try:
-            genre = GenresDb.objects.get(genre__iexact=lookup_value.title())  # Name-based retrieval
+            genre = GenresDb.objects.get(genre__iexact=lookup_value.title())
             serializer = self.get_serializer(genre)
             return Response(serializer.data)
         except GenresDb.DoesNotExist:
