@@ -2113,7 +2113,638 @@ books = [
         },
         "genres": ["Historyczna"],
         "cover_book": "/covers/trylogia_sienkiewicza.jpg"
+    },
+    {
+        "isbn": "1645124561",
+        "isbn13": "9781645124561",
+        "title": "Biblia a reinkarnacja albo Listy do Teofila",
+        "description": "Podróż przez duchowe rozważania i odkrywanie reinkarnacji w kontekście Biblii.",
+        "publication_date": "2020-11-10",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Irek",
+            "second_name": "Męclewski"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/biblia_reinkarnacja.jpg"
+    },
+    {
+        "isbn": "1645125672",
+        "isbn13": "9781645125672",
+        "title": "Charon Docks at Daylight",
+        "description": "Opowieść o podróży pełnej niebezpieczeństw i tajemnic na granicy światów.",
+        "publication_date": "2021-06-01",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Zoe",
+            "second_name": "Reed"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/charon_docks.jpg"
+    },
+    {
+        "isbn": "1645126783",
+        "isbn13": "9781645126783",
+        "title": "Hrabia Monte Christo",
+        "description": "Klasyczna powieść przygodowa o zemście, zdradzie i poszukiwaniu sprawiedliwości.",
+        "publication_date": "1844-08-01",
+        "rating": 5.0,
+        "author": {
+            "first_name": "Aleksander",
+            "second_name": "Dumas"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/hrabia_monte_christo.jpg"
+    },
+    {
+        "isbn": "1645127894",
+        "isbn13": "9781645127894",
+        "title": "Pirate Tales",
+        "description": "Zbiór opowieści o piratach, morskich przygodach i poszukiwaniach skarbów.",
+        "publication_date": "2005-07-25",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Autor",
+            "second_name": "Nieznany"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/pirate_tales.jpg"
+    },
+    {
+        "isbn": "1645238901",
+        "isbn13": "9781645238901",
+        "title": "Oto jest Kasia",
+        "description": "Opowieść o dziewczynce, która uczy się jak radzić sobie z trudnościami i zrozumieć swoje miejsce w rodzinie.",
+        "publication_date": "1985-09-15",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Mira",
+            "second_name": "Jaworczkowa"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/oto_jest_kasia.jpg"
+    },
+    {
+        "isbn": "1645238912",
+        "isbn13": "9781645238912",
+        "title": "Sposób na Elfa",
+        "description": "Wzruszająca opowieść o psie Elfie i jego przygodach, które uczą wartości przyjaźni i oddania.",
+        "publication_date": "2010-06-12",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Marcin",
+            "second_name": "Pałasz"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/sposob_na_elfa.jpg"
+    },
+    {
+        "isbn": "1645238923",
+        "isbn13": "9781645238923",
+        "title": "Ten Obcy",
+        "description": "Kultowa powieść o grupie młodych przyjaciół, którzy spotykają tajemniczego nieznajomego.",
+        "publication_date": "1961-04-05",
+        "rating": 5.0,
+        "author": {
+            "first_name": "Irena",
+            "second_name": "Jurgielewiczowa"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/ten_obcy.jpg"
+    },
+    {
+        "isbn": "1645238934",
+        "isbn13": "9781645238934",
+        "title": "Mikołajek",
+        "description": "Zabawne przygody chłopca imieniem Mikołajek i jego przyjaciół, pełne humoru i refleksji.",
+        "publication_date": "1959-03-01",
+        "rating": 4.5,
+        "author": {
+            "first_name": "René",
+            "second_name": "Goscinny"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/mikolajek.jpg"
+    },
+    {
+        "isbn": "1645238945",
+        "isbn13": "9781645238945",
+        "title": "Identical",
+        "description": "Historia pełna intryg, tajemnic i bliźniaczych zagadek.",
+        "publication_date": "2023-02-20",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Aleksandra",
+            "second_name": "Negrońska"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/identical.jpg"
+    },
+    {
+        "isbn": "1645238956",
+        "isbn13": "9781645238956",
+        "title": "Pax",
+        "description": "Poruszająca opowieść o przyjaźni między chłopcem i lisem, którzy muszą odnaleźć się w świecie pełnym wyzwań.",
+        "publication_date": "2016-03-08",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Sara",
+            "second_name": "Pennypacker"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/pax.jpg"
+    },
+    {
+        "isbn": "1645238967",
+        "isbn13": "9781645238967",
+        "title": "Detektywi na kółkach 3",
+        "description": "Kolejna część przygód młodych detektywów, którzy rozwiązują zagadki z pomocą technologii.",
+        "publication_date": "2022-06-20",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Marcin",
+            "second_name": "Kozioł"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/detektywi_na_kolkach.jpg"
+    },
+    {
+        "isbn": "1645238978",
+        "isbn13": "9781645238978",
+        "title": "Fala",
+        "description": "Pełna napięcia historia o młodych ludziach, którzy stają przed wyzwaniem na granicy swoich możliwości.",
+        "publication_date": "2019-05-15",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Maria",
+            "second_name": "Krasowska"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/fala.jpg"
+    },
+    {
+        "isbn": "1645238989",
+        "isbn13": "9781645238989",
+        "title": "Wysoko wśród drzew",
+        "description": "Odkrywcza podróż przez lasy i przyrodę, gdzie bohaterowie odkrywają tajemnice natury.",
+        "publication_date": "2023-01-25",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Margaret",
+            "second_name": "Atwood"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/wysoko_wsrod_drzew.jpg"
+    },
+    {
+        "isbn": "1645238990",
+        "isbn13": "9781645238990",
+        "title": "Figgrotten",
+        "description": "Historia o przygodach w tajemniczych jaskiniach, pełna zaskakujących zwrotów akcji.",
+        "publication_date": "2020-11-17",
+        "rating": 4.5,
+        "author": {
+            "first_name": "April",
+            "second_name": "Stevens"
+        },
+        "genres": ["Przygodowa"],
+        "cover_book": "/covers/figgrotten.jpg"
+    },
+    {
+        "isbn": "1645239001",
+        "isbn13": "9781645239001",
+        "title": "Holly",
+        "description": "Najnowszy horror Stephena Kinga, opowiadający o mrocznych tajemnicach w małym miasteczku.",
+        "publication_date": "2023-09-05",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Stephen",
+            "second_name": "King"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/holly.jpg"
+    },
+    {
+        "isbn": "1645239002",
+        "isbn13": "9781645239002",
+        "title": "Śpiączka",
+        "description": "Mistrz horroru Graham Masterton przedstawia przerażającą opowieść o pacjentach, którzy nie mogą się obudzić.",
+        "publication_date": "2021-08-18",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Graham",
+            "second_name": "Masterton"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/spiaczka.jpg"
+    },
+    {
+        "isbn": "1645239003",
+        "isbn13": "9781645239003",
+        "title": "Duchy Nocy Świętojańskiej",
+        "description": "Zbiór opowieści o nawiedzonych miejscach i duchach pojawiających się w najkrótszą noc roku.",
+        "publication_date": "2020-06-23",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Autor",
+            "second_name": "Nieznany"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/duchy_nocy.jpg"
+    },
+    {
+        "isbn": "1645239004",
+        "isbn13": "9781645239004",
+        "title": "Lustro",
+        "description": "Mroczna historia o przedmiocie, który ujawnia najgłębsze lęki i koszmary.",
+        "publication_date": "2019-10-10",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Christina",
+            "second_name": "Henry"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/lustro.jpg"
+    },
+    {
+        "isbn": "1645239005",
+        "isbn13": "9781645239005",
+        "title": "Bezgłos",
+        "description": "Katarzyna Puzyńska w swojej najnowszej powieści przedstawia pełną napięcia historię o tajemniczym milczeniu.",
+        "publication_date": "2022-03-15",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Katarzyna",
+            "second_name": "Puzyńska"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/bezglos.jpg"
+    },
+    {
+        "isbn": "1645239006",
+        "isbn13": "9781645239006",
+        "title": "Jak sprzedać nawiedzony dom",
+        "description": "Grady Hendrix oferuje przerażającą, a zarazem zabawną opowieść o sprzedaży domu pełnego duchów.",
+        "publication_date": "2021-05-25",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Grady",
+            "second_name": "Hendrix"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/jak_sprzedac_nawiedzony_dom.jpg"
+    },
+    {
+        "isbn": "0141439471",
+        "isbn13": "9780141439471",
+        "title": "Frankenstein",
+        "description": "A gothic novel by Mary Shelley about the monstrous creation of a scientist and its consequences.",
+        "publication_date": "1994-10-01",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Mary",
+            "second_name": "Shelley"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/frankenstein.jpg"
+    },
+    {
+        "isbn": "1594748695",
+        "isbn13": "9781594748695",
+        "title": "Final Girls: Ostatnie Ocalenie",
+        "description": "A thrilling horror novel about the survivors of slasher movies and the dark secret they share.",
+        "publication_date": "2017-06-13",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Grady",
+            "second_name": "Hendrix"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/final_girls.jpg"
+    },
+    {
+        "isbn": "0316439647",
+        "isbn13": "9780316439647",
+        "title": "Dom Starlingów",
+        "description": "A haunting novel set in an old mansion, blending magic, mystery, and a creeping sense of dread.",
+        "publication_date": "2020-09-01",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Alix E.",
+            "second_name": "Harrow"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/dom_starlingow.jpg"
+    },
+    {
+        "isbn": "0525620805",
+        "isbn13": "9780525620805",
+        "title": "Mexican Gothic",
+        "description": "A gothic horror novel set in Mexico, filled with unsettling atmosphere and supernatural terror.",
+        "publication_date": "2020-06-30",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Silvia",
+            "second_name": "Moreno-Garcia"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/mexican_gothic.jpg"
+    },
+    {
+        "isbn": "0593191907",
+        "isbn13": "9780593191907",
+        "title": "Hacienda",
+        "description": "A chilling horror novel about a young woman who moves into a secluded house, only to discover its terrifying past.",
+        "publication_date": "2021-07-06",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Isabel",
+            "second_name": "Canas"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/hacienda.jpg"
+    },
+    {
+        "isbn": "1982135824",
+        "isbn13": "9781982135824",
+        "title": "Lśnienie w ciemności",
+        "description": "A horror novel by Stephen King, blending cosmic horror with psychological terror.",
+        "publication_date": "2020-03-03",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Stephen",
+            "second_name": "King"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/lsnienie_w_ciemnosci.jpg"
+    },
+    {
+        "isbn": "8365575056",
+        "isbn13": "9788365575056",
+        "title": "Mój dom",
+        "description": "A chilling horror story about a house that keeps its secrets and its hauntings.",
+        "publication_date": "2022-04-15",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Tomasz",
+            "second_name": "Sablik"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/moj_dom.jpg"
+    },
+    {
+        "isbn": "1844163774",
+        "isbn13": "9781844163774",
+        "title": "Milczenie",
+        "description": "A psychological horror novel that explores the silence before the storm of a terrifying fate.",
+        "publication_date": "2006-10-01",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Tim",
+            "second_name": "Lebbon"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/milczenie.jpg"
+    },
+    {
+        "isbn": "1504027647",
+        "isbn13": "9781504027647",
+        "title": "Awaria prądu",
+        "description": "A suspenseful horror story set in a town where all electrical power is mysteriously cut off.",
+        "publication_date": "2015-05-19",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Unknown",
+            "second_name": "Author"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/awaria_pradu.jpg"
+    },
+    {
+        "isbn": "0393364843",
+        "isbn13": "9780393364843",
+        "title": "Dziedzictwo",
+        "description": "A gripping horror novel about a family legacy that leads to horrifying discoveries.",
+        "publication_date": "2013-02-26",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Graham",
+            "second_name": "Masterton"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/dziedzictwo.jpg"
+    },
+    {
+        "isbn": "1501121499",
+        "isbn13": "9781501121499",
+        "title": "Joyland",
+        "description": "A suspenseful story by Stephen King set in an amusement park where tragedy and horror await.",
+        "publication_date": "2013-06-04",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Stephen",
+            "second_name": "King"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/joyland.jpg"
+    },
+    {
+        "isbn": "8364674423",
+        "isbn13": "9788364674423",
+        "title": "Piekło anioła",
+        "description": "A dramatic exploration of the struggle between good and evil, set against the backdrop of a tormented soul.",
+        "publication_date": "2021-11-15",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Kamila",
+            "second_name": "Subzda"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/pieklo_aniola.jpg"
+    },
+    {
+        "isbn": "8380082201",
+        "isbn13": "9788380082201",
+        "title": "Zamknięta w ciemności",
+        "description": "A gripping drama that delves into the emotional turmoil of a woman trapped in her own darkness.",
+        "publication_date": "2019-08-10",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Marta",
+            "second_name": "Mituta"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/zamknieta_w_ciemnosci.jpg"
+    },
+    {
+        "isbn": "8377106811",
+        "isbn13": "9788377106811",
+        "title": "Chora z miłości",
+        "description": "A powerful drama about love's destructive power and the personal sacrifice it demands.",
+        "publication_date": "2020-07-23",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Paulina",
+            "second_name": "Połomska"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/chora_z_milosci.jpg"
+    },
+    {
+        "isbn": "8324406571",
+        "isbn13": "9788324406571",
+        "title": "Ojcze mój",
+        "description": "A heartfelt drama that explores the complexities of father-son relationships amidst hardship.",
+        "publication_date": "2018-03-15",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Grzegorz",
+            "second_name": "Górny"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/ojcze_moj.jpg"
+    },
+    {
+        "isbn": "8393425713",
+        "isbn13": "9788393425713",
+        "title": "Rękopisy nie płoną",
+        "description": "A drama centered around the theme of art, history, and the preservation of culture through the ages.",
+        "publication_date": "2017-10-02",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Patryk",
+            "second_name": "Strzałkowski"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/rekopisy_nie_plona.jpg"
+    },
+    {
+        "isbn": "8368516742",
+        "isbn13": "9788368516742",
+        "title": "Projekt Paradiso",
+        "description": "A complex narrative exploring the human desire to reach perfection through technology and space exploration.",
+        "publication_date": "2020-09-21",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Paweł",
+            "second_name": "Rutkowski"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/projekt_paradiso.jpg"
+    },
+    {
+        "isbn": "8393698535",
+        "isbn13": "9788393698535",
+        "title": "Polowanie na Kasztany",
+        "description": "A thrilling blend of mystery and technology, where artificial intelligence is tasked with solving crimes in a world full of secrets.",
+        "publication_date": "2019-11-09",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Jadwiga",
+            "second_name": "Ziehike"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/polowanie_na_kasztany.jpg"
+    },
+    {
+        "isbn": "8394882226",
+        "isbn13": "9788394882226",
+        "title": "Chłopiec z Łabędziem",
+        "description": "A futuristic journey that involves a boy discovering the secrets of his true nature in a world where science and magic intertwine.",
+        "publication_date": "2021-12-05",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Ingmar",
+            "second_name": "Villgist"
+        },
+        "genres": ["Dramat"],
+        "cover_book": "/covers/chlopiec_z_labedziem.jpg"
+    },
+    {
+        "isbn": "8365413720",
+        "isbn13": "9788365413720",
+        "title": "Chwiejność",
+        "description": "Thriller psychologiczny, który zagłębia się w niestabilność ludzkiego umysłu.",
+        "publication_date": "2023-01-19",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Rafał",
+            "second_name": "Pakuła"
+        },
+        "genres": ["Thriller"],
+        "cover_book": "/covers/chwiejnosc.jpg"
+    },
+    {
+        "isbn": "8395872229",
+        "isbn13": "9788395872229",
+        "title": "Niebieski kot. Dziewczyna w masce",
+        "description": "Mroczny, atmosferyczny thriller o dziewczynie z tajemniczą maską.",
+        "publication_date": "2022-07-09",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Łukasz",
+            "second_name": "Janowicz"
+        },
+        "genres": ["Thriller"],
+        "cover_book": "/covers/niebieski_kot.jpg"
+    },
+    {
+        "isbn": "8363729351",
+        "isbn13": "9788363729351",
+        "title": "Tangram Nazistów",
+        "description": "Tensja związana z odkrywaniem nazistowskich tajemnic ukrytych w przestrzeni publicznej.",
+        "publication_date": "2020-03-10",
+        "rating": 4.0,
+        "author": {
+            "first_name": "Piotr",
+            "second_name": "O'Braga"
+        },
+        "genres": ["Thriller"],
+        "cover_book": "/covers/tangram_nazistow.jpg"
+    },
+    {
+        "isbn": "8367162518",
+        "isbn13": "9788367162518",
+        "title": "Kazalnica",
+        "description": "Eksploracja mrocznych sił i ukrytych planów, rozgrywająca się w odizolowanej wiosce.",
+        "publication_date": "2021-05-05",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Katarzyna",
+            "second_name": "Jagiełło-Grygiel"
+        },
+        "genres": ["Thriller"],
+        "cover_book": "/covers/kazalnica.jpg"
+    },
+    {
+        "isbn": "4567890123",
+        "isbn13": "9784567890123",
+        "title": "Wielki czarny kwadrat",
+        "description": "Surrealistyczna powieść o granicach sztuki i człowieka.",
+        "publication_date": "2022-08-19",
+        "rating": 3.5,
+        "author": {
+            "first_name": "Igor",
+            "second_name": "Stefanowicz"
+        },
+        "genres": ["Thriller"],
+        "cover_book": "/covers/wielki_czarny_kwadrat.jpg"
+    },
+    {
+        "isbn": "5678901234",
+        "isbn13": "9785678901234",
+        "title": "Dom numer 47",
+        "description": "Mroczna powieść o tajemniczym domu, który skrywa niejedną zbrodnię.",
+        "publication_date": "2021-07-22",
+        "rating": 4.5,
+        "author": {
+            "first_name": "Ina",
+            "second_name": "Nacht"
+        },
+        "genres": ["Horror"],
+        "cover_book": "/covers/dom_numer_47.jpg"
     }
+
 ]
 
 libraries = [
