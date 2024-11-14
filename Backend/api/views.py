@@ -37,23 +37,58 @@ from .serializers import (
 class LibraryViewSet(viewsets.ModelViewSet):
     queryset = Library.objects.all()
     serializer_class = LibrarySerializer
+
     def get_queryset(self):
-        queryset = super().get_queryset()                                       
-        city = self.request.query_params.get('city', None)                      
-        if city is not None:
+        queryset = super().get_queryset()
+        city = self.request.query_params.get('city', None)
+        latitude = self.request.query_params.get('latitude', None)
+        longitude = self.request.query_params.get('longitude', None)
+
+        if city:
             city = city.title()
-            queryset = queryset.filter(city__iexact=city)                      
-            if not queryset.exists():  
-                raise NotFound(detail=f"No libraries found in {city}.")      
+            queryset = queryset.filter(city__iexact=city)
+            if not queryset.exists():
+                raise NotFound(detail=f"No libraries found in {city}.")
+
+        if latitude and longitude:
+            try:
+                user_location = (float(latitude), float(longitude))
+            except ValueError:
+                raise ValidationError("Invalid coordinates.")
+            
+            libraries_with_distance = [
+                {
+                    'id': library.id,
+                    'library_name': library.library_name,
+                    'city': library.city,
+                    'distance': round(geodesic(user_location, (library.latitude, library.longitude)).kilometers, 2)
+                }
+                for library in queryset
+            ]
+            
+            sorted_libraries = sorted(libraries_with_distance, key=lambda x: x['distance'])
+            return sorted_libraries
+
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        latitude = request.query_params.get('latitude')
+        longitude = request.query_params.get('longitude')
+
+        if latitude and longitude:
+            libraries_with_distance = self.get_queryset()
+            return Response(libraries_with_distance)
+
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
     def create(self, request, *args, **kwargs):
         city = request.data.get('city', '').strip()
         library_name = request.data.get('library_name', '').strip()
         latitude = request.data.get('latitude', None)
         longitude = request.data.get('longitude', None)
 
-        #sprawdzanie pustych pól
         if not city:
             raise ValidationError("City is required.")
         if not library_name:
@@ -61,21 +96,20 @@ class LibraryViewSet(viewsets.ModelViewSet):
         if not latitude or not longitude:
             raise ValidationError("Latitude and longitude are required.")
 
-        #sprawdzamy czy biblioteka już istnieje przy tworzeniu
         if Library.objects.filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
+        
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         city = request.data.get('city', instance.city).title()
         library_name = request.data.get('library_name', instance.library_name)
-        lalitude = request.data.get('latitude', instance.latitude)
+        latitude = request.data.get('latitude', instance.latitude)
         longitude = request.data.get('longitude', instance.longitude)
 
         if not library_name:
             raise ValidationError("Library name is required.")
-
         if not city:
             raise ValidationError("City is required.")
         if not latitude or not longitude:
@@ -83,17 +117,18 @@ class LibraryViewSet(viewsets.ModelViewSet):
 
         if Library.objects.exclude(id=instance.id).filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
+        
         return super().update(request, *args, **kwargs)
-         
+
     def retrieve(self, request, *args, **kwargs):
         identifier = kwargs.get('pk')
         if identifier is None:
-            raise NotFound(detail="Library identifier is required. ")                 # nazwa lub di
+            raise NotFound(detail="Library identifier is required.")  # назва або id
         try:
-            if identifier.isdigit():                                                  #jako id
+            if identifier.isdigit():
                 instance = Library.objects.get(id=int(identifier))
-            else:  
-                instance = Library.objects.get(library_name__iexact=identifier)       #jako nazwa
+            else:
+                instance = Library.objects.get(library_name__iexact=identifier)
             serializer = self.get_serializer(instance)
             return Response(serializer.data)
         except Library.DoesNotExist:
