@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Input } from "./ui/input";
-import { FormControl, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { useEffect, useRef, useState } from "react";
 import { ControllerRenderProps, UseFormRegisterReturn } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 
 export default function ImageInput({ field, fileRef }: 
   { field: ControllerRenderProps<{
@@ -54,7 +55,7 @@ export default function ImageInput({ field, fileRef }:
       <FormLabel>Zdjęcie okładki</FormLabel>
       <FormControl>
         <>
-          <Input 
+          <Input
             { ...fileRef }
             ref={inputRef} 
             onChange={handleChange} 
@@ -64,19 +65,36 @@ export default function ImageInput({ field, fileRef }:
           <div 
             ref={dropdownBox}
             title="Drop image here"
-            className="w-full aspect-video border flex items-center justify-center rounded-md overflow-hidden"
+            className="w-full aspect-video border flex items-center justify-center rounded-md overflow-hidden relative"
             onDrop={handleDrop}
             onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
             onDragEnter={() => setDraggedOver(true)}
             onDragLeave={() => setDraggedOver(false)}
             onClick={() => inputRef.current!.click()}>
+
             {imageUrl.length ? (
-              <img src={imageUrl} style={{filter: draggedOver ? "brightness(0.9)" : "brightness(1)"}}/>
+              <div className={cn("w-full h-full relative")}>
+                <img src={imageUrl} className={cn("w-full h-full object-contain relative z-10", draggedOver && "brightness-75")} />
+                <img src={imageUrl} className={cn("w-full h-full object-cover absolute top-0 blur-md", draggedOver && "brightness-75")} />
+                <div className={cn("pointer-events-none absolute top-0 bottom-0 left-0 right-0 items-center justify-center z-10", draggedOver ? "flex" : "hidden")}>
+                  <svg className="stroke-foreground bounce-reverse" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
+                    <path d="M4 14V18H20V14M12 6L8 10M12 6L16 10M12 6V14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
             ) : (
-              <svg className="stroke-foreground" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
+              <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center z-10">
+                <svg className={cn("stroke-foreground", draggedOver && "bounce-reverse")} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
+                  <path d="M4 14V18H20V14M12 6L8 10M12 6L16 10M12 6V14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            )}
+            
+            {/* <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center z-10">
+              <svg className="stroke-foreground animate-bounce" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
                 <path d="M4 14V18H20V14M12 6L8 10M12 6L16 10M12 6V14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            )}
+            </div> */}
           </div>
         </>
       </FormControl>

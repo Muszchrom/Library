@@ -13,4 +13,5 @@ spring:
             - PUT
             - PATCH
             - OPTIONS
+            - HEAD
             allowedHeaders: "*"
