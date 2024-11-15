@@ -37,15 +37,57 @@ from .serializers import (
 class LibraryViewSet(viewsets.ModelViewSet):
     queryset = Library.objects.all()
     serializer_class = LibrarySerializer
+
     def get_queryset(self):
-        queryset = super().get_queryset()                                       
-        city = self.request.query_params.get('city', None)                      
-        if city is not None:
+        queryset = super().get_queryset()
+        city = self.request.query_params.get('city', None)
+        latitude = self.request.query_params.get('latitude', None)
+        longitude = self.request.query_params.get('longitude', None)
+        book_id = self.request.query_params.get('book', None)
+
+        if city:
             city = city.title()
-            queryset = queryset.filter(city__iexact=city)                      
-            if not queryset.exists():  
-                raise NotFound(detail=f"No libraries found in {city}.")      
+            queryset = queryset.filter(city__iexact=city)
+            if not queryset.exists():
+                raise NotFound(detail=f"No libraries found in {city}.")
+
+        if latitude and longitude:
+            try:
+                user_location = (float(latitude), float(longitude))
+            except ValueError:
+                raise ValidationError("Invalid coordinates.")
+
+            if book_id:
+                queryset = queryset.filter(librarybooksdb__book_id=book_id)
+                if not queryset.exists():
+                    raise NotFound(detail="No libraries found with the specified book.")
+
+            libraries_with_distance = [
+                {
+                    'id': library.id,
+                    'library_name': library.library_name,
+                    'city': library.city,
+                    'distance': round(geodesic(user_location, (library.latitude, library.longitude)).kilometers, 2)
+                }
+                for library in queryset
+            ]
+            
+            sorted_libraries = sorted(libraries_with_distance, key=lambda x: x['distance'])
+            return sorted_libraries
+
         return queryset
+
+    def list(self, request, *args, **kwargs):
+        latitude = request.query_params.get('latitude')
+        longitude = request.query_params.get('longitude')
+
+        if latitude and longitude:
+            libraries_with_distance = self.get_queryset()
+            return Response(libraries_with_distance)
+
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         city = request.data.get('city', '').strip()
@@ -53,7 +95,6 @@ class LibraryViewSet(viewsets.ModelViewSet):
         latitude = request.data.get('latitude', None)
         longitude = request.data.get('longitude', None)
 
-        #sprawdzanie pustych pól
         if not city:
             raise ValidationError("City is required.")
         if not library_name:
@@ -61,21 +102,20 @@ class LibraryViewSet(viewsets.ModelViewSet):
         if not latitude or not longitude:
             raise ValidationError("Latitude and longitude are required.")
 
-        #sprawdzamy czy biblioteka już istnieje przy tworzeniu
         if Library.objects.filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
+        
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         city = request.data.get('city', instance.city).title()
         library_name = request.data.get('library_name', instance.library_name)
-        lalitude = request.data.get('latitude', instance.latitude)
+        latitude = request.data.get('latitude', instance.latitude)
         longitude = request.data.get('longitude', instance.longitude)
 
         if not library_name:
             raise ValidationError("Library name is required.")
-
         if not city:
             raise ValidationError("City is required.")
         if not latitude or not longitude:
@@ -83,17 +123,18 @@ class LibraryViewSet(viewsets.ModelViewSet):
 
         if Library.objects.exclude(id=instance.id).filter(library_name__iexact=library_name, city__iexact=city).exists():
             raise ValidationError(f"Library '{library_name}' already exists in {city}.")
+        
         return super().update(request, *args, **kwargs)
-         
+
     def retrieve(self, request, *args, **kwargs):
         identifier = kwargs.get('pk')
         if identifier is None:
-            raise NotFound(detail="Library identifier is required. ")                 # nazwa lub di
+            raise NotFound(detail="Library identifier is required.")  
         try:
-            if identifier.isdigit():                                                  #jako id
+            if identifier.isdigit():
                 instance = Library.objects.get(id=int(identifier))
-            else:  
-                instance = Library.objects.get(library_name__iexact=identifier)       #jako nazwa
+            else:
+                instance = Library.objects.get(library_name__iexact=identifier)
             serializer = self.get_serializer(instance)
             return Response(serializer.data)
         except Library.DoesNotExist:
@@ -141,6 +182,38 @@ class AuthorsDbViewSet(viewsets.ModelViewSet):
 class BooksDbViewSet(viewsets.ModelViewSet):
     queryset = BooksDb.objects.all()
     serializer_class = BooksDbSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        genre_name = self.request.query_params.get('genre', None)
+        if genre_name:
+            queryset = queryset.filter(bookgenresdb__genre__genre__iexact=genre_name)
+
+        author_param = self.request.query_params.get('author', None)
+        if author_param:
+            if author_param.isdigit():
+                queryset = queryset.filter(author_id=int(author_param))
+            else:
+                try:
+                    first_name, second_name = author_param.split()
+                    queryset = queryset.filter(
+                        author__first_name__iexact=first_name,
+                        author__second_name__iexact=second_name
+                    )
+                except ValueError:
+                    raise serializers.ValidationError("Author parameter should be in 'First Last' format.")
+
+
+        rating = self.request.query_params.get('rating', None)
+        if rating:
+            try:
+                rating = float(rating)
+                queryset = queryset.filter(rating=rating)
+            except ValueError:
+                raise serializers.ValidationError("Rating must be a valid number.")
+
+        return queryset
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
@@ -191,13 +264,34 @@ class GenreDbViewSet(viewsets.ModelViewSet):
                 'genre': existing_genre.genre
             }, status=status.HTTP_200_OK)
 
-        # Użycie serializer z walidacją
         serializer = self.get_serializer(data={'genre': genre_name})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
+        genre_id = request.query_params.get('id', None)
+        genre_name = request.query_params.get('genre', None)
+
+        if genre_id:
+            try:
+                genre = GenresDb.objects.get(id=genre_id)
+                books = BooksDb.objects.filter(bookgenresdb__genre=genre).distinct()
+                books_serializer = BooksDbSerializer(books, many=True)
+                return Response(books_serializer.data)
+            except GenresDb.DoesNotExist:
+                raise NotFound(detail=f"Genre with id '{genre_id}' does not exist.")
+        
+        if genre_name:
+            genre_name = genre_name.title()
+            try:
+                genre = GenresDb.objects.get(genre__iexact=genre_name)
+                books = BooksDb.objects.filter(bookgenresdb__genre=genre).distinct()
+                books_serializer = BooksDbSerializer(books, many=True)
+                return Response(books_serializer.data)
+            except GenresDb.DoesNotExist:
+                raise NotFound(detail=f"Genre '{genre_name}' does not exist.")
+        
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -211,9 +305,9 @@ class GenreDbViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         if lookup_value.isdigit():
-            return super().retrieve(request, *args, **kwargs)  # ID-based retrieval
+            return super().retrieve(request, *args, **kwargs)  
         try:
-            genre = GenresDb.objects.get(genre__iexact=lookup_value.title())  # Name-based retrieval
+            genre = GenresDb.objects.get(genre__iexact=lookup_value.title())
             serializer = self.get_serializer(genre)
             return Response(serializer.data)
         except GenresDb.DoesNotExist:
