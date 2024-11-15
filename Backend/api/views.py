@@ -43,6 +43,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
         city = self.request.query_params.get('city', None)
         latitude = self.request.query_params.get('latitude', None)
         longitude = self.request.query_params.get('longitude', None)
+        book_id = self.request.query_params.get('book', None)
 
         if city:
             city = city.title()
@@ -55,7 +56,12 @@ class LibraryViewSet(viewsets.ModelViewSet):
                 user_location = (float(latitude), float(longitude))
             except ValueError:
                 raise ValidationError("Invalid coordinates.")
-            
+
+            if book_id:
+                queryset = queryset.filter(librarybooksdb__book_id=book_id)
+                if not queryset.exists():
+                    raise NotFound(detail="No libraries found with the specified book.")
+
             libraries_with_distance = [
                 {
                     'id': library.id,
@@ -82,7 +88,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
+
     def create(self, request, *args, **kwargs):
         city = request.data.get('city', '').strip()
         library_name = request.data.get('library_name', '').strip()
@@ -123,7 +129,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         identifier = kwargs.get('pk')
         if identifier is None:
-            raise NotFound(detail="Library identifier is required.")  # назва або id
+            raise NotFound(detail="Library identifier is required.")  
         try:
             if identifier.isdigit():
                 instance = Library.objects.get(id=int(identifier))
