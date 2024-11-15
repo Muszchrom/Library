@@ -8,6 +8,7 @@ export default async function BookCard({bookData}: {bookData: Book}) {
   const coverUrl = await (async () => {
     const coverNotFound = process.env.GATEWAY_URL + "waz/media/covers/default_cover.jpg"
 
+    if (!bookData.cover_book) return coverNotFound;
     const x = bookData.cover_book.split(":")[2]; // split into 3 parts, http, domain, path
     const url = process.env.GATEWAY_URL + "waz"  + x.substring(x.indexOf("/")); // remove port
     const y = await fetch(url, {method: "HEAD"})

@@ -1,9 +1,11 @@
+import SignOut from "@/components/signout";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
   const res = await fetch("http://gateway:8081/auth/user/" + session?.user.id);
+  if (res.status !== 200) return <SignOut />
   const user = await res.json();
 
   return (
