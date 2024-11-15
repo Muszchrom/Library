@@ -184,9 +184,20 @@ class BooksDbViewSet(viewsets.ModelViewSet):
         if genre_name:
             queryset = queryset.filter(bookgenresdb__genre__genre__iexact=genre_name)
 
-        author_name = self.request.query_params.get('author', None)
-        if author_name:
-            queryset = queryset.filter(author__name__iexact=author_name)
+        author_param = self.request.query_params.get('author', None)
+        if author_param:
+            if author_param.isdigit():
+                queryset = queryset.filter(author_id=int(author_param))
+            else:
+                try:
+                    first_name, second_name = author_param.split()
+                    queryset = queryset.filter(
+                        author__first_name__iexact=first_name,
+                        author__second_name__iexact=second_name
+                    )
+                except ValueError:
+                    raise serializers.ValidationError("Author parameter should be in 'First Last' format.")
+
 
         rating = self.request.query_params.get('rating', None)
         if rating:
