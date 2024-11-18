@@ -10,6 +10,21 @@ export interface Book {
   author: number
 }
 
+export interface Library {
+  id: number,
+  library_name: string,
+  city: string,
+  latitude: string,
+  longitude: string
+}
+
+export interface LibraryDistance {
+  id: number,
+  library_name: string,
+  city: string,
+  distance: number
+}
+
 export interface Genre {
   id: number,
   genre: string
