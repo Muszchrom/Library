@@ -30,7 +30,7 @@ URLS:
 * `http://localhost:8000/rentals/`                    <= not implemented yet
 
 
-### Connecting to PostgreSQL server
+# Connecting to PostgreSQL server
 * On host go to `localhost:5420`
 * Right click Servers, located on the left side of browser window, then select Register, server
 * Fill in Name field with whatever name you like
@@ -43,16 +43,31 @@ URLS:
 
 
 # Frontend
-create file Frontend/.env.local with these lines in it:
-`NEXTAUTH_SECRET=[secret key]`
-`NEXTAUTH_URL=http://localhost:3000/`
+Create a file Frontend/.env.local with these lines in it:
+```
+NEXTAUTH_SECRET=[secret key]
+NEXTAUTH_URL=http://localhost:3000/
+
+GATEWAY_URL=http://gateway:8081/
+GATEWAY_URL_CLIENT=http://localhost:8081/
+BACKEND_URL=http://backend:8000/
+BACKEND_URL_NO_PORT_NO_HTTP=backend
+GATEWAY_URL_NO_PORT_NO_HTTP=gateway
+```
+
 And to get secret key run this command in ubuntu: `openssl rand -base64 32`
 
-### Gateway
-* Role:
-  * 1 - Admin
-  * 2 - Employee
-  * 3 - User
+# Gateway
+### Custom headers for user authentication on backend
+<b>X-role-id</b> or in python <b>HTTP_X_ROLE_ID</b> consists of two values in the following format: "user_role user_id". Real world example would be "3 1"
+Note that not every request would have this kind of header on itself. This type of data can only be retrieved when user is signed in. Because of that add appropriate null handlers or inform gateway maintainers about routes requiring user_role and user_id. Possible values: `"user_role user_id" | null`.
+
+python code example to get this header: `self.request.META.get('HTTP_X_ROLE_ID')`
+
+Roles:
+* 1 - Admin
+* 2 - Employee
+* 3 - User
 
 #### Config
 * /libraries  
