@@ -11,6 +11,8 @@ from geopy.distance import geodesic
 from django.shortcuts import get_object_or_404
 from django.core.files import File
 from django.conf import settings
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
 
 from .models import (
@@ -204,7 +206,6 @@ class BooksDbViewSet(viewsets.ModelViewSet):
                 except ValueError:
                     raise serializers.ValidationError("Author parameter should be in 'First Last' format.")
 
-
         rating = self.request.query_params.get('rating', None)
         if rating:
             try:
@@ -212,6 +213,41 @@ class BooksDbViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(rating=rating)
             except ValueError:
                 raise serializers.ValidationError("Rating must be a valid number.")
+
+        title_param = self.request.query_params.get('title', None)
+        if title_param:
+            all_titles = list(BooksDb.objects.values_list('title', flat=True))
+            matching_titles = [
+                title for title in all_titles
+                if fuzz.partial_ratio(title_param.lower(), title.lower()) >= 80
+            ]
+
+            if matching_titles:
+                queryset = queryset.filter(title__in=matching_titles)
+            else:
+                raise ValidationError(f"No matching titles found for '{title_param}'.")
+
+        search_param = self.request.query_params.get('search', None)
+        if search_param:
+            search_param = search_param.lower()
+            all_books = BooksDb.objects.select_related('author').all()
+            matching_books = []
+
+            for book in all_books:
+                author_full_name = f"{book.author.first_name.lower()} {book.author.second_name.lower()}"
+                author_reversed_name = f"{book.author.second_name.lower()} {book.author.first_name.lower()}"
+                
+                if (
+                    fuzz.partial_ratio(search_param, book.title.lower()) >= 70 or
+                    fuzz.partial_ratio(search_param, author_full_name) >= 70 or
+                    fuzz.partial_ratio(search_param, author_reversed_name) >= 70
+                ):
+                    matching_books.append(book.id)
+
+            if matching_books:
+                queryset = queryset.filter(id__in=matching_books)
+            else:
+                raise ValidationError(f"No matches found for '{search_param}'.")
 
         return queryset
 
