@@ -10,6 +10,7 @@ If after building the application, the backed container does not start, you need
 URLS:
 * `http://localhost:8000/libraries/`                  <= returns json with available libraries
 * `http://localhost:8000/libraries/?city=<city>`      <= returns json with available libraries in the city
+* `http://localhost:8000/libraries/?latitude=<>&longitude=<>`   <= returns json with list of nearest libraries
 * `http://localhost:8000/libraries/id`                <= returns json with a specific library
 
 * `http://localhost:8000/authors/`                    <= returns json with available authors
@@ -17,14 +18,23 @@ URLS:
 
 * `http://localhost:8000/books/`                      <= returns json with available books
 * `http://localhost:8000/books/id`                    <= returns json with a specific book
+* `http://localhost:8000/books/?author=<>`            <= returns json with books written by this author
+* `http://localhost:8000/books/?genre=<>`             <= returns json with books of this genre
+* `http://localhost:8000/books/?rating=<>`            <= return json with books with this rating
+* `http://localhost:8000/books/?title=<>`           <= return json with books of this title
+* `http://localhost:8000/books/?search=<>`          <= serching books by title and author
 
-* `books/genres`                                       <= not implemented yet
 
 * `http://localhost:8000/genres/`                       <= returns json with available genres
 * `http://localhost:8000/genres/Fantastyka`             <= returns json with a specific genre by name in database
+* `http://localhost:8000/genres/?genre=<>`              <= return json with books of this genre 
 
 * `http://localhost:8000/book-genres/`                  <= returns json with available relation book - genres
 * `http://localhost:8000/book-genres/id`                <= returns json with a specific relation book - genres
+
+* `http://localhost:8000/best-nearest/?latitude=<>&longitude=<>`                <= returns json with books which have best rating from nearest libraries
+
+* `http://localhost:8000/bestseller`                <= returns json with books which have best rating
 
 * `http://localhost:8000/library-books/`              <= not implemented yet
 * `http://localhost:8000/rentals/`                    <= not implemented yet
