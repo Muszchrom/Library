@@ -1,9 +1,13 @@
 ```markdown
-# **Library Management API Overview**
+# **Library Management API**
 
-## **Endpoints**
+## **Overview**
+
+This API allows users to interact with libraries, books, authors, genres, and rentals. It provides filtering, searching, and operations like renting and returning books.
 
 ---
+
+## **Endpoints**
 
 ### **Libraries**
 
@@ -17,6 +21,11 @@ Retrieve all libraries.
   - `longitude`: User's longitude.
   - `book`: Filter libraries by book availability.
 
+- **Example**:
+  ```bash
+  GET /libraries/?city=SampleCity&latitude=51.246452&longitude=22.568446
+  ```
+
 - **Response**:
   ```json
   [
@@ -25,14 +34,9 @@ Retrieve all libraries.
           "library_name": "Central Library",
           "city": "Sample City",
           "distance": 2.5
-      },
-      ...
+      }
   ]
   ```
-
-- **Notes**:
-  - If `latitude` and `longitude` are provided, libraries are sorted by proximity.
-  - If `book` is provided, filters libraries where the specified book is available.
 
 #### **POST /libraries/**
 
@@ -44,9 +48,16 @@ Create a new library.
   - `latitude`: Latitude of the library.
   - `longitude`: Longitude of the library.
 
-#### **PUT /libraries/{id}/**
-
-Update an existing library.
+- **Example**:
+  ```bash
+  POST /libraries/
+  {
+      "library_name": "Central Library",
+      "city": "Sample City",
+      "latitude": 51.246452,
+      "longitude": 22.568446
+  }
+  ```
 
 ---
 
@@ -64,24 +75,23 @@ Create a new author.
   - `first_name`: Author's first name.
   - `second_name`: Author's last name.
 
-#### **Response**:
-  - If the author already exists:
-    ```json
-    {
-        "message": "Author John Doe already exists.",
-        "id": 1,
-        "first_name": "John",
-        "second_name": "Doe"
-    }
-    ```
-  - If created successfully:
-    ```json
-    {
-        "id": 2,
-        "first_name": "Jane",
-        "second_name": "Smith"
-    }
-    ```
+- **Example**:
+  ```bash
+  POST /authors/
+  {
+      "first_name": "John",
+      "second_name": "Doe"
+  }
+  ```
+
+- **Response**:
+  ```json
+  {
+      "id": 1,
+      "first_name": "John",
+      "second_name": "Doe"
+  }
+  ```
 
 ---
 
@@ -98,6 +108,11 @@ Retrieve all books.
   - `title`: Search for books by title (fuzzy matching).
   - `search`: Search for books by title or author (fuzzy matching).
 
+- **Example**:
+  ```bash
+  GET /books/?genre=Fantasy&rating=4.5
+  ```
+
 #### **POST /books/**
 
 Create a new book.
@@ -107,13 +122,15 @@ Create a new book.
   - `author`: ID of the author.
   - `rating`: Rating of the book.
 
-#### **POST /books/{id}/upload-cover/**
-
-Upload a cover image for a book.
-
-#### **POST /books/{id}/library/{library_id}/rent/**
-
-Rent a book from a library.
+- **Example**:
+  ```bash
+  POST /books/
+  {
+      "title": "Fantasy World",
+      "author": 1,
+      "rating": 4.5
+  }
+  ```
 
 ---
 
@@ -131,8 +148,16 @@ Retrieve all genres.
 
 Create a new genre.
 
-- **Required Field**:
+- **Required Fields**:
   - `genre`: Name of the genre.
+
+- **Example**:
+  ```bash
+  POST /genres/
+  {
+      "genre": "Fantasy"
+  }
+  ```
 
 ---
 
@@ -140,16 +165,22 @@ Create a new genre.
 
 #### **POST /library-books/**
 
-Add a new book to a library.
+Add a book to a library.
 
 - **Required Fields**:
   - `book`: ID of the book.
   - `library`: ID of the library.
-  - `book_count`: Number of copies available.
+  - `book_count`: Number of available copies.
 
-#### **PUT /library-books/{id}/**
-
-Update the number of copies available for a book in a library.
+- **Example**:
+  ```bash
+  POST /library-books/
+  {
+      "book": 1,
+      "library": 2,
+      "book_count": 10
+  }
+  ```
 
 ---
 
@@ -175,9 +206,23 @@ Rent a book.
   - `book_id`: ID of the book.
   - `library_id`: ID of the library.
 
+- **Example**:
+  ```bash
+  POST /rental/
+  {
+      "book_id": 1,
+      "library_id": 2
+  }
+  ```
+
 #### **PUT /rental/{id}/**
 
 Return a book.
+
+- **Example**:
+  ```bash
+  PUT /rental/1/
+  ```
 
 ---
 
@@ -199,37 +244,20 @@ Retrieve the top 25 books from the nearest 5 libraries.
   - `latitude`: User's latitude.
   - `longitude`: User's longitude.
 
+- **Example**:
+  ```bash
+  GET /best-nearest/?latitude=51.246452&longitude=22.568446
+  ```
+
+- **Response**:
+  ```json
+  [
+      {
+          "id": 1,
+          "title": "Fantasy World",
+          "rating": 4.5
+      }
+  ]
+  ```
+
 ---
-
-## **Key Features**
-
-1. **Libraries**:
-   - Filter libraries by city, proximity, or book availability.
-   - Manage library records via CRUD operations.
-
-2. **Authors**:
-   - Create or retrieve authors.
-   - Handles duplicate authors gracefully.
-
-3. **Books**:
-   - Extensive filtering options by genre, author, rating, title, or search.
-   - Rent books directly from libraries.
-
-4. **Genres**:
-   - Retrieve all genres or filter by ID or name.
-   - Associate genres with books.
-
-5. **Library Books**:
-   - Manage the availability of books in libraries.
-
-6. **Rentals**:
-   - Track active and past rentals.
-   - Ensure users cannot rent more than two copies of the same book.
-
-7. **Best-Sellers**:
-   - Retrieve the top-rated books across all libraries.
-
-8. **Best Nearest Books**:
-   - Retrieve highly-rated books from the nearest libraries based on location.
-
-```
