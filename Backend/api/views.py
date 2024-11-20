@@ -518,12 +518,7 @@ class BestSellerBooksViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-'''             OBSŁUGA WYPOŻYCZEŃ            '''
-class RentalsDbViewSet(viewsets.ModelViewSet):
-    queryset = RentalsDb.objects.all()
-    serializer_class = RentalsDbSerializer
-
-#               OBSŁUGA BEST-NEAREST
+'''               OBSŁUGA BEST-NEAREST          '''
 class BestNearestView(APIView):
     def get(self, request):
         default_location = (51.246452, 22.568446)  # default location if user doesnt allow location access
@@ -569,35 +564,14 @@ class BestNearestView(APIView):
         serializer = BooksDbSerializer(books, many=True)
         return Response(serializer.data)
 
-
-class BooksByGenreView(APIView):
-    def get(self, request, genre_id):
-        books = BooksDb.objects.filter(bookgenresdb__genre_id=genre_id).distinct()
-        serializer = BooksDbSerializer(books, many=True)
-        return Response(serializer.data)
     
-class LibraryBooksByGenreView(APIView):
-    def get(self, request, library_id, genre_id):
-        try:
-            library = Library.objects.get(id=library_id)
-        except Library.DoesNotExist:
-            raise NotFound(detail="Library not found.")
-
-        books = BooksDb.objects.filter(
-            librarybooksdb__library=library,
-            bookgenresdb__genre_id=genre_id
-        ).distinct()
-
-        serializer = BooksDbSerializer(books, many=True)
-        return Response(serializer.data)
-    
-class TestHeaderView(APIView):
-    def get(self, request, *args, **kwargs):
-        x_role_id = request.META.get('HTTP_X_ROLE_ID', None)
-        return Response({
-            "X-role-id": x_role_id,
-        })
-
+# class TestHeaderView(APIView):
+#     def get(self, request, *args, **kwargs):
+#         x_role_id = request.META.get('HTTP_X_ROLE_ID', None)
+#         return Response({
+#             "X-role-id": x_role_id,
+#         })
+'''             OBSŁUGA WYPOŻYCZEŃ            '''
 class RentalsDbViewSet(viewsets.ViewSet):
     queryset = RentalsDb.objects.all()
     serializer_class = RentalsDbSerializer
@@ -659,7 +633,7 @@ class RentalsDbViewSet(viewsets.ViewSet):
             return Response({"error": "This book is not available in the selected library."}, status=status.HTTP_404_NOT_FOUND)
 
         # Get user role and ID from the header
-        x_role_id = request.META.get('HTTP_X_ROLE_ID', "3 1")  # Default value for testing
+        x_role_id = request.META.get('HTTP_X_ROLE_ID')  # Default value for testing
         try:
             role, user_id = x_role_id.split()
             role = int(role)
