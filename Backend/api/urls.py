@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from . import views
-from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, BestNearestView, BooksByGenreView, LibraryBooksByGenreView
+from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, BestNearestView, BooksByGenreView, LibraryBooksByGenreView, RentalsDbViewSet, TestHeaderView
 
 from .dev_views import generateTemplateData
 
@@ -19,6 +19,7 @@ router.register(r'genres', views.GenreDbViewSet, basename='genres')
 router.register(r'book-genres', views.BookGenresDbViewSet)  
 router.register(r'library-books', views.LibraryBooksDbViewSet)
 router.register(r'rentals', views.RentalsDbViewSet)  
+router.register(r'rentals', RentalsDbViewSet, basename='rentals')
 
 router.register(r'bestseller', BestSellerBooksViewSet, basename='bestseller-books')
   
@@ -35,7 +36,9 @@ urlpatterns = [
     path('libraries/<int:library_id>/books/genres/<int:genre_id>/', LibraryBooksByGenreView.as_view(), name='library-books-by-genre'),
     #generowanie danych
     path('generate', generateTemplateData),
-    path('best-nearest/', BestNearestView.as_view(), name='best-nearest')
+    path('best-nearest/', BestNearestView.as_view(), name='best-nearest'),
+    path('test-header/', TestHeaderView.as_view(), name='test-header'),
+
     
 
 
