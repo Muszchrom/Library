@@ -95,13 +95,9 @@ Create a new author.
 
 ---
 
-### **Books API Documentation**
+### **Books**
 
-#### **Endpoints**
-
----
-
-### **GET /books/**
+#### **GET /books/**
 
 **Retrieve all books** with optional filters.
 
@@ -134,9 +130,7 @@ Create a new author.
   ]
   ```
 
----
-
-### **POST /books/**
+#### **POST /books/**
 
 **Create a new book** in the database.
 
@@ -165,9 +159,7 @@ Create a new author.
   - `rating` must be between 1.0 and 5.0 in 0.5 steps.
   - A book with the same `isbn` and `author` cannot already exist.
 
----
-
-### **POST /books/{id}/upload-cover/**
+#### **POST /books/{id}/upload-cover/**
 
 **Upload a cover image** for a specific book.
 
@@ -187,9 +179,7 @@ Create a new author.
   }
   ```
 
----
-
-### **POST /books/{id}/library/{library_id}/rent/**
+#### **POST /books/{id}/library/{library_id}/rent/**
 
 **Rent a book from a specific library**.
 
