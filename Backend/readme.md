@@ -95,27 +95,50 @@ Create a new author.
 
 ---
 
-### **Books**
+### **Books API Documentation**
 
-#### **GET /books/**
+#### **Endpoints**
 
-Retrieve all books.
+---
+
+### **GET /books/**
+
+**Retrieve all books** with optional filters.
 
 - **Optional Query Parameters**:
-  - `genre`: Filter books by genre.
-  - `author`: Filter books by author name or ID.
-  - `rating`: Filter books by rating.
-  - `title`: Search for books by title (fuzzy matching).
+  - `genre`: Filter by genre name.
+  - `author`: Filter by author name (format: `First Last`) or author ID.
+  - `rating`: Filter by book rating.
+  - `title`: Search for books by title using fuzzy matching.
   - `search`: Search for books by title or author (fuzzy matching).
 
 - **Example**:
   ```bash
-  GET /books/?genre=Fantasy&rating=4.5
+  GET /books/?genre=Fantasy&rating=4.5&search=John Smith
   ```
 
-#### **POST /books/**
+- **Response**:
+  ```json
+  [
+      {
+          "id": 1,
+          "author": 2,
+          "isbn": "1234567890",
+          "isbn13": "1234567890123",
+          "title": "Fantasy World",
+          "description": "A magical journey.",
+          "publication_date": "2023-01-01",
+          "rating": 4.5,
+          "cover_book": "/media/covers/fantasy_world.jpg"
+      }
+  ]
+  ```
 
-Create a new book.
+---
+
+### **POST /books/**
+
+**Create a new book** in the database.
 
 - **Required Fields**:
   - `title`: Title of the book.
@@ -126,14 +149,73 @@ Create a new book.
   ```bash
   POST /books/
   {
-      "title": "Fantasy World",
+      "title": "Mystery Novel",
       "author": 1,
-      "rating": 4.5
+      "isbn": "0987654321",
+      "isbn13": "0987654321098",
+      "description": "An intriguing mystery story.",
+      "publication_date": "2024-01-01",
+      "rating": 4.0
+  }
+  ```
+
+- **Validation**:
+  - `isbn` must be 10 characters.
+  - `isbn13` must be 13 characters.
+  - `rating` must be between 1.0 and 5.0 in 0.5 steps.
+  - A book with the same `isbn` and `author` cannot already exist.
+
+---
+
+### **POST /books/{id}/upload-cover/**
+
+**Upload a cover image** for a specific book.
+
+- **Example**:
+  ```bash
+  POST /books/1/upload-cover/
+  Content-Type: multipart/form-data
+  File: cover.jpg
+  ```
+
+- **Response**:
+  ```json
+  {
+      "id": 1,
+      "title": "Fantasy World",
+      "cover_book": "/media/covers/cover.jpg"
   }
   ```
 
 ---
 
+### **POST /books/{id}/library/{library_id}/rent/**
+
+**Rent a book from a specific library**.
+
+- **Path Parameters**:
+  - `id`: ID of the book to rent.
+  - `library_id`: ID of the library.
+
+- **Headers**:
+  - `X-role-id`: User role and ID in the format `"role user_id"`. Example: `"3 1"`.
+
+- **Example**:
+  ```bash
+  POST /books/1/library/2/rent/
+  X-role-id: "3 10"
+  ```
+
+- **Response**:
+  ```json
+  {
+      "message": "Book 'Fantasy World' successfully rented from 'Central Library'.",
+      "rental_status": "Rented",
+      "rental_date": "2024-11-20",
+      "due_date": "2024-12-04"
+  }
+  ```
+---
 ### **Genres**
 
 #### **GET /genres/**
