@@ -9,7 +9,8 @@ from .models import (
   BooksDb,
   GenresDb,
   BookGenresDb,
-  LibraryBooksDb
+  LibraryBooksDb,
+  RentalsDb
 )
 
 from .template_data import (
@@ -40,6 +41,9 @@ def cleanup():
   
     LibraryBooksDb.objects.all().delete()
     reset_sequences(LibraryBooksDb)
+
+    RentalsDb.objects.all().delete()
+    reset_sequences(RentalsDb)
 
 def getGenresFromBooksRawData():
   arr = []

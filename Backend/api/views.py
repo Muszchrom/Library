@@ -8,11 +8,13 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 from geopy.distance import geodesic
+from datetime import date, timedelta
 from django.shortcuts import get_object_or_404
 from django.core.files import File
 from django.conf import settings
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+from django.db import transaction
 
 
 from .models import (
@@ -273,7 +275,7 @@ class BooksDbViewSet(viewsets.ModelViewSet):
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'], parser_classes=[MultiPartParser], url_path='upload-cover')
-    def upload_cover(self, request, pk=None):
+    def upload_cover(self, request):
         book = self.get_object() 
         if 'cover_book' not in request.FILES:
             return Response({"error": "No cover image provided."}, status=status.HTTP_400_BAD_REQUEST)
@@ -283,6 +285,74 @@ class BooksDbViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(book)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'], url_path='library/(?P<library_id>[^/.]+)/rent')
+    @transaction.atomic
+
+    # POST /books/{id}/library/{library_id}/rent/ - Rent a book from a library.
+    def rent_from_library(self, request, pk=None, library_id=None):
+        try:
+            book = BooksDb.objects.get(pk=pk)
+            library = Library.objects.get(pk=library_id)
+        except BooksDb.DoesNotExist:
+            return Response({"error": "Book not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Library.DoesNotExist:
+            return Response({"error": "Library not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check the book availability in the library
+        try:
+            library_book = LibraryBooksDb.objects.get(book=book, library=library)
+            if library_book.book_count <= 0:
+                return Response({"error": "No copies of this book are available in the selected library."}, status=status.HTTP_400_BAD_REQUEST)
+        except LibraryBooksDb.DoesNotExist:
+            return Response({"error": "This book is not available in the selected library."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Parse user role and ID from headers
+        x_role_id = request.META.get('HTTP_X_ROLE_ID')
+        if not x_role_id:
+            return Response({"error": "User role and ID not provided in the headers."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            role, user_id = x_role_id.split()
+            role = int(role)
+            user_id = int(user_id)
+        except ValueError:
+            return Response({"error": "Invalid format for X-role-id header."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user has already rented 2 active copies of this book from the library
+        active_rentals = RentalsDb.objects.filter(
+            user_id=user_id,
+            book=book,
+            library=library,
+            return_date__isnull=True
+        )
+        if active_rentals.count() >= 2:
+            return Response({"error": "You cannot rent more than 2 active copies of the same book from this library."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Process the rental
+        rental_status = "Rented"
+        rental_date = date.today()
+        due_date = rental_date + timedelta(days=14)
+
+        # Create a rental record
+        RentalsDb.objects.create(
+            user_id=user_id,
+            book=book,
+            library=library,
+            rental_status=rental_status,
+            rental_date=rental_date,
+            due_date=due_date
+        )
+
+        # Update the library's book count
+        library_book.book_count -= 1
+        library_book.save()
+
+        return Response({
+            "message": f"Book '{book.title}' successfully rented from '{library.library_name}'.",
+            "rental_status": rental_status,
+            "rental_date": rental_date,
+            "due_date": due_date
+        }, status=status.HTTP_201_CREATED)
 
 '''             OBSŁUGA GATUNKÓW KSIĄŻEK            '''
 class GenreDbViewSet(viewsets.ModelViewSet):
@@ -448,12 +518,7 @@ class BestSellerBooksViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-'''             OBSŁUGA WYPOŻYCZEŃ            '''
-class RentalsDbViewSet(viewsets.ModelViewSet):
-    queryset = RentalsDb.objects.all()
-    serializer_class = RentalsDbSerializer
-
-#               OBSŁUGA BEST-NEAREST
+'''               OBSŁUGA BEST-NEAREST          '''
 class BestNearestView(APIView):
     def get(self, request):
         default_location = (51.246452, 22.568446)  # default location if user doesnt allow location access
@@ -499,24 +564,135 @@ class BestNearestView(APIView):
         serializer = BooksDbSerializer(books, many=True)
         return Response(serializer.data)
 
-
-class BooksByGenreView(APIView):
-    def get(self, request, genre_id):
-        books = BooksDb.objects.filter(bookgenresdb__genre_id=genre_id).distinct()
-        serializer = BooksDbSerializer(books, many=True)
-        return Response(serializer.data)
     
-class LibraryBooksByGenreView(APIView):
-    def get(self, request, library_id, genre_id):
-        try:
-            library = Library.objects.get(id=library_id)
-        except Library.DoesNotExist:
-            raise NotFound(detail="Library not found.")
+class TestHeaderView(APIView):
+    def get(self, request, *args, **kwargs):
+        x_role_id = request.META.get('HTTP_X_ROLE_ID', None)
+        return Response({
+            "X-role-id": x_role_id,
+        })
+'''             OBSŁUGA WYPOŻYCZEŃ            '''
+class RentalsDbViewSet(viewsets.ViewSet):
+    queryset = RentalsDb.objects.all()
+    serializer_class = RentalsDbSerializer
 
-        books = BooksDb.objects.filter(
-            librarybooksdb__library=library,
-            bookgenresdb__genre_id=genre_id
-        ).distinct()
-
-        serializer = BooksDbSerializer(books, many=True)
+    def list(self, request, *args, **kwargs):
+        """
+        GET /rentals/ - Retrieve all rentals.
+        """
+        rentals = self.queryset
+        serializer = self.serializer_class(rentals, many=True)
         return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        """
+        GET /rentals/{id}/ - Retrieve a specific rental by ID.
+        """
+        try:
+            rental = RentalsDb.objects.get(pk=pk)
+            serializer = self.serializer_class(rental)
+            return Response(serializer.data)
+        except RentalsDb.DoesNotExist:
+            raise NotFound(detail="Rental not found.")
+
+    @action(detail=False, methods=['get'], url_path='user/(?P<user_id>[^/.]+)')
+    def rentals_by_user(self, request, user_id=None):
+        """
+        GET /rentals/user/{user_id}/ - Retrieve rentals for a specific user.
+        """
+        rentals = RentalsDb.objects.filter(user_id=user_id)
+        if not rentals.exists():
+            return Response({"error": f"No rentals found for user with ID {user_id}."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(rentals, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        """
+        POST /rentals/ - Rent a book.
+        """
+        book_id = request.data.get('book_id')
+        library_id = request.data.get('library_id')
+
+        if not book_id or not library_id:
+            return Response({"error": "Both 'book_id' and 'library_id' are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            book = BooksDb.objects.get(pk=book_id)
+            library = Library.objects.get(pk=library_id)
+        except BooksDb.DoesNotExist:
+            return Response({"error": "Book not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Library.DoesNotExist:
+            return Response({"error": "Library not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check availability in the library
+        try:
+            library_book = LibraryBooksDb.objects.get(book=book, library=library)
+            if library_book.book_count <= 0:
+                return Response({"error": "No copies of this book are available in the selected library."}, status=status.HTTP_400_BAD_REQUEST)
+        except LibraryBooksDb.DoesNotExist:
+            return Response({"error": "This book is not available in the selected library."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get user role and ID from the header
+        x_role_id = request.META.get('HTTP_X_ROLE_ID', "3 1")  # Default value for testing
+        if not x_role_id:
+            return Response({"error": "User role and ID not provided in the headers."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            role, user_id = x_role_id.split()
+            role = int(role)
+            user_id = int(user_id)
+        except ValueError:
+            return Response({"error": "Invalid format for X-role-id header."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user has already rented 2 active copies of this book from the library
+        active_rentals = RentalsDb.objects.filter(
+            user_id=user_id,
+            book=book,
+            library=library,
+            return_date__isnull=True
+        )
+        if active_rentals.count() >= 2:
+            return Response({"error": "You cannot rent more than 2 active copies of the same book from this library."}, status=status.HTTP_400_BAD_REQUEST)
+
+        rental_status = "Rented"
+        rental_date = date.today()
+        due_date = rental_date + timedelta(days=14)  # Example: 2-week rental period
+
+        RentalsDb.objects.create(
+            user_id=user_id,
+            book=book,
+            library=library,
+            rental_status=rental_status,
+            rental_date=rental_date,
+            due_date=due_date
+        )
+
+        library_book.book_count -= 1
+        library_book.save()
+
+        return Response({
+            "message": f"Book '{book.title}' successfully rented from '{library.library_name}'.",
+            "rental_id": RentalsDb.objects.latest('id').id,
+            "rental_status": rental_status,
+            "rental_date": rental_date,
+            "due_date": due_date
+            
+        }, status=status.HTTP_201_CREATED)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        """
+        PUT /rentals/{id}/ - Return a rented book.
+        """
+        try:
+            rental = RentalsDb.objects.get(pk=pk, return_date__isnull=True)
+        except RentalsDb.DoesNotExist:
+            return Response({"error": "Active rental not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        rental.return_date = date.today()
+        rental.rental_status = "Returned"
+        rental.save()
+
+        library_book = LibraryBooksDb.objects.get(book=rental.book, library=rental.library)
+        library_book.book_count += 1
+        library_book.save()
+
+        return Response({"message": "Book successfully returned.", "rental_id": rental.id}, status=status.HTTP_200_OK)
