@@ -565,12 +565,12 @@ class BestNearestView(APIView):
         return Response(serializer.data)
 
     
-# class TestHeaderView(APIView):
-#     def get(self, request, *args, **kwargs):
-#         x_role_id = request.META.get('HTTP_X_ROLE_ID', None)
-#         return Response({
-#             "X-role-id": x_role_id,
-#         })
+class TestHeaderView(APIView):
+    def get(self, request, *args, **kwargs):
+        x_role_id = request.META.get('HTTP_X_ROLE_ID', None)
+        return Response({
+            "X-role-id": x_role_id,
+        })
 '''             OBSŁUGA WYPOŻYCZEŃ            '''
 class RentalsDbViewSet(viewsets.ViewSet):
     queryset = RentalsDb.objects.all()
@@ -578,7 +578,7 @@ class RentalsDbViewSet(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
         """
-        GET /rental/ - Retrieve all rentals.
+        GET /rentals/ - Retrieve all rentals.
         """
         rentals = self.queryset
         serializer = self.serializer_class(rentals, many=True)
@@ -586,7 +586,7 @@ class RentalsDbViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         """
-        GET /rental/{id}/ - Retrieve a specific rental by ID.
+        GET /rentals/{id}/ - Retrieve a specific rental by ID.
         """
         try:
             rental = RentalsDb.objects.get(pk=pk)
@@ -598,7 +598,7 @@ class RentalsDbViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], url_path='user/(?P<user_id>[^/.]+)')
     def rentals_by_user(self, request, user_id=None):
         """
-        GET /rental/user/{user_id}/ - Retrieve rentals for a specific user.
+        GET /rentals/user/{user_id}/ - Retrieve rentals for a specific user.
         """
         rentals = RentalsDb.objects.filter(user_id=user_id)
         if not rentals.exists():
@@ -608,7 +608,7 @@ class RentalsDbViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-        POST /rental/ - Rent a book.
+        POST /rentals/ - Rent a book.
         """
         book_id = request.data.get('book_id')
         library_id = request.data.get('library_id')
@@ -633,7 +633,9 @@ class RentalsDbViewSet(viewsets.ViewSet):
             return Response({"error": "This book is not available in the selected library."}, status=status.HTTP_404_NOT_FOUND)
 
         # Get user role and ID from the header
-        x_role_id = request.META.get('HTTP_X_ROLE_ID')  # Default value for testing
+        x_role_id = request.META.get('HTTP_X_ROLE_ID', "3 1")  # Default value for testing
+        if not x_role_id:
+            return Response({"error": "User role and ID not provided in the headers."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             role, user_id = x_role_id.split()
             role = int(role)
@@ -669,14 +671,16 @@ class RentalsDbViewSet(viewsets.ViewSet):
 
         return Response({
             "message": f"Book '{book.title}' successfully rented from '{library.library_name}'.",
+            "rental_id": RentalsDb.objects.latest('id').id,
             "rental_status": rental_status,
             "rental_date": rental_date,
             "due_date": due_date
+            
         }, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None, *args, **kwargs):
         """
-        PUT /rental/{id}/ - Return a rented book.
+        PUT /rentals/{id}/ - Return a rented book.
         """
         try:
             rental = RentalsDb.objects.get(pk=pk, return_date__isnull=True)

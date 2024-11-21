@@ -258,19 +258,19 @@ Add a book to a library.
 
 ### **Rentals**
 
-#### **GET /rental/**
+#### **GET /rentals/**
 
 Retrieve all rentals.
 
-#### **GET /rental/{id}/**
+#### **GET /rentals/{id}/**
 
 Retrieve a specific rental.
 
-#### **GET /rental/user/{user_id}/**
+#### **GET /rentals/user/{user_id}/**
 
 Retrieve rentals for a specific user.
 
-#### **POST /rental/**
+#### **POST /rentals/**
 
 Rent a book.
 
@@ -280,20 +280,20 @@ Rent a book.
 
 - **Example**:
   ```bash
-  POST /rental/
+  POST /rentals/
   {
       "book_id": 1,
       "library_id": 2
   }
   ```
 
-#### **PUT /rental/{id}/**
+#### **PUT /rentals/{id}/**
 
 Return a book.
 
 - **Example**:
   ```bash
-  PUT /rental/1/
+  PUT /rentals/1/
   ```
 
 ---

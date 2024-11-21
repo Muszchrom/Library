@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from . import views
-from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, BestNearestView, BooksByGenreView, LibraryBooksByGenreView, RentalsDbViewSet, TestHeaderView
+from .views import LibraryViewSet,AuthorsDbViewSet, BooksDbViewSet, BestSellerBooksViewSet, GenreDbViewSet, BookGenresDbViewSet, LibraryBooksDbViewSet, BestNearestView, RentalsDbViewSet, TestHeaderView
 
 from .dev_views import generateTemplateData
 
@@ -30,10 +30,8 @@ urlpatterns = [
     
     path('libraries/<str:pk>/', LibraryViewSet.as_view({'get': 'retrieve'}), name='library-by-identifier'), 
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),   # Lista książek w bibliotece
-    path('genres/<int:genre_id>/books/', BooksByGenreView.as_view(), name='books-by-genre'),
     path('books/<int:pk>/update-rating/', BooksDbViewSet.as_view({'patch': 'update_rating'}), name='update-rating'),    #update rating
     path('libraries/<int:library_id>/books/', views.BooksDbViewSet.as_view({'get': 'list'}), name='library-books'),
-    path('libraries/<int:library_id>/books/genres/<int:genre_id>/', LibraryBooksByGenreView.as_view(), name='library-books-by-genre'),
     #generowanie danych
     path('generate', generateTemplateData),
     path('best-nearest/', BestNearestView.as_view(), name='best-nearest'),
