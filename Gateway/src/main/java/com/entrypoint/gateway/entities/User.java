@@ -31,6 +31,8 @@ public class User{
     @Column("password")
     private String password;
 
+    public User() {}
+
     // , Integer phone,
     public User(String password, String username, String email, Integer phone, Integer role) {
         this.password = password;
@@ -39,6 +41,23 @@ public class User{
         this.email = email;
         this.phone = phone;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(Integer phone) {
+        this.phone = phone;
+    }
+
     public String getPassword(){
         return this.password;
     }

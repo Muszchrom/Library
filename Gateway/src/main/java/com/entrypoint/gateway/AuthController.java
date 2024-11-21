@@ -7,18 +7,25 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.entrypoint.gateway.entities.User;
+import com.entrypoint.gateway.entities.UserDTO;
+import com.entrypoint.gateway.exceptions.BadRequestException;
 import com.entrypoint.gateway.exceptions.InvalidPasswordException;
 import com.entrypoint.gateway.exceptions.UserNotFoundException;
 import com.entrypoint.gateway.exceptions.UsernameExistsException;
 import com.entrypoint.gateway.repositories.UserRepository;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -86,23 +93,89 @@ public class AuthController {
 
     @PostMapping("/user")
     public Mono<User> register(@RequestBody User user) {
-    if (user.getPassword().length() < 7) {
-      throw new InvalidPasswordException("Haslo za krotkie");
-    }
+        if (user.getPassword().length() < 7) {
+            throw new InvalidPasswordException("Haslo za krotkie");
+        }
 
         return userRepository.findByUsername(user.getUsername())
-        .map(u -> {
-            Boolean t = true;
-            if (t) {
-            throw new UsernameExistsException("Username: " + user.getUsername() + " juz istnieje");
-            }
-            return u;
-        }).switchIfEmpty(Mono.defer(() -> {
-            user.hashPassword();
-            return userRepository.save(user);
-        }));
+            .map(u -> {
+                Boolean t = true;
+                if (t) {
+                    throw new UsernameExistsException("Username: " + user.getUsername() + " juz istnieje");
+                }
+                return u;
+            }).switchIfEmpty(Mono.defer(() -> {
+                user.hashPassword();
+                return userRepository.save(user);
+            }));
     }
 
+
+
+    @PatchMapping("/user")
+    public Mono<User> patchUser(@RequestBody UserDTO user, @RequestHeader("Authorization") String token) {
+        // get data from token
+        Claims claims;
+        try {
+            claims = Jwts.parser()
+                                .verifyWith(JWTUtil.getSecretKey())
+                                .build()
+                                .parseSignedClaims(token.substring(7))
+                                .getPayload();
+        } catch (MalformedJwtException ex) {
+            throw new BadCredentialsException("Invalid JWT syntax");
+        }
+
+        Integer id = (Integer) claims.get("id");
+
+        return userRepository.findById(id).flatMap(u -> {
+            // check if password matches with token username
+            BCryptPasswordEncoder bcPsswdEncoder = new BCryptPasswordEncoder();
+            if (!bcPsswdEncoder.matches(user.getPassword(), u.getPassword())) {
+                throw new InvalidPasswordException("Niepoprawne hasło");
+            }
+
+            // if newPassword in request body alter current password
+            if (user.getNewPassword() != null) {
+                if (user.getNewPassword().length() < 7) {
+                    throw new InvalidPasswordException("Haslo za krotkie");
+                }
+                u.setPassword(user.getNewPassword());
+                u.hashPassword();
+                return userRepository.save(u);
+            }
+
+            // if username in request body alter current username
+            if (user.getUsername() != null) {
+                return userRepository.findByUsername(user.getUsername())
+                    .map(us -> {
+                        Boolean t = true;
+                        if (t) {
+                            throw new UsernameExistsException("Username: " + user.getUsername() + " juz istnieje");
+                        } 
+                        return us;
+                    }).switchIfEmpty(Mono.defer(() -> {
+                        u.setUsername(user.getUsername());
+                        System.out.println("XD>D>>");
+                        return userRepository.save(u);
+                    }));
+            }
+
+            // if email in request
+            if (user.getEmail() != null) {
+                u.setEmail(user.getEmail());
+                return userRepository.save(u);
+            }
+
+            // if phone in request
+            if (user.getPhone() != null) {
+                u.setPhone(user.getPhone());
+                return userRepository.save(u);
+            }
+
+            throw new BadRequestException("No matching field provided. Please provide one of the following: newPassword, username, email, phone");
+        });
+    }
 
     @GetMapping("/user/{id}")
     public Mono<User> getUser(@PathVariable Long id) {

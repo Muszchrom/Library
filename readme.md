@@ -79,6 +79,38 @@ Roles:
 * 2 - Employee
 * 3 - User
 
+## Routes
+### /auth/user
+#### PATCH
+Alters current record in database. User must be logged in and token must be provided. Please provide only one field that has to be changed at the time otherwise errors might occur since only one field changes per request in set order. 
+
+<b>@Headers</b><br>
+Authorization bearer with JWT. 
+
+<b>@Body</b><br>
+Takes current password and a field that has to be changed.
+```
+{
+    "password": "student", 
+    // plus one of the following
+    "newPassword": "student2"
+    "username": "student"
+    "email": "student@student.student"
+    "phone": 123123123
+}
+```
+<b>@Response</b></br> 
+```
+{
+    "id": 1,
+    "username": "student",
+    "email": "student@student.student",
+    "phone": 123123123,
+    "role": 3
+}
+``` 
+
+
 #### Config
 * /libraries  
   `role 1 - GET,POST,PUT,DELETE,PATCH`     
