@@ -22,9 +22,8 @@ public class AuthFilterEmployee implements GatewayFilter {
         System.out.println(authorizationHeader);
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             String token = authorizationHeader.substring(7);
-
             try {
-                Claims claims = (Claims) Jwts.parser().setSigningKey(JWTUtil.getSecretKey()).build().parse(token).getBody();
+                Claims claims = (Claims) Jwts.parser().verifyWith(JWTUtil.getSecretKey()).build().parseSignedClaims(token).getPayload();
 
                 Integer role = (Integer) claims.get("role");
                 if (role != null && role == 2) {
