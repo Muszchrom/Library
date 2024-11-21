@@ -633,7 +633,7 @@ class RentalsDbViewSet(viewsets.ViewSet):
             return Response({"error": "This book is not available in the selected library."}, status=status.HTTP_404_NOT_FOUND)
 
         # Get user role and ID from the header
-        x_role_id = request.META.get('HTTP_X_ROLE_ID', "3 1")  # Default value for testing
+        x_role_id = request.META.get('HTTP_X_ROLE_ID') 
         if not x_role_id:
             return Response({"error": "User role and ID not provided in the headers."}, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -646,14 +646,12 @@ class RentalsDbViewSet(viewsets.ViewSet):
         # Check if the user has already rented 2 active copies of this book from the library
         active_rentals = RentalsDb.objects.filter(
             user_id=user_id,
-            book=book,
-            library=library,
             return_date__isnull=True
         )
         if active_rentals.count() >= 2:
-            return Response({"error": "You cannot rent more than 2 active copies of the same book from this library."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "You cannot rent more than 2 books."}, status=status.HTTP_400_BAD_REQUEST)
 
-        rental_status = "Rented"
+        rental_status = "Pending"
         rental_date = date.today()
         due_date = rental_date + timedelta(days=14)  # Example: 2-week rental period
 
@@ -666,8 +664,8 @@ class RentalsDbViewSet(viewsets.ViewSet):
             due_date=due_date
         )
 
-        library_book.book_count -= 1
-        library_book.save()
+        # library_book.book_count -= 1
+        # library_book.save()
 
         return Response({
             "message": f"Book '{book.title}' successfully rented from '{library.library_name}'.",
@@ -681,18 +679,58 @@ class RentalsDbViewSet(viewsets.ViewSet):
     def update(self, request, pk=None, *args, **kwargs):
         """
         PUT /rentals/{id}/ - Return a rented book.
-        """
+        """            
+
+        x_role_id = request.META.get('HTTP_X_ROLE_ID')  # Default value for testing
+        if not x_role_id:
+            return Response({"error": "User role and ID not provided in the headers."}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            rental = RentalsDb.objects.get(pk=pk, return_date__isnull=True)
+            role, user_id = x_role_id.split()
+            role = int(role)
+            user_id = int(user_id)
+        except ValueError:
+            return Response({"error": "Invalid format for X-role-id header."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if role == 3:
+            try:
+                rental = RentalsDb.objects.filter(
+                    user_id=user_id,
+                    rental_status="Pending",
+                    pk = pk
+                )
+            except RentalsDb.DoesNotExist:
+                return Response({"error": "Rental not found."}, status=status.HTTP_404_NOT_FOUND)
+            
+            update_rent = RentalsDb.objects.get(pk=pk)
+            update_rent.rental_status = "Cancelled"
+            update_rent.save()
+            return Response({"error": "Rental was cancelled."}, status=status.HTTP_200_OK)
+        
+        try:
+            rental = RentalsDb.objects.get(pk=pk)
         except RentalsDb.DoesNotExist:
             return Response({"error": "Active rental not found."}, status=status.HTTP_404_NOT_FOUND)
+        if rental.rental_status == "Pending": 
+            rental.rental_date = date.today()
+            rental.rental_status = "Rented"
+            rental.due_date = date.today() + timedelta(days=14)
+            rental.save()
 
-        rental.return_date = date.today()
-        rental.rental_status = "Returned"
-        rental.save()
+            library_book = LibraryBooksDb.objects.get(book=rental.book, library=rental.library)
+            library_book.book_count -= 1
+            library_book.save()
 
-        library_book = LibraryBooksDb.objects.get(book=rental.book, library=rental.library)
-        library_book.book_count += 1
-        library_book.save()
+            return Response({"message": "Book successfully rented.", "rental_id": rental.id}, status=status.HTTP_200_OK)
 
-        return Response({"message": "Book successfully returned.", "rental_id": rental.id}, status=status.HTTP_200_OK)
+        if rental.rental_status == "Rented": 
+            rental.rental_status = "Returned"
+            rental.return_date = date.today()
+            rental.save()
+
+            library_book = LibraryBooksDb.objects.get(book=rental.book, library=rental.library)
+            library_book.book_count += 1
+            library_book.save()
+
+            return Response({"message": "Book successfully returned.", "rental_id": rental.id}, status=status.HTTP_200_OK)
+        
+        return Response({"error": "No books to rent/return."}, status=status.HTTP_400_BAD_REQUEST)
