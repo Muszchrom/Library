@@ -1,14 +1,25 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import magglass from "@/components/svg/magglass.svg";
-import BookCard from "@/components/book-card";
-import { images } from "@/app/raw-dev-data";
 import { Book } from "@/interfaces";
+import { useEffect, useState } from "react";
+import BookCard from "./book-card-client";
+import BookCardSkeleton from "./book-card-skeleton";
 
-export default async function BrowseBooksPage() {
-  const res2 = await fetch(process.env.GATEWAY_URL + "waz/books/");
-  const books: Book[] = await res2.json();
+
+
+export default function BrowseBooksPage() {
+  const [books, setBooks] = useState<Book[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("http://localhost:8081/" + "waz/books/");
+      const bks: Book[] = await res.json();
+      setBooks(bks.slice(0, 30));
+    })();
+  }, []);
 
   return (
     <>
@@ -24,8 +35,11 @@ export default async function BrowseBooksPage() {
         </div>
       </div>
       <div className="grid gap-2 grid-cols-[repeat(auto-fill,minmax(10rem,1fr))]"> {/*flex flex-wrap gap-2 */}
-        {books.map((book) => (
-          <BookCard bookData={book}/>
+        
+        {books.length ? books.map((book) => (
+          <BookCard key={book.id} bookData={book}/>
+        )) : Array.from(Array(10).keys()).map((i) => (
+          <BookCardSkeleton key={i}/>
         ))}
       </div>
     </>

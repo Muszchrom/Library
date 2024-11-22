@@ -7,6 +7,9 @@ const nextConfig = {
       },
       {
         hostname: process.env.GATEWAY_URL_NO_PORT_NO_HTTP,
+      },
+      {
+        hostname: "localhost",
       }
     ]
   }

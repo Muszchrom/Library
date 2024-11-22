@@ -17,21 +17,23 @@ export default async function BookCard({bookData}: {bookData: Book}) {
   {/*bookData.coverURL  */} 
   // 176 - 240
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="w-40 h-56 overflow-hidden border-md">
+    <div className="flex flex-col h-full">
+      <div className="border-md">
         <Link href={baseUrl + "/" + bookData.id} className="w-full h-full flex items-center justify-center relative ">
-          <Image 
-            className="rounded-md w-full h-full object-contain relative z-10" 
-            alt="" 
-            height={224} 
-            width={160} 
-            src={coverUrl} />
+          <div className="w-40 h-56">
+            <Image 
+              className="rounded-md w-full h-full object-contain relative z-10" 
+              alt="" 
+              height={224} 
+              width={160} 
+              src={coverUrl} />
+          </div>
           <div className="w-full h-full object-cover absolute top-0 bottom-0 z-0 rounded-md overflow-hidden">
             <Image className="w-auto h-auto object-cover blur-md" alt="" fill={true} quality={1} sizes="1vw" src={coverUrl} />
           </div>
         </Link>
       </div>
-      <h3 className="font-medium leading-none tracking-tight px-1 pt-2 break-words">
+      <h3 className="font-medium leading-none tracking-tight px-1 pt-2 break-words line-clamp-2">
         {bookData.title}
       </h3>
       <div className="flex justify-between mt-auto px-1 pb-2">
