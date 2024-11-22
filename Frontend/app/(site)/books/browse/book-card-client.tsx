@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function BookCard({bookData}: {bookData: Book}) {
   const [coverUrl, setCoverUrl] = useState("");
-  const [genre, setGenre] = useState("");
+  const [genre, setGenre] = useState("Ładuję ...");
   
   useEffect(() => {
     (async () => {
