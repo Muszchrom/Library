@@ -2,15 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Author } from "@/interfaces";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 
 interface AuthorInputProps {
