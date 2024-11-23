@@ -232,7 +232,53 @@ Create a new genre.
   ```
 
 ---
+### **Book-Genres**
 
+#### **GET /book-genres/**
+
+Retrieve all book-genre relations.
+
+- **Optional Query Parameters**:
+  - `bookId`: Filter by book ID.
+
+- **Example**:
+  ```bash
+  GET /book-genres/?bookId=1
+  ```
+- **Response**:
+  ```bash
+  [
+    {
+        "id": 1,
+        "book": 1,
+        "genre": 1
+    },
+    ...
+  }
+  ```
+
+#### **GET /book-genres/{id}/**
+
+Retrieve specific book-genre relation.
+
+#### **POST /book-genres/**
+
+Assign new genre to a book.
+
+- **Required Fields**:
+  - `genre`: Id of the genre.
+  - `book`: Id of the book.
+
+- **Example**:
+  ```bash
+  POST /book-genres/
+  {
+      "book": 1,
+      "genre": 1
+  }
+  ```
+
+---
 ### **Library Books**
 
 #### **POST /library-books/**
