@@ -44,13 +44,13 @@ export default function BookCard({bookData}: {bookData: Book}) {
         <Link href={baseUrl + "/" + bookData.id} className="w-full h-56 flex items-center justify-center relative ">
           {coverUrl.length !== 0 && (
             <>
-              <div className="w-full h-full object-cover absolute top-0 bottom-0 rounded-md overflow-hidden">
+              <div className="w-full h-full object-cover absolute top-0 bottom-0 rounded-md overflow-hidden z-[1]">
                 {/* alt empty since its purely decorative thing */}
                 <img className="min-w-full min-h-full object-cover blur-md" alt="" src={coverUrl} />
               </div>
               <div className="w-40 h-56">
                 <img 
-                  className="rounded-md w-full h-full object-contain relative" 
+                  className="rounded-md w-full h-full object-contain relative z-[1]" 
                   alt={"Zdjęcie okładki książki pt. " + bookData.title} 
                   height={224} 
                   width={160} 
