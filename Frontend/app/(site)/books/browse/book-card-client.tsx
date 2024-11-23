@@ -44,21 +44,21 @@ export default function BookCard({bookData}: {bookData: Book}) {
         <Link href={baseUrl + "/" + bookData.id} className="w-full h-56 flex items-center justify-center relative ">
           {coverUrl.length !== 0 && (
             <>
+              <div className="w-full h-full object-cover absolute top-0 bottom-0 rounded-md overflow-hidden">
+                {/* alt empty since its purely decorative thing */}
+                <img className="min-w-full min-h-full object-cover blur-md" alt="" src={coverUrl} />
+              </div>
               <div className="w-40 h-56">
                 <img 
-                  className="rounded-md w-full h-full object-contain relative z-10" 
+                  className="rounded-md w-full h-full object-contain relative" 
                   alt={"Zdjęcie okładki książki pt. " + bookData.title} 
                   height={224} 
                   width={160} 
                   src={coverUrl} />
               </div>
-              <div className="w-full h-full object-cover absolute top-0 bottom-0 z-0 rounded-md overflow-hidden">
-                {/* alt empty since its purely decorative thing */}
-                <img className="min-w-full min-h-full object-cover blur-md" alt="" src={coverUrl} />
-              </div>
             </>
            )}
-           <div className="w-full h-56 absolute z-[1]">
+           <div className="w-full h-56 absolute">
             <Skeleton className="w-full h-full"/>
           </div>
         </Link>
@@ -71,7 +71,7 @@ export default function BookCard({bookData}: {bookData: Book}) {
         {/* Or maybe genre? Since avaliability is dependent on library */}
         {/* Availablitity in current library */}
         <div className="px-2 py-0.5 bg-primary text-secondary rounded-full text-sm w-fit"> {/**max-w-16 */}
-          <span className="line-clamp-1">
+          <span className="line-clamp-1 break-all">
             {genre}
           </span>
         </div>
