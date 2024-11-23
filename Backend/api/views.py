@@ -425,6 +425,22 @@ class BookGenresDbViewSet(viewsets.ModelViewSet):
     queryset = BookGenresDb.objects.all()
     serializer_class = BookGenresDbSerializer
 
+    def list(self, request, *args, **kwargs):
+        book_id = request.query_params.get('bookId', None)
+        if book_id:
+            try:
+                book = BooksDb.objects.get(id=book_id)
+                book_genres = BookGenresDb.objects.filter(book=book).distinct()
+                book_genres_serializer = BookGenresDbSerializer(book_genres, many=True)
+                return Response(book_genres_serializer.data)
+            # add handler if book does not exist
+            # since error will occur if someone would just guess book_id incorrectly
+            except BookGenresDb.DoesNotExist:
+                return Response({"error": "Book appears to have no genres"}, status=status.HTTP_404_NOT_FOUND)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
         book_id = request.data.get('book')
         genre_id = request.data.get('genre')
