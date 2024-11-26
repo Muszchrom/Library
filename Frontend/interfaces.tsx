@@ -10,6 +10,14 @@ export interface Book {
   author: number
 }
 
+export interface User {
+  id: number,
+  username: string,
+  email: string,
+  phone: number,
+  role: number
+}
+
 export interface Library {
   id: number,
   library_name: string,
