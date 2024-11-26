@@ -18,16 +18,20 @@ import { cn } from "@/lib/utils";
 import AuthorSelect from "./author-select";
 import GenreSelect from "./genre-select";
 import RatingSelect from "./rating-select";
+import { useSearchParams } from "next/navigation";
 
 
 
 export default function BrowseBooksPage() {
+  const searchParams = useSearchParams();
+  const searchParam = searchParams.get("genre");
+
   const [loading, setLoading] = useState(true);
   const [books, setBooks] = useState<Book[]>([]);
   const [inputValue, setInputValue] = useState("");
 
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState("");
+  const [filters, setFilters] = useState(searchParam ? `genre=${encodeURIComponent(searchParam)}&` : "");
 
   useEffect(() => {
     (async () => {
@@ -81,13 +85,16 @@ export default function BrowseBooksPage() {
 }
 
 function Filters({onSubmit}: {onSubmit: (filter: string) => void}) {
+  const searchParams = useSearchParams();
+  const searchParam = searchParams.get("genre") || undefined;
+
   const [open, setOpen] = useState(false);
   const [authors, setAuthors] = useState<Author[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [ratings, setRatings] = useState<number[]>([]);
 
   const [selectedAuthor, setSelectedAuthor] = useState<number | undefined>(undefined);
-  const [selectedGenre, setSelectedGenre] = useState<string | undefined>(undefined);
+  const [selectedGenre, setSelectedGenre] = useState<string | undefined>(searchParam);
   const [selectedRating, setSelectedRating] = useState<number | undefined>(undefined);
 
   useEffect(() => {
