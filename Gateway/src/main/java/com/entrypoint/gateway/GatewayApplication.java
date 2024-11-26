@@ -40,7 +40,8 @@ public class GatewayApplication {
 						"/waz/authors/**",
 						"/waz/libraries/**",
 						"/waz/media/covers/**",
-						"/waz/book-genres/**")
+						"/waz/book-genres/**",
+						"/waz/library-books/**")
 					.and()
 					.method(HttpMethod.GET, HttpMethod.HEAD, HttpMethod.OPTIONS)
 					.filters(f -> f.rewritePath("/waz/(?<segment>.*)", "/${segment}"))
