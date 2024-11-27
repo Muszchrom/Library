@@ -15,7 +15,7 @@ from django.conf import settings
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from django.db import transaction
-
+from django.db.models import Q
 
 from .models import (
     Library, 
@@ -661,9 +661,10 @@ class RentalsDbViewSet(viewsets.ViewSet):
 
         # Check if the user has already rented 2 active copies of this book from the library
         active_rentals = RentalsDb.objects.filter(
-            user_id=user_id,
-            return_date__isnull=True
+            Q(rental_status='Rented') | Q(rental_status='Pending'),
+            user_id=user_id
         )
+        
         if active_rentals.count() >= 2:
             return Response({"error": "You cannot rent more than 2 books."}, status=status.HTTP_400_BAD_REQUEST)
 
