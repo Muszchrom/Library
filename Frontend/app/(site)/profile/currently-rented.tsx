@@ -51,7 +51,7 @@ export default function CurrentlyRented({rentals}: {rentals: RentalData[]}) {
               </div>
               <div className="flex justify-between gap-2 flex-wrap">
                 <Button className="grow max-w-[100px]" onClick={() => toast.info("Placeholder")} >Kontakt</Button>
-                <Button className="grow max-w-[100px]" onClick={() => toast.info("Placeholder")}>Przedłóż</Button>
+                <Button className="grow max-w-[100px]" onClick={() => toast.info("Placeholder")}>Przedłuż</Button>
               </div>
             </div>
             <div className="flex grow">
