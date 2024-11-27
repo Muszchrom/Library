@@ -10,14 +10,14 @@ export type psswdValues = z.infer<typeof psswdSchema>
 
 const psswdSchema = z.object({
   newPassword: z.string().min(6, {
-    message: "Hasło musi zawierać przynajmniej 6 znaków"
+    message: "Nowe hasło musi zawierać przynajmniej 6 znaków"
   }).max(255, {
-    message: "Hasło nie może mieć więcej niż 255 znaków"
+    message: "Nowe hasło nie może mieć więcej niż 255 znaków"
   }),
   newPasswordRepeat: z.string().min(6, {
-    message: "Hasło musi zawierać przynajmniej 6 znaków"
+    message: "Nowe hasło musi zawierać przynajmniej 6 znaków"
   }).max(255, {
-    message: "Hasło nie może mieć więcej niż 255 znaków"
+    message: "Nowe hasło nie może mieć więcej niż 255 znaków"
   }),
   password: z.string()
 }).superRefine(({newPassword, newPasswordRepeat}, ctx) => {

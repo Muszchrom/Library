@@ -107,8 +107,8 @@ export default function EditProfilePopoverForm({variant, token, onUpdateSuccess}
                    variant == "psswd" ? "hasło" : "nazwę"}
           </DialogTitle>
           <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            Tutaj możesz prowadzić zmiany w swoim profilu.
+          </DialogDescription>
         </DialogHeader>
         {variant == "email" ? <EmailForm onSubmit={onEmailSubmit}/> :
          variant == "phone" ? <PhoneForm onSubmit={onPhoneSubmit}/> : 
