@@ -1,6 +1,6 @@
 "use client";
 import { User } from "@/interfaces";
-import EditProfilePopoverForm from "./edit-profile-popover-form";
+import EditProfilePopoverForm from "./forms/edit-profile-popover-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Session } from "next-auth";
