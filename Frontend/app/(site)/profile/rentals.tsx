@@ -1,15 +1,16 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { Book, Library, Rental } from "@/interfaces";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
-import BookCard from "../books/browse/book-card-client";
+import BookCard from "@/components/book-card-client";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import CardSkeleton from "@/components/card-skeleton";
 
 interface RentalData {
   book: Book, 
@@ -69,20 +70,6 @@ export default function Rentals({session}: {session: Session}) {
       ) : (
         <CurrentlyRented rentals={rentals.filter((d) => d.rental.rental_status === "Pending" || d.rental.rental_status === "Rented")}/>
       )}
-      <Card>
-        <CardHeader>
-          <CardTitle>Obecnie wypożyczone</CardTitle>
-        </CardHeader>
-        <CardContent>
-        {rentals === undefined ? (
-            <div className="aspect-video">
-              <Skeleton className="w-full h-full"/>
-            </div>
-          ) : (
-            <RentalsGraph rentals={rentals}/>
-          )}
-        </CardContent>
-      </Card>
     </>
   );
 }
@@ -152,15 +139,3 @@ function RentalsGraph({rentals}: {rentals: RentalData[]}) {
   );
 }
 
-function CardSkeleton() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle><Skeleton className="w-1/2 h-5"/></CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Skeleton className="aspect-video w-full h-full"/>
-      </CardContent>
-    </Card>
-  );
-}

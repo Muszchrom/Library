@@ -3,9 +3,8 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import EditProfile from "./edit-profile";
 import { User } from "@/interfaces";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import Rentals from "./rentals";
+import CardSkeleton from "@/components/card-skeleton";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -19,22 +18,10 @@ export default async function Page() {
         <h1 className="text-2xl font-bold tracking-tight">Profil</h1>
         <Rentals session={session}/>
 
-        <Card>
-          <CardHeader>
-            <CardTitle><Skeleton className="w-1/2 h-5"/></CardTitle>
-            {/* <CardTitle>Historia wypożyczeń (książki/wykres)</CardTitle> */}
-            {/* <RentedBooks /> */}
-            {/* https://ui.shadcn.com/ (examples) */}
-          </CardHeader>
-          <CardContent>
-            <div className="aspect-video">
-              <Skeleton className="w-full h-full"/>
-            </div>
-          </CardContent>
-        </Card>
+        <CardSkeleton />
 
         <EditProfile session={session} apiToken={session.user.APIToken}/>
-        
+
       </div>
     </>
   );
