@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useEffect, useState } from "react";
 import { Session } from "next-auth";
 import SignOut from "@/components/signout";
+import CardSkeleton from "@/components/card-skeleton";
 
 export interface ChangeProfile {
   variant: "email" | "phone" | "psswd" | "uname"
@@ -39,7 +40,6 @@ const rawData: Data[] = [
 ]
 
 export default function EditProfile({session, apiToken}: {session: Session, apiToken: string}) {
-
   const [udata, setUdata] = useState<Data[]>([]);
 
   useEffect(() => {
@@ -59,24 +59,30 @@ export default function EditProfile({session, apiToken}: {session: Session, apiT
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Ustawienia konta</CardTitle>
-        <CardDescription>Zmień ustawienia konta klikając na przycisk "edytuj"</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-4">
-          {udata.map((d) => (
-            <div key={d.variant} className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="font-semibold leading-none tracking-tight">{d.title}</span>
-                <span className="text-muted-foreground">{d.content}</span>
+    <>
+    {udata.length ? (
+      <Card>
+        <CardHeader>
+          <CardTitle>Ustawienia konta</CardTitle>
+          <CardDescription>Zmień ustawienia konta klikając na przycisk "edytuj"</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-4">
+            {udata.map((d) => (
+              <div key={d.variant} className="flex items-center justify-between">
+                <div className="flex flex-col">
+                  <span className="font-semibold leading-none tracking-tight">{d.title}</span>
+                  <span className="text-muted-foreground">{d.content}</span>
+                </div>
+                <EditProfilePopoverForm variant={d.variant} token={apiToken} onUpdateSuccess={updateData}/>
               </div>
-              <EditProfilePopoverForm variant={d.variant} token={apiToken} onUpdateSuccess={updateData}/>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    ) : (
+      <CardSkeleton />
+    )}
+    </>
   );
 }

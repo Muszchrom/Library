@@ -1,10 +1,9 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { CartesianGrid, LabelList, Line, LineChart, YAxis } from "recharts";
+import { CartesianGrid, LabelList, Line, LineChart } from "recharts";
 import { RentalData } from "./rentals";
 
 export default function RentalsChart({rentals}: {rentals: RentalData[]}) {
-  console.log(rentals);
   const months = ["sty", "lut", "mar", "kwi", "maj", "cze", "lip", "sie", "wrz", "paź", "lis", "gru"];
   const monthsFullName = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
   const chartConfig: any = {
@@ -30,8 +29,6 @@ export default function RentalsChart({rentals}: {rentals: RentalData[]}) {
       };
       now.setMonth(now.getMonth() - 1);
     }
-    // x[0].rentedTotal = 1;
-    // x[1].rentedTotal = 10;
     return x;
   })().reverse();
 
@@ -45,7 +42,7 @@ export default function RentalsChart({rentals}: {rentals: RentalData[]}) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart - Custom Label</CardTitle>
+        <CardTitle>Twoja historia wypożyczeń</CardTitle>
         <CardDescription>{str}</CardDescription>
       </CardHeader>
       <CardContent>

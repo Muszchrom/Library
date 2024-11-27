@@ -42,7 +42,7 @@ export default function Rentals({session}: {session: Session}) {
         </>
       ) : (
         <>
-          <CurrentlyRented rentals={rentals.slice().filter((d) => d.rental.rental_status === "Pending" || d.rental.rental_status === "Rented")}/>
+          <CurrentlyRented token={session.user.APIToken} rentalsProp={rentals.slice().filter((d) => d.rental.rental_status === "Pending" || d.rental.rental_status === "Rented")}/>
           <RentalsChart rentals={rentals}/>
         </>
       )}

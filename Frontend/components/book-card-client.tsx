@@ -19,7 +19,7 @@ export default function BookCard({bookData}: {bookData: Book}) {
       if (y.status == 200) return setCoverUrl(url);
       else setCoverUrl(coverNotFound);
     })();
-  }, []);
+  }, [bookData]);
 
   useEffect(() => {
     (async () => {
@@ -32,7 +32,7 @@ export default function BookCard({bookData}: {bookData: Book}) {
       const genre_: Genre = await res2.json();
       setGenre(genre_.genre)
     })();
-  }, []);
+  }, [bookData]);
 
   const baseUrl = "/book";
 
@@ -63,7 +63,7 @@ export default function BookCard({bookData}: {bookData: Book}) {
           </div>
         </Link>
       </div>
-      <h3 className="font-medium leading-none tracking-tight px-1 pt-2 break-words line-clamp-2">
+      <h3 className="font-medium max-w-[164px] leading-none tracking-tight px-1 pt-2 break-words line-clamp-2">
         {bookData.title}
       </h3>
       <div className="flex justify-between gap-2 items-center mt-auto px-1 pb-2">
@@ -71,7 +71,7 @@ export default function BookCard({bookData}: {bookData: Book}) {
         {/* Or maybe genre? Since avaliability is dependent on library */}
         {/* Availablitity in current library */}
         <div className="px-2 py-0.5 bg-primary text-secondary rounded-full text-sm w-fit"> {/**max-w-16 */}
-          <span className="line-clamp-1 break-all">
+          <span className="line-clamp-1 break-all max-w-[64px]">
             {genre}
           </span>
         </div>

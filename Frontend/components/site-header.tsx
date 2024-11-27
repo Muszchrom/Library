@@ -18,7 +18,7 @@ export async function SiteHeader() {
         <Link href="/">
           <span className="scroll-m-20 text-xl font-bold tracking-tight inline-flex gap-1 items-center">
             <BookCheckIcon className="h-5 w-5"/>  
-            library
+            IzIRent
           </span>
         </Link>
         <Sheet>

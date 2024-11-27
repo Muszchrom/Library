@@ -5,10 +5,10 @@ import { Book, LibraryDistance } from "@/interfaces";
 import { useEffect, useState } from "react";
 import ChoosePlace, { City } from "./choose-place";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export default function LibrariesList({bookId}: {bookId: Book["id"]}) {
+export default function LibrariesList({bookId, token}: {bookId: Book["id"], token: string | undefined}) {
   const [libraries, setLibraries] = useState<LibraryDistance[] | undefined>(undefined);
-  const [sortDistanceAscending, setSortDistanceAscending] = useState<boolean>(true);
 
   const [city, setCity] = useState<City>();
   const [latLong, setLatLong] = useState<string>("") // ex "51.246500 22.568400" | "lat long"
@@ -29,25 +29,41 @@ export default function LibrariesList({bookId}: {bookId: Book["id"]}) {
     })()
   }, [latLong]);
 
-  // http://localhost:8000/libraries/?latitude=51.246500&longitude=22.568400&book=1
 
   const locationListener = (city: City) => {
     setLatLong(`${city.lat} ${city.long}`);
     setCity(city);
   }
 
-  const libraryChosenEvent = (libraryId: number) => {
-    console.log(libraryId, bookId);
-    router.push(`/cart?libraryid=${libraryId}&bookid=${bookId}`);
+  const libraryChosenEvent = async (libraryId: number) => {
+    if (!token) return;
+    const res = await fetch("http://localhost:8081/waz/rentals/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        book_id: bookId,
+        library_id: libraryId
+      })
+    })
+    const data = await res.json()
+    if (res.status === 400) return toast.warning(
+        data.error === "You cannot rent more than 2 books." 
+        ? "Nie możesz wypożyczyć więcej niż 2 książki"
+        : "Książka jest obecnie niedostępna")
+    if (res.status !== 201) return toast.error("Coś poszło nie tak", {
+      description: "Kod błędu" + res.status
+    });
+
+    // router.push(`/cart?libraryid=${libraryId}&bookid=${bookId}`);
+    router.push(`/profile`);
   }
 
   return (
     <div className="flex flex-col gap-4 mt-4">
       <div className="flex justify-between items-start">
-        {/* <Button variant={"outline"}>Odległość 👇</Button> */}
-        {/* <Button variant={"outline"}>Domyślnie 👇</Button> */}
-        {/* <Button variant="outline" disabled={true}>Dostawa ✅</Button> */}
-        {/* <ChoosePlace changeListener={locationListener}/> */}
       </div>
       <span className="text-center">
         {libraries 
