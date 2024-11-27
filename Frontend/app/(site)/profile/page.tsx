@@ -5,6 +5,7 @@ import EditProfile from "./edit-profile";
 import { User } from "@/interfaces";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import Rentals from "./rentals";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -16,16 +17,7 @@ export default async function Page() {
     <>
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-bold tracking-tight">Profil</h1>
-        <Card>
-          <CardHeader>
-            <CardTitle>Obecnie wypożyczone</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="aspect-video">
-              <Skeleton className="w-full h-full"/>
-            </div>
-          </CardContent>
-        </Card>
+        <Rentals session={session}/>
 
         <Card>
           <CardHeader>

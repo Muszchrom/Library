@@ -10,6 +10,17 @@ export interface Book {
   author: number
 }
 
+export interface Rental {
+  id: number,
+  user_id: number,
+  rental_status: "Pending" | "Rented" | "Returned",
+  rental_date: string,
+  due_date: string,
+  return_date: string,
+  book: number,
+  library: number
+}
+
 export interface User {
   id: number,
   username: string,
