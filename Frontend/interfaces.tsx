@@ -16,7 +16,7 @@ export interface Rental {
   rental_status: "Pending" | "Rented" | "Returned",
   rental_date: string,
   due_date: string,
-  return_date: string,
+  return_date: string | null,
   book: number,
   library: number
 }
