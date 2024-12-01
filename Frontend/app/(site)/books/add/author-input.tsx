@@ -19,7 +19,7 @@ interface AuthorInputProps {
     isbn13: string;
     description: string;
     publication_date: string;
-    cover?: any;
+    cover?: "";
   }, "author">,
   uploadBookForm: UseFormReturn<{
     author: number;
@@ -28,8 +28,8 @@ interface AuthorInputProps {
     isbn13: string;
     description: string;
     publication_date: string;
-    cover?: any;
-  }, any, undefined>,
+    cover?: "";
+  }, undefined, undefined>,
   authors: Author[]
 }
 

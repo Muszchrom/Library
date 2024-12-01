@@ -2,23 +2,17 @@
 
 import ImageInput from "./image-input";
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogContent } from "@radix-ui/react-dialog";
-import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Author } from "@/interfaces";
 import AuthorForm from "./author-form";
 import AuthorInput from "./author-input";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -54,7 +48,8 @@ export function BookForm() {
   }, [])
 
 
-  const uploadBookForm = useForm<z.infer<typeof uploadBookSchema>>({
+  // undefined because typescript doesnt like any. It has to do with useFormContext stuff
+  const uploadBookForm = useForm<z.infer<typeof uploadBookSchema>, undefined>({
     resolver: zodResolver(uploadBookSchema),
     defaultValues: {
       author: undefined,
@@ -66,6 +61,7 @@ export function BookForm() {
       publication_date: "",
     }
   })  
+  
   const fileRef = uploadBookForm.register("cover");
 
   const onSubmit = (values: z.infer<typeof uploadBookSchema>) => {

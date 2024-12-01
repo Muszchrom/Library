@@ -46,15 +46,19 @@ export default function BookCard({bookData}: {bookData: Book}) {
             <>
               <div className="w-full h-full object-cover absolute top-0 bottom-0 rounded-md overflow-hidden z-[1]">
                 {/* alt empty since its purely decorative thing */}
-                <img className="min-w-full min-h-full object-cover blur-md" alt="" src={coverUrl} />
+                <picture>
+                  <img className="min-w-full min-h-full object-cover blur-md" alt="" src={coverUrl} />
+                </picture>
               </div>
               <div className="w-40 h-56">
-                <img 
-                  className="rounded-md w-full h-full object-contain relative z-[1]" 
-                  alt={"Zdjęcie okładki książki pt. " + bookData.title} 
-                  height={224} 
-                  width={160} 
-                  src={coverUrl} />
+                <picture>
+                  <img 
+                    className="rounded-md w-full h-full object-contain relative z-[1]" 
+                    alt={"Zdjęcie okładki książki pt. " + bookData.title} 
+                    height={224} 
+                    width={160} 
+                    src={coverUrl} />
+                </picture>
               </div>
             </>
            )}

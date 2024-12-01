@@ -5,11 +5,11 @@ import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 
 export default async function BooksRow({ title, books }: {title: string, books?: Book[]}) {
-  const shuffle = (arr: any[]) => {
+  const shuffle = (arr: Book[]) => {
     let count = arr.length,
-        random = Math.random(),
         randomNumber,
         temp;
+    const random = Math.random();
     while (count) {
       randomNumber = random * count-- | 0;
       temp = arr[count];
@@ -33,8 +33,8 @@ export default async function BooksRow({ title, books }: {title: string, books?:
       <ScrollArea className="">
         <div className="flex w-max space-x-2">
           {bks.map((bookData) => 
-            <div className="w-40">
-              <BookCard key={bookData.id} bookData={bookData}></BookCard>
+            <div key={bookData.id} className="w-40">
+              <BookCard bookData={bookData}></BookCard>
             </div>
           )}
         </div>

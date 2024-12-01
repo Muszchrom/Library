@@ -12,7 +12,7 @@ export default function ImageInput({ field, fileRef }:
       title: string;
       description: string;
       publication_date: string;
-      cover?: any;
+      cover?: "";
     }, "cover">, 
     fileRef: UseFormRegisterReturn<"cover">}) {
 
@@ -74,8 +74,12 @@ export default function ImageInput({ field, fileRef }:
 
             {imageUrl.length ? (
               <div className={cn("w-full h-full relative")}>
-                <img src={imageUrl} className={cn("w-full h-full object-contain relative z-10", draggedOver && "brightness-75")} />
-                <img src={imageUrl} className={cn("w-full h-full object-cover absolute top-0 blur-md", draggedOver && "brightness-75")} />
+                <picture>
+                  <img src={imageUrl} alt="Przesłane zdjęcie okładki" className={cn("w-full h-full object-contain relative z-10", draggedOver && "brightness-75")} />
+                </picture>
+                <picture>
+                  <img src={imageUrl} alt="" className={cn("w-full h-full object-cover absolute top-0 blur-md", draggedOver && "brightness-75")} />
+                </picture>
                 <div className={cn("pointer-events-none absolute top-0 bottom-0 left-0 right-0 items-center justify-center z-10", draggedOver ? "flex" : "hidden")}>
                   <svg className="stroke-foreground bounce-reverse" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" pointerEvents={"none"}>
                     <path d="M4 14V18H20V14M12 6L8 10M12 6L16 10M12 6V14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

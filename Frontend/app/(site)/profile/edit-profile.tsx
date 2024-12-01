@@ -49,7 +49,7 @@ export default function EditProfile({session, apiToken}: {session: Session, apiT
       const user: User = await res.json();
       updateData(user);
     })();
-  }, [])
+  }, [session])
 
   const updateData = (user: User) => {
     rawData[0].content = user.email
@@ -64,7 +64,7 @@ export default function EditProfile({session, apiToken}: {session: Session, apiT
       <Card>
         <CardHeader>
           <CardTitle>Ustawienia konta</CardTitle>
-          <CardDescription>Zmień ustawienia konta klikając na przycisk "edytuj"</CardDescription>
+          <CardDescription>Zmień ustawienia konta klikając na przycisk &quot;edytuj&quot;</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">

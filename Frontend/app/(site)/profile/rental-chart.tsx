@@ -6,7 +6,7 @@ import { RentalData } from "./rentals";
 export default function RentalsChart({rentals}: {rentals: RentalData[]}) {
   const months = ["sty", "lut", "mar", "kwi", "maj", "cze", "lip", "sie", "wrz", "paź", "lis", "gru"];
   const monthsFullName = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
-  const chartConfig: any = {
+  const chartConfig: {[key: string]: {label: string, color?: string}} = {
     rentedTotal: {
       label: "Wypożyczenia",
     }

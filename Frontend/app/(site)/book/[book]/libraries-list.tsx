@@ -17,7 +17,7 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
 
   useEffect(() => {
     if (!(latLong.length > 0)) return;
-    let [lat, long] = latLong.split(" ");
+    const [lat, long] = latLong.split(" ");
     (async () => {
       const url = "http://localhost:8081/waz/libraries/?" + 
                   "latitude=" + lat + "&" + 
@@ -27,7 +27,7 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
       const lbrs: LibraryDistance[] = await res.json();
       setLibraries(lbrs);
     })()
-  }, [latLong]);
+  }, [latLong, bookId]);
 
 
   const locationListener = (city: City) => {

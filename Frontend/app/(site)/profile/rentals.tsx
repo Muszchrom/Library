@@ -31,7 +31,7 @@ export default function Rentals({session}: {session: Session}) {
       }));
       setRentals(allData);
     })();
-  }, []);
+  }, [session.user.id]);
 
   return (
     <>

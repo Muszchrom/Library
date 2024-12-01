@@ -130,7 +130,7 @@ function Filters({onSubmit}: {onSubmit: (filter: string) => void}) {
         <DialogHeader>
           <DialogTitle>Wybierz filtry</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col">
