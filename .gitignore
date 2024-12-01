@@ -1,3 +1,5 @@
 .idea
 .vscode
 Backend/media/covers
+certbot
+nginx

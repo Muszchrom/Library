@@ -12,7 +12,8 @@ const nextConfig = {
         hostname: "localhost",
       }
     ]
-  }
+  },
+  output: "standalone"
 };
 
 export default nextConfig;

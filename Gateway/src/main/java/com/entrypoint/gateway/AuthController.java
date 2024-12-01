@@ -29,7 +29,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/gateway/auth")
 public class AuthController {
     
     @Value("${TARGET:net_dev}")

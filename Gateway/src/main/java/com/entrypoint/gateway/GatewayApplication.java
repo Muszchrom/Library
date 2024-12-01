@@ -35,36 +35,36 @@ public class GatewayApplication {
 	public RouteLocator myRoutes(RouteLocatorBuilder builder){
 		return builder.routes()
 				.route("Everyone is allowed", p-> p
-					.path("/waz/books/**", 
-						"/waz/genres/**",
-						"/waz/authors/**",
-						"/waz/libraries/**",
-						"/waz/media/covers/**",
-						"/waz/book-genres/**",
-						"/waz/library-books/**")
+					.path("/gateway/waz/books/**", 
+						"/gateway/waz/genres/**",
+						"/gateway/waz/authors/**",
+						"/gateway/waz/libraries/**",
+						"/gateway/waz/media/covers/**",
+						"/gateway/waz/book-genres/**",
+						"/gateway/waz/library-books/**")
 					.and()
 					.method(HttpMethod.GET, HttpMethod.HEAD, HttpMethod.OPTIONS)
-					.filters(f -> f.rewritePath("/waz/(?<segment>.*)", "/${segment}"))
+					.filters(f -> f.rewritePath("/gateway/waz/(?<segment>.*)", "/${segment}"))
 					.uri("http://backend:8000")
 				)
 				.route("Employees allowed", p-> p
-					.path("/waz/authors/**", 
-						"/waz/libraries/**")
+					.path("/gateway/waz/authors/**", 
+						"/gateway/waz/libraries/**")
 					.filters(f-> {
-						f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+						f.rewritePath("/gateway/waz/(?<segment>.*)", "/${segment}");
 						f.filter(authFilterEmployee);
 						return f;
 					})
 					.uri("http://backend:8000")
 				)
 				.route("Employees allowed for specific methods", p-> p
-					.path("/waz/books/**",
-						"/waz/genres/**",
-						"/waz/book-genres/**")
+					.path("/gateway/waz/books/**",
+						"/gateway/waz/genres/**",
+						"/gateway/waz/book-genres/**")
 					.and()
 					.method(HttpMethod.PATCH,HttpMethod.POST)
 					.filters(f-> {
-						f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+						f.rewritePath("/gateway/waz/(?<segment>.*)", "/${segment}");
 						f.filter(authFilterEmployee);
 						return f;
 					})
@@ -73,22 +73,17 @@ public class GatewayApplication {
 				// /rentals/ is build around header with userId and userRole for easier use of backend
 				// thus separate route
 				.route("Rentals path", p -> p
-					.path("/waz/rentals/**")
+					.path("/gateway/waz/rentals/**")
 					.and()
 					.method(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.OPTIONS)
-					.filters(f -> f.rewritePath("/waz/(?<segment>.*)", "/${segment}"))
+					.filters(f -> f.rewritePath("/gateway/waz/(?<segment>.*)", "/${segment}"))
 					.uri("http://backend:8000")
 				)
 				
 				.route("Admins allowed", p-> p
-						// .path("/waz/books/**",
-						// 	"/waz/genres/**",
-						// 	"/waz/authors/**",
-						// 	"/waz/book-genres/**",
-						// 	"/waz/libraries/**")
-						.path("/waz/**") // easier development/bug finding. In production it is recommended to make paths more strict
+						.path("/gateway/waz/**") // easier development/bug finding. In production it is recommended to make paths more strict
 						.filters(f-> {
-							f.rewritePath("/waz/(?<segment>.*)", "/${segment}");
+							f.rewritePath("/gateway/waz/(?<segment>.*)", "/${segment}");
 							f.filter(authFilterAdmin);
 							return f;
 						})
