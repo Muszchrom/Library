@@ -6,7 +6,7 @@ spring:
         - true
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:3000"
+            allowedOrigins: "http://localhost:3000,https://lublean.com"
             allowedMethods:
             - GET
             - POST

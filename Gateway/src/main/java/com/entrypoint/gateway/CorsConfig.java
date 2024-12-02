@@ -10,7 +10,7 @@ public class CorsConfig implements WebFluxConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry corsRegistry) {
     corsRegistry.addMapping("/**")
-      .allowedOrigins("http://localhost:3000")
+      .allowedOrigins("http://localhost:3000", "https://lublean.com")
       .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
       .allowCredentials(true);
   }
