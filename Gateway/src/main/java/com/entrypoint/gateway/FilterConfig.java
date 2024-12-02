@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import reactor.core.publisher.Mono;
@@ -28,6 +29,11 @@ public class FilterConfig implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         } catch (MalformedJwtException ex) {
             throw new BadCredentialsException("Invalid token");
+        } catch (ExpiredJwtException ex) {
+            exchange.getRequest().mutate().header(
+                "X-role-id", ""
+            ).build();
+            return chain.filter(exchange);
         }
     }
 
