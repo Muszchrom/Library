@@ -1,8 +1,7 @@
 import BooksRow from "@/components/books-row";
 import CategoryRow from "@/components/category-row";
 
-
-export default async function Home() {
+export default function Home() {
   return (
     <div className="flex flex-col gap-2">
       <BooksRow title="Zawsze najlepsze"/>

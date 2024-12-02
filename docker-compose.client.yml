@@ -1,0 +1,12 @@
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+      target: runner
+    environment:
+      GATEWAY_URL: https://lublean.com/gateway/
+    ports:
+      - 3000:3000
+

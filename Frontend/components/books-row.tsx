@@ -1,11 +1,25 @@
+"use client"
 import { Separator } from "@radix-ui/react-separator";
 import BookCard from "./book-card-client";
 import { Book } from "@/interfaces";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { gatewayServer } from "@/lib/urls";
+import { gatewayClient } from "@/lib/urls";
+import { useEffect, useState } from "react";
 
 
-export default async function BooksRow({ title, books }: {title: string, books?: Book[]}) {
+export default function BooksRow({ title, books }: {title: string, books?: Book[]}) {
+  const [bks, setBks] = useState<Book[]>([])
+
+  useEffect(() => {
+    (async () => {
+      if (books) return setBks(books);
+      const res = await fetch(gatewayClient + "waz/books/");
+      const b: Book[] = await res.json();
+      shuffle(b);
+      return setBks(b.slice(0, 15));
+    })();
+  }, []);
+
   const shuffle = (arr: Book[]) => {
     let count = arr.length,
         randomNumber,
@@ -19,13 +33,13 @@ export default async function BooksRow({ title, books }: {title: string, books?:
     }
   }
   
-  const bks: Book[] = await (async () => {
-    if (books) return books;
-    const res = await fetch(gatewayServer + "waz/books/");
-    const b: Book[] = await res.json();
-    shuffle(b);
-    return b.slice(0, 15);
-  })()
+  // const bks: Book[] = await (async () => {
+  //   if (books) return books;
+  //   const res = await fetch(gatewayServer + "waz/books/");
+  //   const b: Book[] = await res.json();
+  //   shuffle(b);
+  //   return b.slice(0, 15);
+  // })()
 
   return (
     <div className="flex flex-col gap-2">

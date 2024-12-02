@@ -3,6 +3,13 @@ Run: `docker compose -f docker-compose.dev.yml up --build -d`
 
 ## Frontend dev setup
 Create a file Frontend/.env.local with these lines in it:
+* This might be actually deprecated, if so modify files
+  * Frontend/next.config.mjs
+  * Frontend/Dockerfile
+  * Frontend/lib/urls
+  * Frontend/lib/*
+  * Frontend/eslintrc.json
+  * other, unlisted
 ```
 NEXTAUTH_SECRET=[secret key]
 NEXTAUTH_URL=http://localhost:3000/
@@ -72,4 +79,21 @@ server {
 7. Run `docker-compose -f docker-compose.tls.yml restart`.
 ### RENEWAL
 Run `docker-compose -f docker-compose.tls.yml run --rm certbot renew` every 3 months or earlier since certificates expire after this period of time.
-#
+
+# BACKEND
+Try to run docker-compose: `docker-compose -f docker-compose.api.yml up --build -d`
+
+# FRONTEND
+HTTPS and BACKEND must be setted up first. Create Frontend/.env.local file with following variables:
+```
+NEXT_PUBLIC_NEXTAUTH_SECRET=your_secret
+NEXT_PUBLIC_NEXTAUTH_URL=http://localhost:3000/
+
+NEXT_PUBLIC_GATEWAY_URL_NO_PORT_NO_HTTP_DEV=gateway
+NEXT_PUBLIC_GATEWAY_URL_NO_PORT_NO_HTTP=domainWithoutDotCom
+```
+To generate secret run: `openssl rand -base64 32`
+
+Edit urls in Frontend/urls.ts and next.config.mjs
+
+To build and run the app: `docker-compose -f docker-compose.client.yml up --build -d`

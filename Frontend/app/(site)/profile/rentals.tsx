@@ -19,6 +19,7 @@ export default function Rentals({session}: {session: Session}) {
   useEffect(() => {
     (async () => {
       const res = await fetch(gatewayClient + "waz/rentals/user/" + session.user.id + "/");
+      if (!res.ok) return;
       const rentals_: Rental[] = await res.json();
 
       const allData = await Promise.all(rentals_.map(async (r) => {
