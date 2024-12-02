@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Genre } from "@/interfaces";
+import { gatewayServer } from "@/lib/urls";
 
 export default async function CategoryRow() {
-  const res = await fetch(process.env.GATEWAY_URL + "waz/genres/");
+  const res = await fetch(gatewayServer + "waz/genres/");
   const genres: Genre[] = await res.json();
   return (
     <ScrollArea>

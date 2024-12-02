@@ -2,6 +2,7 @@ import { DefaultSession, NextAuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt"
 
 import Credentials from "next-auth/providers/credentials"
+import { gatewayServer } from "./urls";
 
 
 declare module "next-auth" {
@@ -46,7 +47,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const res = await fetch("http://gateway:8081/auth/login", {
+          const res = await fetch(gatewayServer + "auth/login", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

@@ -7,13 +7,14 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { RentalData } from "./rentals";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { gatewayServer } from "@/lib/urls";
 
 export default function CurrentlyRented({token, rentalsProp}: {token: string, rentalsProp: RentalData[]}) {
   const [rentals, setRentals] = useState(rentalsProp);
   const [count, setCount] = useState(1); 
 
   const handleClick = async (rentalId: number) => {
-    const res = await fetch("http://localhost:8081/waz/rentals/" + rentalId + "/", {
+    const res = await fetch(gatewayServer + "waz/rentals/" + rentalId + "/", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import CardSkeleton from "@/components/card-skeleton";
 import RentalsChart from "./rental-chart";
 import CurrentlyRented from "./currently-rented";
+import { gatewayClient } from "@/lib/urls";
 
 export interface RentalData {
   book: Book, 
@@ -17,12 +18,12 @@ export default function Rentals({session}: {session: Session}) {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("http://localhost:8081/waz/rentals/user/" + session.user.id + "/");
+      const res = await fetch(gatewayClient + "waz/rentals/user/" + session.user.id + "/");
       const rentals_: Rental[] = await res.json();
 
       const allData = await Promise.all(rentals_.map(async (r) => {
-        const resBook = await fetch("http://localhost:8081/waz/books/" + r.book + "/");
-        const resLib = await fetch("http://localhost:8081/waz/libraries/" + r.library + "/");
+        const resBook = await fetch(gatewayClient + "waz/books/" + r.book + "/");
+        const resLib = await fetch(gatewayClient + "waz/libraries/" + r.library + "/");
         return {
           rental: r,
           book: await resBook.json(),

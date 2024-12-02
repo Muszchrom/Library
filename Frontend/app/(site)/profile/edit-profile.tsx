@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Session } from "next-auth";
 import SignOut from "@/components/signout";
 import CardSkeleton from "@/components/card-skeleton";
+import { gatewayClient } from "@/lib/urls";
 
 export interface ChangeProfile {
   variant: "email" | "phone" | "psswd" | "uname"
@@ -44,7 +45,7 @@ export default function EditProfile({session, apiToken}: {session: Session, apiT
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("http://localhost:8081/auth/user/" + session.user.id);
+      const res = await fetch(gatewayClient + "auth/user/" + session.user.id);
       if (res.status !== 200 || !session) return <SignOut />
       const user: User = await res.json();
       updateData(user);

@@ -1,7 +1,8 @@
 import { Separator } from "@radix-ui/react-separator";
-import BookCard from "./book-card";
+import BookCard from "./book-card-client";
 import { Book } from "@/interfaces";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import { gatewayServer } from "@/lib/urls";
 
 
 export default async function BooksRow({ title, books }: {title: string, books?: Book[]}) {
@@ -20,7 +21,7 @@ export default async function BooksRow({ title, books }: {title: string, books?:
   
   const bks: Book[] = await (async () => {
     if (books) return books;
-    const res = await fetch(process.env.GATEWAY_URL + "waz/books/");
+    const res = await fetch(gatewayServer + "waz/books/");
     const b: Book[] = await res.json();
     shuffle(b);
     return b.slice(0, 15);

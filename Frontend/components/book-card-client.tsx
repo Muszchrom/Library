@@ -1,6 +1,8 @@
+"use client";
 import Score from "@/components/score";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Book, Genre } from "@/interfaces";
+import { gatewayClient } from "@/lib/urls";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -10,11 +12,11 @@ export default function BookCard({bookData}: {bookData: Book}) {
   
   useEffect(() => {
     (async () => {
-      const coverNotFound = "http://localhost:8081/waz/media/covers/default_cover.jpg"
+      const coverNotFound = gatewayClient + "waz/media/covers/default_cover.jpg";
       if (!bookData.cover_book) return setCoverUrl(coverNotFound);
 
       const x = bookData.cover_book.split(":")[2]; // split into 3 parts, http, domain, path
-      const url = "http://localhost:8081/waz"  + x.substring(x.indexOf("/")); // remove port
+      const url = gatewayClient + "waz"  + x.substring(x.indexOf("/")); // remove port
       const y = await fetch(url, {method: "HEAD"});
       if (y.status == 200) return setCoverUrl(url);
       else setCoverUrl(coverNotFound);
@@ -23,11 +25,11 @@ export default function BookCard({bookData}: {bookData: Book}) {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("http://localhost:8081/waz/book-genres/?bookId=" + bookData.id);
+      const res = await fetch(gatewayClient + "waz/book-genres/?bookId=" + bookData.id);
       if (res.status !== 200) return;
       const genres = await res.json();
       if (!genres.length || genres[0].genre === undefined) return;
-      const res2 = await fetch("http://localhost:8081/waz/genres/" + genres[0].genre + "/");
+      const res2 = await fetch(gatewayClient + "waz/genres/" + genres[0].genre + "/");
       if (res2.status !== 200) return;
       const genre_: Genre = await res2.json();
       setGenre(genre_.genre)

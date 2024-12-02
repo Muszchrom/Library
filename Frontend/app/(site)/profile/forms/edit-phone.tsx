@@ -37,12 +37,12 @@ export default function PhoneForm({onSubmit}: PhoneFormProps) {
           name="phone"
           render={({field}) => (
             <FormItem>
-              <FormLabel>Nowy email</FormLabel>
+              <FormLabel>Nowy numer telefonu</FormLabel>
               <FormControl>
                 <Input type="tel" placeholder="123456789" {...field}/>
               </FormControl>
               <FormDescription>
-                Pole na wprowadzenie email.
+                Pole na wprowadzenie nowego numeru telefonu.
               </FormDescription>
               <FormMessage />
             </FormItem>

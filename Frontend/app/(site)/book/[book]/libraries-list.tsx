@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import ChoosePlace, { City } from "./choose-place";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { gatewayClient } from "@/lib/urls";
+import { signOut } from "next-auth/react";
 
 export default function LibrariesList({bookId, token}: {bookId: Book["id"], token: string | undefined}) {
   const [libraries, setLibraries] = useState<LibraryDistance[] | undefined>(undefined);
@@ -19,7 +21,7 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
     if (!(latLong.length > 0)) return;
     const [lat, long] = latLong.split(" ");
     (async () => {
-      const url = "http://localhost:8081/waz/libraries/?" + 
+      const url = gatewayClient + "waz/libraries/?" + 
                   "latitude=" + lat + "&" + 
                   "longitude=" + long + "&" + 
                   "book=" + bookId;
@@ -37,7 +39,7 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
 
   const libraryChosenEvent = async (libraryId: number) => {
     if (!token) return;
-    const res = await fetch("http://localhost:8081/waz/rentals/", {
+    const res = await fetch(gatewayClient + "waz/rentals/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,10 +51,19 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
       })
     })
     const data = await res.json()
-    if (res.status === 400) return toast.warning(
-        data.error === "You cannot rent more than 2 books." 
-        ? "Nie możesz wypożyczyć więcej niż 2 książki"
-        : "Książka jest obecnie niedostępna")
+    if (res.status === 400) {
+      console.log(data.error)
+      let clientError = "Książka jest obecnie niedostępna"
+      if (data.error === "User role and ID not provided in the headers.") {
+        (async () => {
+          await signOut({redirect: false});
+          return router.push('/login');
+        })();
+      } else if (data.error === "You cannot rent more than 2 books.") {
+        clientError = "Nie możesz wypożyczyć więcej niż 2 książki"
+      } 
+      return toast.warning(clientError);
+    }
     if (res.status !== 201) return toast.error("Coś poszło nie tak", {
       description: "Kod błędu" + res.status
     });

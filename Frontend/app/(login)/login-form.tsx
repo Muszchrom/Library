@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import SeparatorWithText from "@/components/separator-with-text";
 import React from "react";
+import { gatewayClient } from "@/lib/urls";
 
 const loginSchema = z.object({
   username: z.string().min(3, {
@@ -101,7 +102,7 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
   }
 
   async function onSubmitRegister(values: z.infer<typeof registerSchema>) {
-    const res = await fetch("http://localhost:8081/auth/user", {
+    const res = await fetch(gatewayClient + "auth/user", {
       method: "POST",
       credentials: "include",
       headers: {

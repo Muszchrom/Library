@@ -13,6 +13,7 @@ import AuthorSelect from "./author-select";
 import GenreSelect from "./genre-select";
 import RatingSelect from "./rating-select";
 import { useSearchParams } from "next/navigation";
+import { gatewayClient } from "@/lib/urls";
 
 
 
@@ -29,7 +30,7 @@ export default function BrowseBooksPage() {
 
   useEffect(() => {
     (async () => {
-      const url = "http://localhost:8081/waz/books/?" + (search.length ? search : "") + "&" + filters;
+      const url = gatewayClient + "waz/books/?" + (search.length ? search : "") + "&" + filters;
       const res = await fetch(url);
       setLoading(false);
       if (res.status !== 200) return setBooks([]);
@@ -93,8 +94,8 @@ function Filters({onSubmit}: {onSubmit: (filter: string) => void}) {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("http://localhost:8081/waz/authors/")
-      const res1 = await fetch("http://localhost:8081/waz/genres/")
+      const res = await fetch(gatewayClient + "waz/authors/")
+      const res1 = await fetch(gatewayClient + "waz/genres/")
       const authors_ = await res.json();
       const genres_ = await res1.json();
       setAuthors(authors_);
