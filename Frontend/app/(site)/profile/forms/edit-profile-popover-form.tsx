@@ -10,6 +10,7 @@ import UnameForm, { unameValues } from "./edit-uname";
 import PsswdForm, { psswdValues } from "./edit-psswd";
 import { toast } from "sonner";
 import { User } from "@/interfaces";
+import { gatewayClient } from "@/lib/urls";
 
 
 interface EditProfilePopoverFormProps extends ChangeProfile {
@@ -19,7 +20,7 @@ interface EditProfilePopoverFormProps extends ChangeProfile {
 
 export default function EditProfilePopoverForm({variant, token, onUpdateSuccess}: EditProfilePopoverFormProps) {
   const [open, setOpen] = useState(false);
-  const apiUrl = "http://localhost:8081/auth/user";
+  const apiUrl = gatewayClient + "auth/user";
   const reqSettings = {
     method: "PATCH",
     headers: {
@@ -107,7 +108,10 @@ export default function EditProfilePopoverForm({variant, token, onUpdateSuccess}
                    variant == "psswd" ? "hasło" : "nazwę"}
           </DialogTitle>
           <DialogDescription>
-            Tutaj możesz prowadzić zmiany w swoim profilu.
+            Tutaj możesz wprowadzić zmiany w {" "} 
+            {variant == "email" ? "adresie email" : 
+             variant == "phone" ? "numerze telefonu" : 
+             variant == "psswd" ? "swoim haśle" : "swojej nazwie użytkownika"}
           </DialogDescription>
         </DialogHeader>
         {variant == "email" ? <EmailForm onSubmit={onEmailSubmit}/> :

@@ -1,21 +1,22 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { Book, LibraryDistance } from "@/interfaces";
+import { Book, City, LibraryDistance } from "@/interfaces";
 import { useEffect, useState } from "react";
-import ChoosePlace, { City } from "./choose-place";
-import { useRouter } from "next/navigation";
+import ChoosePlace from "./choose-place";
+import { useRouter, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { gatewayClient } from "@/lib/urls";
 import { signOut } from "next-auth/react";
 
 export default function LibrariesList({bookId, token}: {bookId: Book["id"], token: string | undefined}) {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [libraries, setLibraries] = useState<LibraryDistance[] | undefined>(undefined);
 
-  const [city, setCity] = useState<City>();
+  const [city, setCity] = useState<City | undefined>();
   const [latLong, setLatLong] = useState<string>("") // ex "51.246500 22.568400" | "lat long"
-
-  const router = useRouter();
 
   useEffect(() => {
     if (!(latLong.length > 0)) return;
@@ -38,7 +39,12 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
   }
 
   const libraryChosenEvent = async (libraryId: number) => {
-    if (!token) return;
+    if (!token) {
+      toast.warning("Nie jesteś zalogowany");
+      const appendTo = `/login?redirectBackTo=${encodeURIComponent(pathname)}` + 
+                  (city?.city ? `&city=${encodeURIComponent(city?.city as string)}` : "");
+      return router.push(appendTo);
+    }
     const res = await fetch(gatewayClient + "waz/rentals/", {
       method: "POST",
       headers: {
@@ -68,7 +74,6 @@ export default function LibrariesList({bookId, token}: {bookId: Book["id"], toke
       description: "Kod błędu" + res.status
     });
 
-    // router.push(`/cart?libraryid=${libraryId}&bookid=${bookId}`);
     router.push(`/profile`);
   }
 

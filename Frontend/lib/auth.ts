@@ -20,7 +20,7 @@ declare module "next-auth" {
       id: string,
       username: string,
       role: string,
-      APIToken: string
+      APIToken: string,
     } & DefaultSession["user"]
   }
 }

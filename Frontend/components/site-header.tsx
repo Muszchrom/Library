@@ -30,7 +30,7 @@ export async function SiteHeader() {
             </svg>
           </SheetTrigger>
           <SheetContent side={"left"} className="flex flex-col">
-            <SheetTitle aria-describedby="" className="inline-flex gap-1 items-center">
+            <SheetTitle className="inline-flex gap-1 items-center">
               <BookCheckIcon className="h-5 w-5"/>  
               library
             </SheetTitle>

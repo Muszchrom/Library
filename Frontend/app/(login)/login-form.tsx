@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import SeparatorWithText from "@/components/separator-with-text";
 import React from "react";
@@ -63,6 +63,7 @@ const registerSchema = z.object({
   })
 
 export function LoginForm({formType}: {formType: "login" | "register"}) {
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -92,7 +93,14 @@ export function LoginForm({formType}: {formType: "login" | "register"}) {
     })
 
     if (!res?.error) {
-      router.push("/");
+      const redirectBackTo: string | null = searchParams.get("redirectBackTo");
+      const city: string | null = redirectBackTo && searchParams.get("city");
+      console.log(redirectBackTo, city);
+      const appendTo = "" + 
+                       (redirectBackTo ? redirectBackTo : "") + 
+                       (city ? `?city=${encodeURIComponent(city as string)}` : "");
+
+      router.push(appendTo || "/");
       toast.success("Jesteś teraz zalogowany/a!");
     } else {
       toast.error("Logowanie nie powiodło się", {

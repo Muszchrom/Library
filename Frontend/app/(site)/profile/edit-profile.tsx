@@ -4,9 +4,10 @@ import EditProfilePopoverForm from "./forms/edit-profile-popover-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Session } from "next-auth";
-import SignOut from "@/components/signout";
 import CardSkeleton from "@/components/card-skeleton";
 import { gatewayClient } from "@/lib/urls";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export interface ChangeProfile {
   variant: "email" | "phone" | "psswd" | "uname"
@@ -42,15 +43,18 @@ const rawData: Data[] = [
 
 export default function EditProfile({session, apiToken}: {session: Session, apiToken: string}) {
   const [udata, setUdata] = useState<Data[]>([]);
-
+  const router = useRouter();
   useEffect(() => {
     (async () => {
       const res = await fetch(gatewayClient + "auth/user/" + session.user.id);
-      if (res.status !== 200 || !session) return <SignOut />
+      if (res.status !== 200 || !session) {
+        await signOut({redirect: false});
+        router.refresh();
+      }
       const user: User = await res.json();
       updateData(user);
     })();
-  }, [session])
+  }, [session, router]);
 
   const updateData = (user: User) => {
     rawData[0].content = user.email

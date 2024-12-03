@@ -1,12 +1,12 @@
-import SignOut from "@/components/signout";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import EditProfile from "./edit-profile";
 import Rentals from "./rentals";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  if (!session) return <SignOut />
+  if (!session) return redirect("/login");
   
   return (
     <div className="flex flex-col gap-4">

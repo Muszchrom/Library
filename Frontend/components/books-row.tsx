@@ -18,7 +18,7 @@ export default function BooksRow({ title, books }: {title: string, books?: Book[
       shuffle(b);
       return setBks(b.slice(0, 15));
     })();
-  }, []);
+  }, [books]);
 
   const shuffle = (arr: Book[]) => {
     let count = arr.length,

@@ -10,6 +10,13 @@ export interface Book {
   author: number
 }
 
+export interface City {
+  city: string, 
+  long: string, 
+  lat: string, 
+  id: number
+}
+
 export interface Rental {
   id: number,
   user_id: number,

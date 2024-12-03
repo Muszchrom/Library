@@ -18,8 +18,9 @@ export default function LinkLoggedInDependant({ loggedInText, notLoggedInText, l
   const { data: session } = useSession();
   const router = useRouter();
 
-  const handleClick = () => {
-    signOut({redirect: false});
+  const handleClick = async () => {
+    await signOut({redirect: false});
+    router.refresh();
     toast.info("Nastąpiło wylogowanie");
   }
 
@@ -35,17 +36,18 @@ export default function LinkLoggedInDependant({ loggedInText, notLoggedInText, l
         )}
       </>
     )
+  } else {
+    return (
+      <>
+        <SheetClose asChild>
+          {session ? (
+            <Button type="button" variant={"link"} onClick={() => handleClick()}>{loggedInText}</Button>
+          ) : (
+            <Button type="button" variant={"link"} onClick={() => router.push("/login")}>{notLoggedInText}</Button>
+          )}
+        </SheetClose>
+      </>
+    )
   }
 
-  return (
-    <>
-      <SheetClose asChild>
-        {session ? (
-          <Button type="button" variant={"link"} onClick={() => handleClick()}>{loggedInText}</Button>
-        ) : (
-          <Button type="button" variant={"link"} onClick={() => router.push("/login")}>{notLoggedInText}</Button>
-        )}
-      </SheetClose>
-    </>
-  )
 }

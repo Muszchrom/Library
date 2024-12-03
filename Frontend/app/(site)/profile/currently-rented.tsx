@@ -7,14 +7,14 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { RentalData } from "./rentals";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { gatewayServer } from "@/lib/urls";
+import { gatewayClient } from "@/lib/urls";
 
 export default function CurrentlyRented({token, rentalsProp}: {token: string, rentalsProp: RentalData[]}) {
   const [rentals, setRentals] = useState(rentalsProp);
   const [count, setCount] = useState(1); 
 
   const handleClick = async (rentalId: number) => {
-    const res = await fetch(gatewayServer + "waz/rentals/" + rentalId + "/", {
+    const res = await fetch(gatewayClient + "waz/rentals/" + rentalId + "/", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export default function CurrentlyRented({token, rentalsProp}: {token: string, re
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between flex-wrap gap-4">
-        <CardTitle className="grow">Obecnie wypożyczone</CardTitle>
+        <CardTitle className="grow">Obecnie wypożyczone i zarezerwowane</CardTitle>
         <div className="flex justify-end gap-2 grow">
           {Array.from(Array(rentals.length).keys()).map((key) => {
             key += 1;
@@ -56,10 +56,17 @@ export default function CurrentlyRented({token, rentalsProp}: {token: string, re
         {rentals[count-1] ? (
           <div className="flex justify-between gap-4 flex-wrap-reverse">
           <div className="flex w-1/2 flex-col gap-2 justify-between pb-2 grow">
+            <div className="flex flex-col">
+              <span className="font-semibold">Status </span>
+              <span className="text-muted-foreground">
+                {rentals && (rentals[count-1].rental.rental_status == "Pending" ? "Zarezerwowana" : "Wypożyczona")}
+              </span>
+            </div>
             <div>
               <h3 className="font-semibold">{rentals[count-1].library.library_name}</h3>
               <span className="text-muted-foreground">{rentals[count-1].library.city}</span>
             </div>
+            
             <div>
               <h4 className="text-center">Termin oddania</h4>
               <Progress value={
@@ -88,7 +95,7 @@ export default function CurrentlyRented({token, rentalsProp}: {token: string, re
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Anuluj</AlertDialogCancel>
+                        <AlertDialogCancel className="sm:w-1/2">Anuluj</AlertDialogCancel>
                         <AlertDialogAction onClick={() => handleClick(rentals[count-1].rental.id)} className="grow bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
                           Usuń rezerwację
                         </AlertDialogAction>
